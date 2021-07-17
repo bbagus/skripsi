@@ -44,9 +44,9 @@
       <img src="data_file/smk-n-1-pengasih-seeklogo.png" style="height:122px;margin-top:5vh;">
     </div>
     <div class="d-flex justify-content-center align-items-center">
-      <h2 class="text-center text-white" style="margin-top: 2vh;margin-bottom: 5vh;"> Selamat Datang di<br>
+      <h2 class="text-center text-white" style="margin-top: 2vh;margin-bottom: 4vh;"> Selamat Datang di<br>
         Sistem Informasi Praktik Kerja Lapangan<br>
-        <b>SMK Negeri 1 Pengasih</b></h2>
+        <a target="_blank" rel="noopener noreferrer" href="http://v5.smkn1pengasih.sch.id/" style="color: white;"><b>SMK Negeri 1 Pengasih</b></a></h2>
     </div>
       <div class="d-flex justify-content-center align-items-center">
         @yield('content')

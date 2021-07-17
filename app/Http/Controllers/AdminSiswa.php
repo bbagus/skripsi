@@ -38,13 +38,16 @@ class AdminSiswa extends Controller
 	public function proses_upload(Request $request){
 		$ceknis = Siswa::find($request->nis);
 		if ($ceknis == null) {
-			if ($request->file('foto') != null) {
-				$this->validate($request, [
-					'foto' => 'file|image|mimes:jpeg,png,jpg|max:700',
+			$this->validate($request, [
 					'nis' => 'required',
 					'nama' => 'required',
 					'tgl_lahir' => 'required',
 					'kd_kelas' => 'required',
+					'telp' => 'string|max:20|nullable',
+				]);
+			if ($request->file('foto') != null) {
+				$this->validate($request, [
+					'foto' => 'file|image|mimes:jpeg,png,jpg|max:700',
 				]);
 				// menyimpan data file yang diupload ke variabel $file
 				$file = $request->file('foto');
@@ -87,15 +90,18 @@ class AdminSiswa extends Controller
 		$ceknis = Siswa::find($request->nis);
 		$nis = $request->nislama;
 		if ($ceknis == null || $nis == $request->nis) {
+			$this->validate($request, [
+				'nis' => 'required',
+				'nama' => 'required',
+				'tgl_lahir' => 'required',
+				'kd_kelas' => 'required',
+				'telp' => 'string|max:20|nullable',
+			]);
 			$siswa = DB::table('siswa')->where('nis',$nis)->first();
 			$nama_file = $siswa->foto;
 		if ($request->file('foto') != null) {
 			$this->validate($request, [
 				'foto' => 'file|image|mimes:jpeg,png,jpg|max:700',
-				'nis' => 'required',
-				'nama' => 'required',
-				'tgl_lahir' => 'required',
-				'kd_kelas' => 'required',
 			]);
 			
 			if($siswa->foto == 'default.jpg'){
@@ -124,9 +130,10 @@ class AdminSiswa extends Controller
 			$image_path = public_path().'/data_file/'.$siswa->foto;
 			File::delete($image_path);
 		}
-			
-			$siswa = Siswa::find($nis);
-			$siswa->nis = $request->nis;
+			$user = User::find($nis);
+			$user->username = $request->nis;
+			$user->save();
+			$siswa = Siswa::find($request->nis);
 			$siswa->nama = $request->nama;
 			$siswa->tgl_lahir = $request->tgl_lahir;
 			$siswa->telp = $request->telp;
@@ -136,7 +143,7 @@ class AdminSiswa extends Controller
 			$siswa->save();
 
 			$isiclass = 'alert-success';
-			$pesan = 'Input data siswa berhasil!';
+			$pesan = 'Mengubah data siswa berhasil!';
 			return view('admin.editSiswa', ['isiclass' => $isiclass, 'pesan' => $pesan, 'siswa' => $siswa]);
 			return redirect()->back()->withInput();
 		}

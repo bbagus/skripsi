@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'SI-PKL : Tambah Data Siswa')
+@section('title', 'SI-PKL : Tambah Data Guru')
 @section('head')
 
 @endsection
@@ -65,13 +65,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/admin/kelola-siswa" class="nav-link active">
+                <a href="/admin/kelola-siswa" class="nav-link ">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Siswa</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/admin/kelola-siswa" class="nav-link">
+                <a href="/admin/kelola-guru" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Guru Pembimbing</p>
                 </a>
@@ -166,7 +166,7 @@
     <!-- /.sidebar -->
   </aside>
 @endsection
-@section('judul', 'Menambah Data Siswa')
+@section('judul', 'Menambah Data Guru')
 @section('content')
  <section class="content">
       <div class="container-fluid">
@@ -191,20 +191,14 @@
             <div class="card card-info" >
               <div class="card-header">
                 <h3 class="card-title">
-                  <a href="/admin/kelola-siswa"><i class="fas fa-arrow-left"></i>&nbsp; Kembali</a>
+                  <a href="/admin/kelola-guru"><i class="fas fa-arrow-left"></i>&nbsp; Kembali</a>
                 </h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form class="form-horizontal" id="formsiswa" action="{{route('proses_upload')}}" method="POST" enctype="multipart/form-data">
+              <form class="form-horizontal" id="formguru" action="{{route('upload_guru')}}" method="POST" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="card-body" style="padding: 1.75rem 5rem;">
-                  <div class="form-group row">
-                    <label for="nis" class="col-sm-2 col-form-label">Nomor Induk Siswa<strong class="text-danger">*</strong></label>
-                    <div class="col-sm-9">
-                      <input type="text" class="form-control" id="nis" name="nis" placeholder="Tulis nomor induk siswa.." maxlength="15">
-                    </div>
-                  </div>
                   <div class="form-group row">
                     <label for="nama" class="col-sm-2 col-form-label">Nama Lengkap<strong class="text-danger">*</strong></label>
                     <div class="col-sm-9">
@@ -212,31 +206,35 @@
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label for="tgl_lahir" class="col-sm-2 col-form-label">Tanggal Lahir<strong class="text-danger">*</strong></label>
-                    <div class="col-sm-9 input-group date">
-                        <input type="date" class="form-control datetimepicker-input" name="tgl_lahir"/>
+                    <label for="nip" class="col-sm-2 col-form-label">NIP</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="nip" placeholder="Tulis NIP.." maxlength="25">
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label for="kd_kelas" class="col-sm-2 col-form-label" class="col-sm-2 col-form-label">Kelas<strong class="text-danger">*</strong></label>
+                    <label for="telp" class="col-sm-2 col-form-label">No. Telepon</label>
                     <div class="col-sm-9">
-                      <select class="form-control col-form-label" name="kd_kelas">
-                        <option disabled="" selected="" hidden="">Pilih kelas</option>
-                        <option value="1">XI MM 1</option>
-                        <option value="2">XI MM 2</option>
+                      <input type="text" name="telp" class="form-control" id="telp" placeholder="Tulis nomor telepon.." maxlength="20">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="jurusan" class="col-sm-2 col-form-label">Jurusan<strong class="text-danger">*</strong></label>
+                    <div class="col-sm-9">
+                      <select class="form-control col-form-label" name="jurusan">
+                        <option disabled="" selected="" hidden="">Pilih Jurusan</option>
+                        <option value="Akuntansi Keuangan dan Lembaga">Akuntansi Keuangan dan Lembaga</option>
+                        <option value="Bisnis Daring dan Pemasaran">Bisnis Daring dan Pemasaran</option>
+                        <option value="Otomatisasi dan Tata Kelola Perkantoran">Otomatisasi dan Tata Kelola Perkantoran</option>
+                        <option value="Perhotelan">Perhotelan</option>
+                        <option value="Multimedia">Multimedia</option>
+                        <option value="Tata Busana">Tata Busana</option>
                       </select>
                     </div>
                   </div>
-                   <div class="form-group row">
-                    <label for="telp" class="col-sm-2 col-form-label">No. Telepon</label>
-                    <div class="col-sm-9">
-                      <input type="text" name="telp" class="form-control" id="telp" placeholder="Tulis nomor telepon.." maxlength="20" >
-                    </div>
-                  </div>
                   <div class="form-group row">
-                    <label for="alamat" class="col-sm-2 col-form-label">Alamat</label>
+                    <label for="wilayah" class="col-sm-2 col-form-label">Wilayah</label>
                     <div class="col-sm-9">
-                      <textarea type="text" name="alamat" class="form-control" id="telp" placeholder="Tulis alamat lengkap.." ></textarea>
+                      <input type="text" name="wilayah" class="form-control" placeholder="Tulis wilayah.." maxlength="50">
                     </div>
                   </div>
                    <div class="form-group row">
@@ -273,44 +271,27 @@
 <script>
 $(function () {
   $.validator.setDefaults({});
-  $('#formsiswa').validate({
+  $('#formguru').validate({
     rules: {
-      nis: {
-        required: true,
-        number: true,
-      },
       nama: {
         required: true,
       },
-      tgl_lahir: {
+      jurusan: {
         required: true,
-        date: true,
       },
-      kd_kelas: {
-        required: true,
-      }
       telp: {
-        max: 20,
+        maxlength: 20,
       }
     },
     messages: {
-      nis: {
-        required: "NIS harus diisi",
-        number: "Mohon isi NIS dengan benar"
-      },
       nama: {
         required: "Nama lengkap harus diisi",
       },
-      
-      tgl_lahir: {
-        required: "Tanggal lahir harus diisi",
-        date: "Mohon isi tanggal dengan benar"
+      jurusanr: {
+        required: "Jurusan harus diisi",
       },
-      kd_kelas: {
-        required: "Kelas harus diisi",
-      }
       telp: {
-        max: "Nomor telepon terlalu panjang!",
+        maxlength: "nomor telp maksimal 20 karakter",
       }
     },
     errorElement: 'span',
@@ -327,7 +308,7 @@ $(function () {
   });
 });
 function myFunction() {
-  document.getElementById("formsiswa").reset();
+  document.getElementById("formguru").reset();
 }
 </script>
 @endsection

@@ -40,8 +40,8 @@ border-right-width: 1px;">
                                 <span class="text-danger">{{ $errors->first('password') }}</span>
                                 @endif
                             </div>
-                            <div class="row">
-                              <div class="col-8">
+                            <div class="row mb-2">
+                              <div class="col-6">
                                 <div class="icheck-primary">
                                   <input type="checkbox" id="remember" name="remember">
                                   <label style="font-weight: 400;" for="remember">
@@ -49,14 +49,17 @@ border-right-width: 1px;">
                                   </label>
                                 </div>
                               </div>
+                              <div class="col-6">
+                                <div class="icheck-primary" style="text-align:right;">
+                                   <a href="forgot-password.html">Lupa password ?</a>
+                                </div>
+                              </div>
                             </div>
 
-                            <div class="d-grid mx-auto mb-2 mt-1">
+                            <div class="d-grid mx-auto mb-2">
                                 <button type="submit" class="btn btn-primary btn-block">Masuk</button>
                             </div>
                         </form>
-                         <p class="mb-3 mt-1">
-                         <a href="forgot-password.html">Lupa password ?</a> </p>
                     </div>
                     <div class="card-body login-card-body" style="padding-top: 0px;">
                         <p class="login-box-msg" style="padding-bottom: 0px;">

@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'SI-PKL : Admin - Data Siswa')
+@section('title', 'SI-PKL : Admin - Data Guru Pembimbing')
 @section('head')
 <!-- DataTables -->
   <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
@@ -71,13 +71,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/admin/kelola-siswa" class="nav-link active">
+                <a href="/admin/kelola-siswa" class="nav-link ">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Siswa</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/admin/kelola-guru" class="nav-link">
+                <a href="/admin/kelola-guru" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Guru Pembimbing</p>
                 </a>
@@ -172,7 +172,7 @@
     <!-- /.sidebar -->
   </aside>
 @endsection
-@section('judul', 'Kelola Data Siswa')
+@section('judul', 'Kelola Data Guru Pembimbing')
 @section('content')
  <section class="content">
       <div class="container-fluid">
@@ -189,7 +189,7 @@
             <div class="card card-purple card-outline">
               <div class="card-header">
                 <h3 class="card-title">
-                  <a href="/admin/kelola-siswa/tambah" class="btn btn-small btn-success"><i class="fas fa-plus"></i> Tambah siswa</a>
+                  <a href="/admin/kelola-guru/tambah" class="btn btn-small btn-success"><i class="fas fa-plus"></i> Tambah guru</a>
                 </h3>
               </div>
               <!-- /.card-header -->
@@ -197,31 +197,29 @@
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>NIS</th>
                     <th>Nama Lengkap</th>
-                    <th>Tanggal Lahir</th>
+                    <th>NIP</th>
                     <th>Nomor Telepon</th>
-                    <th>Alamat</th>
-                    <th>Kelas</th>
+                    <th>Jurusan</th>
+                    <th>Wilayah</th>
                     <th>Foto</th>
                     <th>Action</th>
                   </tr>
                   </thead>
                   <tbody>
-                    @foreach ($siswa as $s)
+                    @foreach ($guru as $s)
                     <tr>
-                      <td style="vertical-align: middle;">{{ $s->nis }}</td>
-                      <td style="vertical-align: middle;">{{ $s->nama}}</td>
-                      <td style="vertical-align: middle;">{{ $s->tgl_lahir}}</td>
+                      <td style="vertical-align: middle;">{{ $s->nama }}</td>
+                      <td style="vertical-align: middle;">{{ $s->nip}}</td>
                       <td style="vertical-align: middle;">{{ $s->telp}}</td>
-                      <td style="vertical-align: middle;">{{ $s->alamat}}</td>
-                      <td style="vertical-align: middle;">{{ $s->kelas}}</td>
+                      <td style="vertical-align: middle;">{{ $s->jurusan}}</td>
+                      <td style="vertical-align: middle;">{{ $s->wilayah}}</td>
                       <td style="vertical-align: middle;padding:0.2rem;" width="100px">
                         <img class="img-fluid" src="{{url('/')}}/data_file/{{$s->foto}}" alt="">
                       </td>
                       <td style="vertical-align: middle;" width="160px" >
-                              <a href="{{url('/')}}/admin/kelola-siswa/{{$s->nis}}" class="btn btn-small btn-success"><i class="fas fa-edit"></i>Edit</a>
-                              <a onclick="deleteConfirm('{{url('/')}}/admin/kelola-siswa/hapus/{{$s->nis}}')" href="#!" class="btn btn-small btn-danger"><i class="fas fa-trash"></i> Hapus</a>
+                              <a href="{{url('/')}}/admin/kelola-guru/{{$s->kd_pembimbing}}" class="btn btn-small btn-success"><i class="fas fa-edit"></i>Edit</a>
+                              <a onclick="deleteConfirm('{{url('/')}}/admin/kelola-guru/hapus/{{$s->username}}')" href="#!" class="btn btn-small btn-danger"><i class="fas fa-trash"></i> Hapus</a>
                       </td>
                     </tr>
                     @endforeach
@@ -269,12 +267,11 @@
     $("#example1").DataTable({
       "processing": true,
       "columns": [
-            { "data": "nis" },
             { "data": "nama" },
-            { "data": "tgl_lahir" },
+            { "data": "nip" },
             { "data": "telp" },
-            { "data": "alamat" },
-            { "data": "kelas" },
+            { "data": "jurusan" },
+            { "data": "wilayah" },
             { "data": "foto" },
             { "data": "action"}
         ],

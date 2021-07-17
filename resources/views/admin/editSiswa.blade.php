@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'SI-PKL : Tambah Data Siswa')
+@section('title', 'SI-PKL : Ubah Data Siswa')
 @section('head')
 @endsection
 @section('sidebar')
@@ -70,7 +70,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/tables/simple.html" class="nav-link">
+                <a href="/admin/kelola-siswa" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Guru Pembimbing</p>
                 </a>
@@ -95,7 +95,7 @@
             <a href="/admin/kelola-informasi" class="nav-link">
               <i class="nav-icon fas fa-book"></i>
               <p>
-                Berkas/Template
+                Dokumen/Template
               </p>
             </a>
           </li>
@@ -203,13 +203,13 @@
                   <div class="form-group row">
                     <label for="nis" class="col-sm-2 col-form-label">Nomor Induk Siswa<strong class="text-danger">*</strong></label>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" id="nis" name="nis" placeholder="Tulis nomor induk siswa.." value="{{$siswa->nis}}">
+                      <input type="text" class="form-control" id="nis" name="nis" placeholder="Tulis nomor induk siswa.." value="{{$siswa->nis}}" maxlength="15">
                     </div>
                   </div>
                   <div class="form-group row">
                     <label for="nama" class="col-sm-2 col-form-label">Nama Lengkap<strong class="text-danger">*</strong></label>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" id="nama" name="nama" placeholder="Tulis nama Lengkap.." value="{{$siswa->nama}}">
+                      <input type="text" class="form-control" id="nama" name="nama" placeholder="Tulis nama Lengkap.." value="{{$siswa->nama}}" maxlength="50">
                     </div>
                   </div>
                   <div class="form-group row">
@@ -231,7 +231,7 @@
                    <div class="form-group row">
                     <label for="telp" class="col-sm-2 col-form-label">No. Telepon</label>
                     <div class="col-sm-9">
-                      <input type="text" name="telp" class="form-control" id="telp" placeholder="Tulis nomor telepon.." value="{{$siswa->telp}}" >
+                      <input type="text" name="telp" class="form-control" id="telp" placeholder="Tulis nomor telepon.." value="{{$siswa->telp}}" maxlength="20" >
                     </div>
                   </div>
                   <div class="form-group row">

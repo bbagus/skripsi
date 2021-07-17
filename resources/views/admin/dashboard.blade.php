@@ -72,7 +72,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/tables/simple.html" class="nav-link">
+                <a href="/admin/kelola-guru" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Guru Pembimbing</p>
                 </a>
@@ -97,7 +97,7 @@
             <a href="/admin/kelola-informasi" class="nav-link">
               <i class="nav-icon fas fa-book"></i>
               <p>
-                Berkas/Template
+                Dokumen/Template
               </p>
             </a>
           </li>
