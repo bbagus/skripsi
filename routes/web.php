@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminDashboard;
 use App\Http\Controllers\AdminSiswa;
 use App\Http\Controllers\Login;
 use App\Http\Controllers\AdminGuru;
+use App\Http\Controllers\AdminIndustri;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,12 +26,19 @@ Route::get('admin/kelola-siswa/tambah', [AdminSiswa::class, 'tambahSiswa'])->mid
 Route::get('admin/kelola-siswa/{nis}', [AdminSiswa::class, 'editSiswa'])->middleware('is_admin');
 Route::get('admin/kelola-siswa/hapus/{nis}', [AdminSiswa::class, 'hapusSiswa'])->middleware('is_admin');
 Route::get('admin/kelola-siswa/hapus-foto/{nis}', [AdminSiswa::class, 'hapusFoto'])->middleware('is_admin');
+
 //kelola-guru
 Route::get('admin/kelola-guru', [AdminGuru::class, 'index'])->middleware('is_admin');
 Route::get('admin/kelola-guru/tambah', [AdminGuru::class, 'tambahGuru'])->middleware('is_admin');
 Route::get('admin/kelola-guru/{kd}', [AdminGuru::class, 'editGuru'])->middleware('is_admin');
 Route::get('admin/kelola-guru/hapus/{kd}', [AdminGuru::class, 'hapusGuru'])->middleware('is_admin');
 Route::get('admin/kelola-guru/hapus-foto/{kd}', [AdminGuru::class, 'hapusFoto'])->middleware('is_admin');
+//kelola-industri
+Route::get('admin/kelola-industri', [AdminIndustri::class, 'index'])->middleware('is_admin');
+Route::get('admin/kelola-industri/tambah', [AdminIndustri::class, 'tambahIndustri'])->middleware('is_admin');
+Route::get('admin/kelola-industri/{kd}', [AdminIndustri::class, 'editIndustri'])->middleware('is_admin');
+Route::get('admin/kelola-industri/hapus/{kd}', [AdminIndustri::class, 'hapusIndustri'])->middleware('is_admin');
+Route::get('admin/kelola-industri/hapus-foto/{kd}', [AdminIndustri::class, 'hapusFoto'])->middleware('is_admin');
 
 Route::get('siswa', function () {
     return view('siswa.dashboard');
@@ -55,8 +63,9 @@ Route::post('admin/kelola-siswa/edit', [AdminSiswa::class, 'proses_edit'])->name
 //post-guru
 Route::post('admin/kelola-guru/tambah', [AdminGuru::class, 'proses_upload'])->name('upload_guru')->middleware('is_admin');
 Route::post('admin/kelola-guru/edit', [AdminGuru::class, 'proses_edit'])->name('edit_guru')->middleware('is_admin');
-
-
+//post-industri
+Route::post('admin/kelola-industri/tambah', [AdminIndustri::class, 'proses_upload'])->name('upload_industri')->middleware('is_admin');
+Route::post('admin/kelola-industri/edit', [AdminIndustri::class, 'proses_edit'])->name('edit_industri')->middleware('is_admin');
 
 Route::fallback(function () {
     //

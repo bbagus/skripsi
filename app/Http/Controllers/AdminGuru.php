@@ -91,6 +91,7 @@ class AdminGuru extends Controller
 			'jurusan' => 'required',
 			'telp' => 'string|max:20|nullable',
 		]);
+		$unik = $guru->username;
 		if ($request->file('foto') != null) {
 			$this->validate($request, [
 				'foto' => 'file|image|mimes:jpeg,png,jpg|max:700',
@@ -100,7 +101,6 @@ class AdminGuru extends Controller
 				//mau ada foto
 				$file = $request->file('foto');
 				$extension = $request->foto->getClientOriginalExtension();
-				$unik = uniqid();
 				$nama_file = $unik.'-'.$request->nama.'.'.$extension;
 	      	        // isi dengan nama folder tempat kemana file diupload
 				$tujuan_upload = 'data_file';
@@ -111,7 +111,8 @@ class AdminGuru extends Controller
 				$image_path = public_path().'/data_file/'.$guru->foto;
 				File::delete($image_path);
 				$file = $request->file('foto');
-				$nama_file = $guru->foto;
+				$extension = $request->foto->getClientOriginalExtension();
+				$nama_file = $unik.'-'.$request->nama.'.'.$extension;
 		      	        // isi dengan nama folder tempat kemana file diupload
 				$tujuan_upload = 'data_file';
 				$file->move($tujuan_upload,$nama_file);
@@ -132,6 +133,7 @@ class AdminGuru extends Controller
 		$guru->save();
 		$isiclass = 'alert-success';
 		$pesan = 'Mengubah data guru berhasil!';
+
 		return view('admin.editGuru', ['isiclass' => $isiclass, 'pesan' => $pesan, 'guru' => $guru]);
 		return redirect()->back()->withInput();
 	}

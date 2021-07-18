@@ -1,7 +1,6 @@
 @extends('layout.master')
-@section('title', 'SI-PKL : Tambah Data Siswa')
+@section('title', 'SI-PKL : Ubah Data Industri')
 @section('head')
-
 @endsection
 @section('sidebar')
 <!-- Main Sidebar Container -->
@@ -65,13 +64,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/admin/kelola-siswa" class="nav-link active">
+                <a href="/admin/kelola-siswa" class="nav-link ">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Siswa</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/admin/kelola-guru" class="nav-link">
+                <a href="/admin/kelola-guru" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Guru Pembimbing</p>
                 </a>
@@ -112,7 +111,7 @@
             </a>
           </li> 
           <li class="nav-item">
-            <a href="/admin/kelola-monitoring" class="nav-link">
+            <a href="/admin/kelola-informasi" class="nav-link">
               <i class="nav-icon fas fa-binoculars"></i>
               <p>
                 Monitoring
@@ -152,7 +151,7 @@
       <!-- /.sidebar -->
     </aside>
     @endsection
-    @section('judul', 'Menambah Data Siswa')
+    @section('judul', 'Mengubah Data Industri')
     @section('content')
     <section class="content">
       <div class="container-fluid">
@@ -177,57 +176,77 @@
             <div class="card card-info" >
               <div class="card-header">
                 <h3 class="card-title">
-                  <a href="/admin/kelola-siswa"><i class="fas fa-arrow-left"></i>&nbsp; Kembali</a>
+                  <a href="/admin/kelola-industri"><i class="fas fa-arrow-left"></i>&nbsp; Kembali</a>
                 </h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form class="form-horizontal" id="formsiswa" action="{{route('proses_upload')}}" method="POST" enctype="multipart/form-data">
+              <form class="form-horizontal" id="formindustri" action="{{route('edit_industri')}}" method="POST" enctype="multipart/form-data">
                 {{ csrf_field() }}
+                <input type="hidden" name="kd_industri" value="{{$industri->kd_industri}}" />
+
                 <div class="card-body" style="padding: 1.75rem 5rem;">
                   <div class="form-group row">
-                    <label for="nis" class="col-sm-2 col-form-label">Nomor Induk Siswa<strong class="text-danger">*</strong></label>
+                    <label for="nama" class="col-sm-2 col-form-label">Nama<strong class="text-danger">*</strong></label>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" id="nis" name="nis" placeholder="Tulis nomor induk siswa.." maxlength="15">
+                      <input type="text" class="form-control" id="nama" name="nama" placeholder="Tulis nama industri.." maxlength="50" value="{{$industri->nama}}">
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label for="nama" class="col-sm-2 col-form-label">Nama Lengkap<strong class="text-danger">*</strong></label>
+                    <label for="bidang_kerja" class="col-sm-2 col-form-label">Bidang kerja<strong class="text-danger">*</strong></label>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" id="nama" name="nama" placeholder="Tulis nama Lengkap.." maxlength="50">
+                      <input type="text" class="form-control" name="bidang_kerja" placeholder="Tulis bidang kerja.." maxlength="50" value="{{$industri->bidang_kerja}}">
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label for="tgl_lahir" class="col-sm-2 col-form-label">Tanggal Lahir<strong class="text-danger">*</strong></label>
-                    <div class="col-sm-9 input-group date">
-                      <input type="date" class="form-control datetimepicker-input" name="tgl_lahir"/>
+                    <label for="deskripsi" class="col-sm-2 col-form-label">Deskripsi<strong class="text-danger">*</strong></label>
+                    <div class="col-sm-9">
+                      <textarea type="text" name="deskripsi" class="form-control" placeholder="Tulis deskripsi.."s>{{$industri->deskripsi}}</textarea>
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label for="kd_kelas" class="col-sm-2 col-form-label" class="col-sm-2 col-form-label">Kelas<strong class="text-danger">*</strong></label>
+                    <label for="alamat" class="col-sm-2 col-form-label">Alamat<strong class="text-danger">*</strong></label>
                     <div class="col-sm-9">
-                      <select class="form-control col-form-label" name="kd_kelas">
-                        <option disabled="" selected="" hidden="">Pilih kelas</option>
-                        <option value="1">XI MM 1</option>
-                        <option value="2">XI MM 2</option>
-                      </select>
+                      <textarea type="text" name="alamat" class="form-control" placeholder="Tulis alamat lengkap.."s>{{$industri->alamat}}</textarea>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="wilayah" class="col-sm-2 col-form-label">Wilayah<strong class="text-danger">*</strong></label>
+                    <div class="col-sm-3">
+                      <input type="text" name="wilayah" class="form-control" placeholder="Tulis wilayah/kota.." maxlength="50" value="{{$industri->wilayah}}">
+                    </div>
+                    <div class="col-sm-1"></div>
+                    <label for="website" class="col-sm-1 col-form-label">Website</label>
+                    <div class="col-sm-4">
+                      <input type="text" name="website" class="form-control"  placeholder="Tulis alamat website.." maxlength="50" value="{{$industri->website}}">
                     </div>
                   </div>
                   <div class="form-group row">
                     <label for="telp" class="col-sm-2 col-form-label">No. Telepon</label>
-                    <div class="col-sm-9">
-                      <input type="text" name="telp" class="form-control" id="telp" placeholder="Tulis nomor telepon.." maxlength="20" >
+                    <div class="col-sm-3">
+                      <input type="text" name="telp" class="form-control" placeholder="Tulis nomor telepon.." maxlength="20" value="{{$industri->telp}}">
+                    </div>
+                    <div class="col-sm-1"></div>
+                    <label for="email" class="col-sm-1 col-form-label">Email</label>
+                    <div class="col-sm-4">
+                      <input type="text" name="email" class="form-control"  placeholder="Tulis alamat email.." maxlength="50" value="{{$industri->email}}">
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label for="alamat" class="col-sm-2 col-form-label">Alamat</label>
-                    <div class="col-sm-9">
-                      <textarea type="text" name="alamat" class="form-control" id="telp" placeholder="Tulis alamat lengkap.." ></textarea>
+                    <label for="kuota" class="col-sm-2 col-form-label">Kuota</label>
+                    <div class="col-sm-3">
+                      <input type="text" name="kuota" class="form-control"  placeholder="Tulis kuota.." maxlength="50" value="{{$industri->kuota}}">
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label for="foto" class="col-sm-2 col-form-label">Foto Profil</label>
+                    <label for="foto" class="col-sm-2 col-form-label">Logo industri</label>
                     <div class="col-sm-9">
+                      @if($industri->foto != 'default.jpg')
+                      <img class="img-fluid mb-3" style="width: 150px;float:left;" src="{{url('/')}}/data_file/{{$industri->foto}}" alt="">
+                      <a class="close" title="hapus foto(jangan lupa klik simpan)" style="float: left;
+                      margin-left: 5px;" href="{{url('/')}}/admin/kelola-industri/hapus-foto/{{$industri->kd_industri}}">x</a>
+                      @endif
+                      <input type="hidden" name="ganti" value="{{$isiclass}}" />
                       <input class="form-control-file" type="file" name="foto">
                       <font color="red">
                         Ukuran file maksimal 700 KB.<br>
@@ -259,60 +278,56 @@
     <script>
       $(function () {
         $.validator.setDefaults({});
-        $('#formsiswa').validate({
-          rules: {
-            nis: {
-              required: true,
-              number: true,
-            },
-            nama: {
-              required: true,
-            },
-            tgl_lahir: {
-              required: true,
-              date: true,
-            },
-            kd_kelas: {
-              required: true,
-            },
-            telp: {
-              max: 20,
-            }
+        $('#formindustri').validate({
+         rules: {
+          nama: {
+            required: true,
           },
-          messages: {
-            nis: {
-              required: "NIS harus diisi",
-              number: "Mohon isi NIS dengan benar",
-            },
-            nama: {
-              required: "Nama lengkap harus diisi",
-            },
-            tgl_lahir: {
-              required: "Tanggal lahir harus diisi",
-              date: "Mohon isi tanggal dengan benar",
-            },
-            kd_kelas: {
-              required: "Kelas harus diisi",
-            },
-            telp: {
-              max: "Nomor telepon terlalu panjang!",
-            }
+          bidang_kerja: {
+            required: true,
           },
-          errorElement: 'span',
-          errorPlacement: function (error, element) {
-            error.addClass('invalid-feedback');
-            element.closest('.form-group').append(error);
+          deskripsi: {
+            required: true,
           },
-          highlight: function (element, errorClass, validClass) {
-            $(element).addClass('is-invalid');
+          alamat: {
+            required: true,
           },
-          unhighlight: function (element, errorClass, validClass) {
-            $(element).removeClass('is-invalid');
+          wilayah: {
+            required: true,
+          },
+        },
+        messages: {
+          nama: {
+            required: "Nama harus diisi",
+          },
+          bidang_kerja: {
+            required: "Bidang kerja harus diisi",
+          },
+          deskripsi: {
+            required: "Deskripsi harus diisi",
+          },
+          alamat: {
+            required: "Alamat harus diisi",
+          },
+          wilayah: {
+            required: "Wilayah harus diisi",
           }
-        });
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+        }
+      });
       });
       function myFunction() {
-        document.getElementById("formsiswa").reset();
+        document.getElementById("formindustri").reset();
       }
     </script>
     @endsection

@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'SI-PKL : Tambah Data Siswa')
+@section('title', 'SI-PKL : Tambah Data Industri')
 @section('head')
 
 @endsection
@@ -55,7 +55,7 @@
               </p>
             </a>
           </li> 
-          <li class="nav-item menu-is-opening menu-open">
+          <li class="nav-item">
             <a href="/admin/kelola-informasi" class="nav-link ">
               <i class="nav-icon fas fa-user"></i>
               <p>
@@ -65,13 +65,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/admin/kelola-siswa" class="nav-link active">
+                <a href="/admin/kelola-siswa" class="nav-link ">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Siswa</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/admin/kelola-guru" class="nav-link">
+                <a href="/admin/kelola-guru" class="nav-link ">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Guru Pembimbing</p>
                 </a>
@@ -79,7 +79,7 @@
             </ul>
           </li>  
           <li class="nav-item">
-            <a href="/admin/kelola-industri" class="nav-link">
+            <a href="/admin/kelola-industri" class="nav-link active">
               <i class="nav-icon fas fa-building"></i>
               <p>
                 Industri
@@ -152,7 +152,7 @@
       <!-- /.sidebar -->
     </aside>
     @endsection
-    @section('judul', 'Menambah Data Siswa')
+    @section('judul', 'Menambah Data Industri')
     @section('content')
     <section class="content">
       <div class="container-fluid">
@@ -177,56 +177,68 @@
             <div class="card card-info" >
               <div class="card-header">
                 <h3 class="card-title">
-                  <a href="/admin/kelola-siswa"><i class="fas fa-arrow-left"></i>&nbsp; Kembali</a>
+                  <a href="/admin/kelola-industri"><i class="fas fa-arrow-left"></i>&nbsp; Kembali</a>
                 </h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form class="form-horizontal" id="formsiswa" action="{{route('proses_upload')}}" method="POST" enctype="multipart/form-data">
+              <form class="form-horizontal" id="formindustri" action="{{route('upload_industri')}}" method="POST" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="card-body" style="padding: 1.75rem 5rem;">
                   <div class="form-group row">
-                    <label for="nis" class="col-sm-2 col-form-label">Nomor Induk Siswa<strong class="text-danger">*</strong></label>
+                    <label for="nama" class="col-sm-2 col-form-label">Nama<strong class="text-danger">*</strong></label>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" id="nis" name="nis" placeholder="Tulis nomor induk siswa.." maxlength="15">
+                      <input type="text" class="form-control" id="nama" name="nama" placeholder="Tulis nama industri.." maxlength="50">
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label for="nama" class="col-sm-2 col-form-label">Nama Lengkap<strong class="text-danger">*</strong></label>
+                    <label for="bidang_kerja" class="col-sm-2 col-form-label">Bidang kerja<strong class="text-danger">*</strong></label>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" id="nama" name="nama" placeholder="Tulis nama Lengkap.." maxlength="50">
+                      <input type="text" class="form-control" name="bidang_kerja" placeholder="Tulis bidang kerja.." maxlength="50">
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label for="tgl_lahir" class="col-sm-2 col-form-label">Tanggal Lahir<strong class="text-danger">*</strong></label>
-                    <div class="col-sm-9 input-group date">
-                      <input type="date" class="form-control datetimepicker-input" name="tgl_lahir"/>
+                    <label for="deskripsi" class="col-sm-2 col-form-label">Deskripsi<strong class="text-danger">*</strong></label>
+                    <div class="col-sm-9">
+                      <textarea type="text" name="deskripsi" class="form-control" placeholder="Tulis deskripsi.."s></textarea>
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label for="kd_kelas" class="col-sm-2 col-form-label" class="col-sm-2 col-form-label">Kelas<strong class="text-danger">*</strong></label>
+                    <label for="alamat" class="col-sm-2 col-form-label">Alamat<strong class="text-danger">*</strong></label>
                     <div class="col-sm-9">
-                      <select class="form-control col-form-label" name="kd_kelas">
-                        <option disabled="" selected="" hidden="">Pilih kelas</option>
-                        <option value="1">XI MM 1</option>
-                        <option value="2">XI MM 2</option>
-                      </select>
+                      <textarea type="text" name="alamat" class="form-control" placeholder="Tulis alamat lengkap.."s></textarea>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="wilayah" class="col-sm-2 col-form-label">Wilayah<strong class="text-danger">*</strong></label>
+                    <div class="col-sm-3">
+                      <input type="text" name="wilayah" class="form-control" placeholder="Tulis wilayah/kota.." maxlength="50">
+                    </div>
+                    <div class="col-sm-1"></div>
+                    <label for="website" class="col-sm-1 col-form-label">Website</label>
+                    <div class="col-sm-4">
+                      <input type="text" name="website" class="form-control"  placeholder="Tulis alamat website.." maxlength="50">
                     </div>
                   </div>
                   <div class="form-group row">
                     <label for="telp" class="col-sm-2 col-form-label">No. Telepon</label>
-                    <div class="col-sm-9">
-                      <input type="text" name="telp" class="form-control" id="telp" placeholder="Tulis nomor telepon.." maxlength="20" >
+                    <div class="col-sm-3">
+                      <input type="text" name="telp" class="form-control" placeholder="Tulis nomor telepon.." maxlength="20">
+                    </div>
+                    <div class="col-sm-1"></div>
+                    <label for="email" class="col-sm-1 col-form-label">Email</label>
+                    <div class="col-sm-4">
+                      <input type="text" name="email" class="form-control"  placeholder="Tulis alamat email.." maxlength="50">
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label for="alamat" class="col-sm-2 col-form-label">Alamat</label>
-                    <div class="col-sm-9">
-                      <textarea type="text" name="alamat" class="form-control" id="telp" placeholder="Tulis alamat lengkap.." ></textarea>
+                    <label for="kuota" class="col-sm-2 col-form-label">Kuota</label>
+                    <div class="col-sm-3">
+                      <input type="text" name="kuota" class="form-control"  placeholder="Tulis kuota.." maxlength="50">
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label for="foto" class="col-sm-2 col-form-label">Foto Profil</label>
+                    <label for="foto" class="col-sm-2 col-form-label">Logo Industri</label>
                     <div class="col-sm-9">
                       <input class="form-control-file" type="file" name="foto">
                       <font color="red">
@@ -259,43 +271,39 @@
     <script>
       $(function () {
         $.validator.setDefaults({});
-        $('#formsiswa').validate({
+        $('#formindustri').validate({
           rules: {
-            nis: {
-              required: true,
-              number: true,
-            },
             nama: {
               required: true,
             },
-            tgl_lahir: {
-              required: true,
-              date: true,
-            },
-            kd_kelas: {
+            bidang_kerja: {
               required: true,
             },
-            telp: {
-              max: 20,
-            }
+            deskripsi: {
+              required: true,
+            },
+            alamat: {
+              required: true,
+            },
+            wilayah: {
+              required: true,
+            },
           },
           messages: {
-            nis: {
-              required: "NIS harus diisi",
-              number: "Mohon isi NIS dengan benar",
-            },
             nama: {
-              required: "Nama lengkap harus diisi",
+              required: "Nama harus diisi",
             },
-            tgl_lahir: {
-              required: "Tanggal lahir harus diisi",
-              date: "Mohon isi tanggal dengan benar",
+            bidang_kerja: {
+              required: "Bidang kerja harus diisi",
             },
-            kd_kelas: {
-              required: "Kelas harus diisi",
+            deskripsi: {
+              required: "Deskripsi harus diisi",
             },
-            telp: {
-              max: "Nomor telepon terlalu panjang!",
+            alamat: {
+              required: "Alamat harus diisi",
+            },
+            wilayah: {
+              required: "Wilayah harus diisi",
             }
           },
           errorElement: 'span',
@@ -312,7 +320,7 @@
         });
       });
       function myFunction() {
-        document.getElementById("formsiswa").reset();
+        document.getElementById("formindustri").reset();
       }
     </script>
     @endsection

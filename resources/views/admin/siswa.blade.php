@@ -82,16 +82,10 @@
                   <p>Guru Pembimbing</p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="pages/tables/simple.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Pembimbing DU/DI</p>
-                </a>
-              </li>
             </ul>
           </li>  
           <li class="nav-item">
-            <a href="/admin/kelola-informasi" class="nav-link">
+            <a href="/admin/kelola-industri" class="nav-link">
               <i class="nav-icon fas fa-building"></i>
               <p>
                 Industri
@@ -99,24 +93,16 @@
             </a>
           </li> 
           <li class="nav-item">
-            <a href="/admin/kelola-informasi" class="nav-link">
+            <a href="/admin/kelola-dokumen" class="nav-link">
               <i class="nav-icon fas fa-book"></i>
               <p>
                 Dokumen/Template
               </p>
             </a>
           </li>
-          <li class="nav-item">
-            <a href="/admin/kelola-informasi" class="nav-link">
-              <i class="nav-icon fas fa-id-badge"></i>
-              <p>
-                Kelas
-              </p>
-            </a>
-          </li>
           <li class="nav-header">Proses PKL</li>  
           <li class="nav-item">
-            <a href="/admin/kelola-informasi" class="nav-link">
+            <a href="/admin/kelola-pengajuan" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
                 Pengajuan
@@ -124,7 +110,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="/admin/kelola-informasi" class="nav-link">
+            <a href="/admin/kelola-penempatan" class="nav-link">
               <i class="nav-icon fas fa-map-marker-alt"></i>
               <p>
                 Penempatan
@@ -132,7 +118,7 @@
             </a>
           </li> 
           <li class="nav-item">
-            <a href="/admin/kelola-informasi" class="nav-link">
+            <a href="/admin/kelola-monitoring" class="nav-link">
               <i class="nav-icon fas fa-binoculars"></i>
               <p>
                 Monitoring
@@ -141,7 +127,7 @@
             </a>
              <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/admin/kelola-informasi" class="nav-link">
+                <a href="/admin/kelola-laporan-mingguan" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
                   laporan mingguan
@@ -149,7 +135,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/admin/kelola-informasi" class="nav-link">
+                <a href="/admin/kelola-laporan-pkl" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
                   laporan PKL
@@ -157,7 +143,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/admin/kelola-informasi" class="nav-link">
+                <a href="/admin/kelola-nilai" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
                   Nilai

@@ -45,6 +45,7 @@ class AdminSiswa extends Controller
 					'kd_kelas' => 'required',
 					'telp' => 'string|max:20|nullable',
 				]);
+			$unik = substr(uniqid('', true), -5);
 			if ($request->file('foto') != null) {
 				$this->validate($request, [
 					'foto' => 'file|image|mimes:jpeg,png,jpg|max:700',
@@ -52,7 +53,6 @@ class AdminSiswa extends Controller
 				// menyimpan data file yang diupload ke variabel $file
 				$file = $request->file('foto');
 				$extension = $request->foto->getClientOriginalExtension();
-				$unik = uniqid();
 	 			$nama_file = $unik.'-'.$request->nis.'.'.$extension;
 	      	        // isi dengan nama folder tempat kemana file diupload
 				$tujuan_upload = 'data_file';
@@ -99,6 +99,7 @@ class AdminSiswa extends Controller
 			]);
 			$siswa = DB::table('siswa')->where('nis',$nis)->first();
 			$nama_file = $siswa->foto;
+			$unik = substr(uniqid('', true), -5);
 		if ($request->file('foto') != null) {
 			$this->validate($request, [
 				'foto' => 'file|image|mimes:jpeg,png,jpg|max:700',
@@ -108,7 +109,6 @@ class AdminSiswa extends Controller
 				//mau ada foto
 				$file = $request->file('foto');
 				$extension = $request->foto->getClientOriginalExtension();
-				$unik = uniqid();
 	 			$nama_file = $unik.'-'.$request->nis.'.'.$extension;
 	      	        // isi dengan nama folder tempat kemana file diupload
 				$tujuan_upload = 'data_file';
@@ -119,7 +119,8 @@ class AdminSiswa extends Controller
 				$image_path = public_path().'/data_file/'.$siswa->foto;
 				File::delete($image_path);
 				$file = $request->file('foto');
-		 		$nama_file = $siswa->foto;
+		 		$extension = $request->foto->getClientOriginalExtension();
+	 			$nama_file = $unik.'-'.$request->nis.'.'.$extension;
 		      	        // isi dengan nama folder tempat kemana file diupload
 				$tujuan_upload = 'data_file';
 				$file->move($tujuan_upload,$nama_file);
@@ -142,10 +143,12 @@ class AdminSiswa extends Controller
 			$siswa->foto = $nama_file;
 			$siswa->save();
 
+			$siswa = Siswa::find($nis);
 			$isiclass = 'alert-success';
 			$pesan = 'Mengubah data siswa berhasil!';
+			
 			return view('admin.editSiswa', ['isiclass' => $isiclass, 'pesan' => $pesan, 'siswa' => $siswa]);
-			return redirect()->back()->withInput();
+			return redirect()->back();
 		}
 		else {
 		$siswa = DB::table('siswa')->where('nis',$nis)->first();
