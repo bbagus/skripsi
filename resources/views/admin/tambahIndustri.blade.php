@@ -1,14 +1,16 @@
 @extends('layout.master')
 @section('title', 'SI-PKL : Tambah Data Industri')
 @section('head')
-
+<!-- Select2 -->
+  <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 @endsection
 @section('sidebar')
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
-  <a href="{{url('/')}}/AdminLTE-master/index3.html" class="brand-link navbar-primary">
-    <img src="{{url('/')}}/AdminLTE-master/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+  <a href="{{url('/')}}" class="brand-link navbar-dark">
+    <img src="{{url('/')}}/data_file/smk-n-1-pengasih-seeklogo.webp" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
     <span class="brand-text font-weight-light">Sistem Informasi PKL</span>
   </a>
   <!-- Sidebar -->
@@ -240,11 +242,14 @@
                   <div class="form-group row">
                     <label for="foto" class="col-sm-2 col-form-label">Logo Industri</label>
                     <div class="col-sm-9">
-                      <input class="form-control-file" type="file" name="foto">
+                       <div class="custom-file">
+                      <input class="custom-file-input" type="file" name="foto" accept="image/png, image/jpeg" id="customFile" >
+                     <label class="custom-file-label" for="customFile">Pilih file</label>
                       <font color="red">
                         Ukuran file maksimal 700 KB.<br>
                         Format file : jpg, jpeg, png.
                       </font>
+                    </div>
                     </div>
                   </div>
                 </div>
@@ -267,9 +272,19 @@
     <!-- jquery-validation -->
     <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/jquery.validate.min.js"></script>
     <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/additional-methods.min.js"></script>
+    <!-- Select2 -->
+    <script src="{{url('/')}}/AdminLTE-master/plugins/select2/js/select2.full.min.js"></script>
+    <script src="{{url('/')}}/AdminLTE-master/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
     <!-- Page specific script -->
     <script>
       $(function () {
+        bsCustomFileInput.init();
+         //Initialize Select2 Elements
+        $('.select2').select2()
+        //Initialize Select2 Elements
+        $('.select2bs4').select2({
+          theme: 'bootstrap4'
+        })
         $.validator.setDefaults({});
         $('#formindustri').validate({
           rules: {

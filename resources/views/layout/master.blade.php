@@ -14,7 +14,7 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/dist/css/adminlte.min.css">
 </head>
-@if (\Request::is('/'))  
+@if (\Request::is('/')) 
 <body class="hold-transition sidebar-collapse">
   @else
   <body class="hold-transition sidebar-mini">
@@ -37,7 +37,7 @@
             <a href="#" class="nav-link">Industri</a>
           </li>
           <li class="nav-item d-none d-sm-inline-block">
-            <a href="#" class="nav-link">Download</a>
+            <a href="#" class="nav-link">Pedoman PKL</a>
           </li>
         </ul>
 

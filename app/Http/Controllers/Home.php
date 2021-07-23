@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class Home extends Controller
 {
     public function index(){
-		return view('home.home');
+    	if (Auth::check()) {
+    		$login = true;
+    		return view('home.home', ['login' => $login]);
+		}
+			$login = false;
+    		return view('home.home', ['login' => $login]);
 	}
 }

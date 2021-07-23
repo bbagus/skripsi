@@ -1,13 +1,16 @@
 @extends('layout.master')
 @section('title', 'SI-PKL : Ubah Data Guru')
 @section('head')
+ <!-- Select2 -->
+  <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 @endsection
 @section('sidebar')
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
-  <a href="{{url('/')}}/AdminLTE-master/index3.html" class="brand-link navbar-primary">
-    <img src="{{url('/')}}/AdminLTE-master/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+  <a href="{{url('/')}}" class="brand-link navbar-dark">
+    <img src="{{url('/')}}/data_file/smk-n-1-pengasih-seeklogo.webp" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
     <span class="brand-text font-weight-light">Sistem Informasi PKL</span>
   </a>
   <!-- Sidebar -->
@@ -55,7 +58,7 @@
             </a>
           </li> 
           <li class="nav-item menu-is-opening menu-open">
-            <a href="/admin/kelola-informasi" class="nav-link ">
+            <a href="/admin/kelola-informasi" class="nav-link active">
               <i class="nav-icon fas fa-user"></i>
               <p>
                 Pengguna
@@ -157,22 +160,23 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
-            <!-- general form elements -->
-            @if(count($errors) > 0)
-            <div class="alert {{$isiclass}} alert-dismissible shadow">
-              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-              <i class="icon fas fa-exclamation-triangle"></i>
-              @foreach ($errors->all() as $error)
-              {{ $error }} <br/>
-              @endforeach
-            </div>
-            @endif
-            @if($pesan != '')
-            <div class="alert {{$isiclass}} alert-dismissible shadow">
-              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-              <i class="icon fas fa-exclamation-triangle"></i> {{$pesan}}
-            </div>
-            @endif
+           @if(count($errors) > 0)
+           <div class="alert {{$isiclass}} alert-dismissible shadow">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="icon fas fa-exclamation-triangle"></i>
+            @foreach ($errors->all() as $error)
+            {{ $error }} <br/>
+            @endforeach
+          </div>
+          @endif
+          @if($pesan != '')
+          <div class="alert {{$isiclass}} alert-dismissible shadow">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="icon fas fa-exclamation-triangle"></i> {{$pesan}}
+          </div>
+          @endif
+          </div>
+          <div class="col-9">
             <div class="card card-info" >
               <div class="card-header">
                 <h3 class="card-title">
@@ -185,29 +189,29 @@
                 {{ csrf_field() }}
                 <input type="hidden" name="kd_pembimbing" value="{{$guru->kd_pembimbing}}" />
 
-                <div class="card-body" style="padding: 1.75rem 5rem;">
+                <div class="card-body" style="padding: 1.75rem 3rem;">
                   <div class="form-group row">
                     <label for="nama" class="col-sm-2 col-form-label">Nama Lengkap<strong class="text-danger">*</strong></label>
-                    <div class="col-sm-9">
+                    <div class="col-sm-10">
                       <input type="text" class="form-control" id="nama" name="nama" placeholder="Tulis nama Lengkap.." maxlength="50" value="{{$guru->nama}}">
                     </div>
                   </div>
                   <div class="form-group row">
                     <label for="nip" class="col-sm-2 col-form-label">NIP</label>
-                    <div class="col-sm-9">
+                    <div class="col-sm-10">
                       <input type="text" class="form-control" name="nip" placeholder="Tulis NIP.." maxlength="25" value="{{$guru->nip}}">
                     </div>
                   </div>
                   <div class="form-group row">
                     <label for="telp" class="col-sm-2 col-form-label">No. Telepon</label>
-                    <div class="col-sm-9">
+                    <div class="col-sm-10">
                       <input type="text" name="telp" class="form-control" id="telp" placeholder="Tulis nomor telepon.." maxlength="20" value="{{$guru->telp}}">
                     </div>
                   </div>
                   <div class="form-group row">
                     <label for="jurusan" class="col-sm-2 col-form-label">Jurusan<strong class="text-danger">*</strong></label>
-                    <div class="col-sm-9">
-                      <select class="form-control col-form-label" name="jurusan">
+                    <div class="col-sm-10">
+                      <select class="form-control col-form-label select2bs4" name="jurusan">
                         <option selected="" value="{{$guru->jurusan}}">{{$guru->jurusan}}</option>
                         <option value="Akuntansi Keuangan dan Lembaga">Akuntansi Keuangan dan Lembaga</option>
                         <option value="Bisnis Daring dan Pemasaran">Bisnis Daring dan Pemasaran</option>
@@ -220,24 +224,26 @@
                   </div>
                   <div class="form-group row">
                     <label for="wilayah" class="col-sm-2 col-form-label">Wilayah</label>
-                    <div class="col-sm-9">
+                    <div class="col-sm-10">
                       <input type="text" name="wilayah" class="form-control" placeholder="Tulis wilayah.." maxlength="50" value="{{$guru->wilayah}}">
                     </div>
                   </div>
                   <div class="form-group row">
                     <label for="foto" class="col-sm-2 col-form-label">Foto Profil</label>
-                    <div class="col-sm-9">
+                    <div class="col-sm-10">
                       @if($guru->foto != 'default.jpg')
                       <img class="img-fluid mb-3" style="width: 150px;float:left;" src="{{url('/')}}/data_file/{{$guru->foto}}" alt="">
                       <a class="close" title="hapus foto(jangan lupa klik simpan)" style="float: left;
                       margin-left: 5px;" href="{{url('/')}}/admin/kelola-guru/hapus-foto/{{$guru->kd_pembimbing}}">x</a>
                       @endif
-                      <input type="hidden" name="ganti" value="{{$isiclass}}" />
-                      <input class="form-control-file" type="file" name="foto">
+                      <div class="custom-file">
+                      <input class="custom-file-input" type="file" name="foto" accept="image/png, image/jpeg" id="customFile" >
+                     <label class="custom-file-label" for="customFile">Pilih file</label>
                       <font color="red">
                         Ukuran file maksimal 700 KB.<br>
                         Format file : jpg, jpeg, png.
                       </font>
+                    </div>
                     </div>
                   </div>
                 </div>
@@ -252,6 +258,30 @@
             </div>
             <!-- /.card -->
           </div>
+          <div class="col-3">
+            <div class="card card-orange">
+              <div class="card-header ">
+                <h3 class="card-title text-white">
+                  Akun
+                </h3>
+              </div>
+               <div class="card-body" style="padding: 1.75rem 2rem;">
+                <p class="text-justify">
+                <div class="row">
+                  <div class="col-4">Username</div>
+                  <div class="col-1">:</div>
+                  <div class="col-6">{{$guru->username}}</div>
+                  <div class="col-4">Email</div>
+                  <div class="col-1">:</div>
+                  <div class="col-6">{{$guru->email}}
+                  </div>
+                  <div class="col-4">Password</div>
+                  <div class="col-1">:</div>
+                  <div class="col-6"><a href="">Reset password</a></div>
+              </p>
+            </div>
+          </div>
+        </div>
         </div>
       </div>
     </section>
@@ -260,9 +290,19 @@
     <!-- jquery-validation -->
     <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/jquery.validate.min.js"></script>
     <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/additional-methods.min.js"></script>
+    <!-- Select2 -->
+    <script src="{{url('/')}}/AdminLTE-master/plugins/select2/js/select2.full.min.js"></script>
+    <script src="{{url('/')}}/AdminLTE-master/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
     <!-- Page specific script -->
     <script>
       $(function () {
+        bsCustomFileInput.init();
+         //Initialize Select2 Elements
+        $('.select2').select2()
+        //Initialize Select2 Elements
+        $('.select2bs4').select2({
+          theme: 'bootstrap4'
+        })
         $.validator.setDefaults({});
         $('#formguru').validate({
          rules: {

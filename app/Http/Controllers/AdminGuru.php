@@ -27,7 +27,9 @@ class AdminGuru extends Controller
 		return view('admin.tambahGuru', ['pesan' => $pesan, 'isiclass' => $isiclass]);
 	}
 	public function editGuru($kd_pembimbing){
-		$guru = DB::table('guru_pembimbing')->where('kd_pembimbing',$kd_pembimbing)->first();
+		$guru = DB::table('guru_pembimbing')
+		->join('users', 'guru_pembimbing.username', '=', 'users.username')
+		->where('kd_pembimbing',$kd_pembimbing)->first();
 		$pesan = '';
 		$isiclass = 'alert-danger';
 		return view('admin.editGuru', ['pesan' => $pesan, 'isiclass' => $isiclass, 'guru' => $guru]);
@@ -133,12 +135,16 @@ class AdminGuru extends Controller
 		$guru->save();
 		$isiclass = 'alert-success';
 		$pesan = 'Mengubah data guru berhasil!';
-
+		$guru = DB::table('guru_pembimbing')
+		->join('users', 'guru_pembimbing.username', '=', 'users.username')
+		->where('kd_pembimbing',$kd)->first();
 		return view('admin.editGuru', ['isiclass' => $isiclass, 'pesan' => $pesan, 'guru' => $guru]);
 		return redirect()->back()->withInput();
 	}
 	public function hapusFoto($kd) {
-		$guru = Guru::find($kd);
+		$guru = DB::table('guru_pembimbing')
+		->join('users', 'guru_pembimbing.username', '=', 'users.username')
+		->where('kd_pembimbing',$kd)->first();
 		$guru->foto = 'default.jpg';
 		$pesan = '';
 		$isiclass = 'hapus';

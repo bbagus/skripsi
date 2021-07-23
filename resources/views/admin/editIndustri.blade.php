@@ -1,13 +1,16 @@
 @extends('layout.master')
 @section('title', 'SI-PKL : Ubah Data Industri')
 @section('head')
+<!-- Select2 -->
+  <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 @endsection
 @section('sidebar')
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
-  <a href="{{url('/')}}/AdminLTE-master/index3.html" class="brand-link navbar-primary">
-    <img src="{{url('/')}}/AdminLTE-master/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+  <a href="{{url('/')}}" class="brand-link navbar-dark">
+    <img src="{{url('/')}}/data_file/smk-n-1-pengasih-seeklogo.webp" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
     <span class="brand-text font-weight-light">Sistem Informasi PKL</span>
   </a>
   <!-- Sidebar -->
@@ -54,7 +57,7 @@
               </p>
             </a>
           </li> 
-          <li class="nav-item menu-is-opening menu-open">
+          <li class="nav-item ">
             <a href="/admin/kelola-informasi" class="nav-link ">
               <i class="nav-icon fas fa-user"></i>
               <p>
@@ -70,7 +73,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/admin/kelola-guru" class="nav-link active">
+                <a href="/admin/kelola-guru" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Guru Pembimbing</p>
                 </a>
@@ -78,7 +81,7 @@
             </ul>
           </li>  
           <li class="nav-item">
-            <a href="/admin/kelola-industri" class="nav-link">
+            <a href="/admin/kelola-industri" class="nav-link active">
               <i class="nav-icon fas fa-building"></i>
               <p>
                 Industri
@@ -229,7 +232,7 @@
                     <div class="col-sm-1"></div>
                     <label for="email" class="col-sm-1 col-form-label">Email</label>
                     <div class="col-sm-4">
-                      <input type="text" name="email" class="form-control"  placeholder="Tulis alamat email.." maxlength="50" value="{{$industri->email}}">
+                      <input type="email" name="email" class="form-control"  placeholder="Tulis alamat email.." maxlength="50" value="{{$industri->email}}">
                     </div>
                   </div>
                   <div class="form-group row">
@@ -246,12 +249,14 @@
                       <a class="close" title="hapus foto(jangan lupa klik simpan)" style="float: left;
                       margin-left: 5px;" href="{{url('/')}}/admin/kelola-industri/hapus-foto/{{$industri->kd_industri}}">x</a>
                       @endif
-                      <input type="hidden" name="ganti" value="{{$isiclass}}" />
-                      <input class="form-control-file" type="file" name="foto">
+                     <div class="custom-file">
+                      <input class="custom-file-input" type="file" name="foto" accept="image/png, image/jpeg" id="customFile" >
+                     <label class="custom-file-label" for="customFile">Pilih file</label>
                       <font color="red">
                         Ukuran file maksimal 700 KB.<br>
                         Format file : jpg, jpeg, png.
                       </font>
+                    </div>
                     </div>
                   </div>
                 </div>
@@ -274,9 +279,19 @@
     <!-- jquery-validation -->
     <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/jquery.validate.min.js"></script>
     <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/additional-methods.min.js"></script>
+    <!-- Select2 -->
+    <script src="{{url('/')}}/AdminLTE-master/plugins/select2/js/select2.full.min.js"></script>
+    <script src="{{url('/')}}/AdminLTE-master/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
     <!-- Page specific script -->
     <script>
       $(function () {
+        bsCustomFileInput.init();
+         //Initialize Select2 Elements
+        $('.select2').select2()
+        //Initialize Select2 Elements
+        $('.select2bs4').select2({
+          theme: 'bootstrap4'
+        })
         $.validator.setDefaults({});
         $('#formindustri').validate({
          rules: {
@@ -295,6 +310,9 @@
           wilayah: {
             required: true,
           },
+          email: {
+            email: true,
+          }
         },
         messages: {
           nama: {
@@ -311,6 +329,9 @@
           },
           wilayah: {
             required: "Wilayah harus diisi",
+          },
+          email : {
+            email: "Isi email dengan benar",
           }
         },
         errorElement: 'span',

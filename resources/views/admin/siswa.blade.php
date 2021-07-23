@@ -10,8 +10,8 @@
 <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="{{url('/')}}/AdminLTE-master/index3.html" class="brand-link navbar-primary">
-      <img src="{{url('/')}}/AdminLTE-master/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+    <a href="{{url('/')}}" class="brand-link navbar-dark">
+      <img src="{{url('/')}}/data_file/smk-n-1-pengasih-seeklogo.webp" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">Sistem Informasi PKL</span>
     </a>
 
@@ -186,9 +186,9 @@
                     <th>NIS</th>
                     <th>Nama Lengkap</th>
                     <th>Tanggal Lahir</th>
+                    <th>Kelas</th>
                     <th>Nomor Telepon</th>
                     <th>Alamat</th>
-                    <th>Kelas</th>
                     <th>Foto</th>
                     <th>Action</th>
                   </tr>
@@ -199,9 +199,9 @@
                       <td style="vertical-align: middle;">{{ $s->nis }}</td>
                       <td style="vertical-align: middle;">{{ $s->nama}}</td>
                       <td style="vertical-align: middle;">{{ $s->tgl_lahir}}</td>
+                      <td style="vertical-align: middle;">{{ $s->kelas}}</td>
                       <td style="vertical-align: middle;">{{ $s->telp}}</td>
                       <td style="vertical-align: middle;">{{ $s->alamat}}</td>
-                      <td style="vertical-align: middle;">{{ $s->kelas}}</td>
                       <td style="vertical-align: middle;padding:0.2rem;" width="100px">
                         <img class="img-fluid" src="{{url('/')}}/data_file/{{$s->foto}}" alt="">
                       </td>
@@ -258,9 +258,9 @@
             { "data": "nis" },
             { "data": "nama" },
             { "data": "tgl_lahir" },
+            { "data": "kelas" },
             { "data": "telp" },
             { "data": "alamat" },
-            { "data": "kelas" },
             { "data": "foto" },
             { "data": "action"}
         ],
