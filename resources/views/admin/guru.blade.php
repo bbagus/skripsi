@@ -5,6 +5,8 @@
   <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+     <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
 @endsection
 @section('sidebar')
 <!-- Main Sidebar Container -->
@@ -20,7 +22,7 @@
       <!-- Sidebar user (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{url('/')}}/AdminLTE-master/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          <img src="{{url('/')}}/data_file/15267-202005.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="#" class="d-block">Administrator</a>
@@ -92,14 +94,6 @@
               </p>
             </a>
           </li> 
-          <li class="nav-item">
-            <a href="/admin/kelola-dokumen" class="nav-link">
-              <i class="nav-icon fas fa-book"></i>
-              <p>
-                Dokumen/Template
-              </p>
-            </a>
-          </li>
           <li class="nav-header">Proses PKL</li>  
           <li class="nav-item">
             <a href="/admin/kelola-pengajuan" class="nav-link">
@@ -172,7 +166,9 @@
                  </div>
             @endif
             <!-- /.card -->
-            <div class="card card-purple card-outline">
+            <div class="card card-primary card-outline">           <!-- form start -->
+              <form onSubmit="return confirm('Apakah Anda yakin ingin menghapus seluruh data yang ditandai?')" action="{{route('hapus_guru')}}" method="POST">
+                {{ csrf_field() }}
               <div class="card-header">
                 <h3 class="card-title">
                   <a href="/admin/kelola-guru/tambah" class="btn btn-small btn-success"><i class="fas fa-plus"></i> Tambah guru</a>
@@ -183,6 +179,7 @@
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
+                    <th></th>
                     <th>Nama Lengkap</th>
                     <th>NIP</th>
                     <th>Nomor Telepon</th>
@@ -195,6 +192,12 @@
                   <tbody>
                     @foreach ($guru as $s)
                     <tr>
+                      <td style="vertical-align: middle;" width="30px">
+                        <div class="icheck-primary">
+                        <input type="checkbox" name="hapus[]" value="{{$s->username}}" id="{{$s->username}}">
+                        <label for="{{$s->username}}"></label>
+                      </div>
+                      </td>
                       <td style="vertical-align: middle;">{{ $s->nama }}</td>
                       <td style="vertical-align: middle;">{{ $s->nip}}</td>
                       <td style="vertical-align: middle;">{{ $s->telp}}</td>
@@ -213,6 +216,19 @@
                 </table>
               </div>
               <!-- /.card-body -->
+              <div class="card-footer">
+                <div class="mailbox-controls">
+                <!-- Check all button -->
+                <button type="button" class="btn btn-outline-dark btn-small checkbox-toggle"><i class="far fa-square"></i> Tandai Semua
+                </button>
+                <div class="btn-group">
+                  <input type="submit" class="btn btn-danger" value="Hapus">
+                </div>
+                <!-- /.btn-group -->
+                </div>
+              </div>
+              <!-- /.card-footer -->
+            </form>
             </div>
             <!-- /.card -->
           </div>
@@ -222,6 +238,25 @@
       </div>
       <!-- /.container-fluid -->
     </section>
+@endsection
+@section('modal')
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top:150px;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel">Apakah anda yakin?</h4>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">Data yang dihapus tidak bisa dikembalikan.</div>
+      <div class="modal-footer justify-content-between">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        <a id="btn-delete" class="btn btn-danger" href="#">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection
 @section('javascript')
 <!-- DataTables  & Plugins -->
@@ -249,10 +284,27 @@
 <script src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/buttons.colVis.min.js">
 </script>
 <script>
+ $(function () {
+   //Enable check and uncheck all functionality
+    $('.checkbox-toggle').click(function () {
+      var clicks = $(this).data('clicks')
+      if (clicks) {
+        //Uncheck all checkboxes
+        $('#example1 input[type=\'checkbox\']').prop('checked', false)
+        $('.checkbox-toggle .far.fa-check-square').removeClass('fa-check-square').addClass('fa-square')
+      } else {
+        //Check all checkboxes
+        $('#example1 input[type=\'checkbox\']').prop('checked', true)
+        $('.checkbox-toggle .far.fa-square').removeClass('fa-square').addClass('fa-check-square')
+      }
+      $(this).data('clicks', !clicks)
+    })
+  })
  $(document).ready(function () {
     $("#example1").DataTable({
       "processing": true,
       "columns": [
+            { "data": "checkbox"},
             { "data": "nama" },
             { "data": "nip" },
             { "data": "telp" },
@@ -261,7 +313,7 @@
             { "data": "foto" },
             { "data": "action"}
         ],
-      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "responsive": true, "lengthChange": true, "autoWidth": false,
       "buttons": ["colvis", "print", "pdf", "excel"]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
   });
@@ -272,24 +324,4 @@ function deleteConfirm(url){
   $('#deleteModal').modal();
 }
 </script>
-@endsection
-
-@section('modal')
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top:150px;">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title" id="exampleModalLabel">Apakah anda yakin?</h4>
-        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-      </div>
-      <div class="modal-body">Data yang dihapus tidak bisa dikembalikan.</div>
-      <div class="modal-footer justify-content-between">
-        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-        <a id="btn-delete" class="btn btn-danger" href="#">Delete</a>
-      </div>
-    </div>
-  </div>
-</div>
 @endsection

@@ -139,17 +139,35 @@ class AdminIndustri extends Controller
 	}
 	public function hapusFoto($kd) {
 		$industri = Industri::find($kd);
-		$industri->foto = 'default.jpg';
-		$pesan = '';
-		$isiclass = 'hapus';
-		return view('admin.editIndustri', ['pesan' => $pesan, 'isiclass' => $isiclass, 'industri' => $industri]);  
+		if ($industri != null) {
+			$industri->foto = 'default.jpg';
+			$pesan = '';
+			$isiclass = 'hapus';
+			return view('admin.editIndustri', ['pesan' => $pesan, 'isiclass' => $isiclass, 'industri' => $industri]);
+		}  
+		return redirect()->back();
 	}
 	public function hapusIndustri($kd) {
 		$industri = Industri::find($kd);
-		$image_path = public_path().'/data_file/'.$industri->foto;
-		File::delete($image_path);
-		DB::table('industri')->where('kd_industri',$kd)->delete();
-		//hurung hapus file
-		return redirect()->back()->with('success', '1 Data berhasil dihapus.');   
+		if ($industri != null) {
+			$image_path = public_path().'/data_file/'.$industri->foto;
+			File::delete($image_path);
+			DB::table('industri')->where('kd_industri',$kd)->delete();
+			//hurung hapus file
+			return redirect()->back()->with('success', '1 Data berhasil dihapus.');   
+		}
+	}
+	public function truncate_industri(Request $request) {
+		$input = $request->hapus;
+		$count = 0;
+		if ($input != null) {
+		foreach ($input as $i) {
+			$industri = Industri::find($i);
+			$industri->delete();
+			$count++;
+		}
+		return redirect()->back()->with('success', $count.' Data berhasil dihapus.'); 
+	}
+		return redirect()->back();
 	}
 }

@@ -170,19 +170,50 @@ class AdminSiswa extends Controller
 		$siswa = DB::table('siswa')
 			->join('users', 'siswa.nis', '=', 'users.username')
 			->where('nis',$nis)->first();
-		$siswa->foto = 'default.jpg';
-		$pesan = '';
-		$isiclass = 'hapus';
-		return view('admin.editSiswa', ['pesan' => $pesan, 'isiclass' => $isiclass, 'siswa' => $siswa]);  
+		if ($siswa != null){
+			$siswa->foto = 'default.jpg';
+			$pesan = '';
+			$isiclass = 'hapus';
+			return view('admin.editSiswa', ['pesan' => $pesan, 'isiclass' => $isiclass, 'siswa' => $siswa]);
+		}  
+		return redirect()->back();
 	}
 	public function hapusSiswa($nis) {
 		$siswa = Siswa::find($nis);
-		$image_path = public_path().'/data_file/'.$siswa->foto;
-		File::delete($image_path);
-		DB::table('siswa')->where('nis',$nis)->delete();
+		if ($siswa != null) {
+			$image_path = public_path().'/data_file/'.$siswa->foto;
+			File::delete($image_path);
+			$user = User::find($nis);
+			$user->delete();
+			return redirect()->back()->with('success', '1 Data berhasil dihapus.');   
+		}
+		return redirect()->route('kelola_siswa');
+	}
+	public function truncate_siswa(Request $request) {
+		$input = $request->hapus;
+		$count = 0;
+		if ($input != null) {
+		foreach ($input as $i) {
+			$user = User::find($i);
+			$user->delete();
+			$count++;
+		}
+		return redirect()->back()->with('success', $count.' Data berhasil dihapus.'); 
+	}
+		return redirect()->back();
+	}
+	public function resetPassword ($nis) {
 		$user = User::find($nis);
-		$user->delete();
-		//hurung hapus file
-		return redirect()->back()->with('success', '1 Data berhasil dihapus.');   
+		if ($user != null) {
+			$siswa = Siswa::find($nis);
+			$ambil = strtotime($siswa->tgl_lahir);
+			$psw = date('dmY',$ambil);
+			$psw = Hash::make($psw);
+			$user->password = $psw;
+			$user->save();
+
+			return redirect()->back()->with('success', 'Password berhasil direset.'); 
+		}
+		return redirect()->back();
 	}
 }

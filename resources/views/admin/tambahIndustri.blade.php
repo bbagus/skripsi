@@ -18,7 +18,7 @@
     <!-- Sidebar user (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
       <div class="image">
-        <img src="{{url('/')}}/AdminLTE-master/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+        <img src="{{url('/')}}/data_file/15267-202005.jpg" class="img-circle elevation-2" alt="User Image">
       </div>
       <div class="info">
         <a href="#" class="d-block">Administrator</a>
@@ -88,14 +88,6 @@
               </p>
             </a>
           </li> 
-          <li class="nav-item">
-            <a href="/admin/kelola-dokumen" class="nav-link">
-              <i class="nav-icon fas fa-book"></i>
-              <p>
-                Dokumen/Template
-              </p>
-            </a>
-          </li>
           <li class="nav-header">Proses PKL</li>  
           <li class="nav-item">
             <a href="/admin/kelola-pengajuan" class="nav-link">
@@ -303,6 +295,9 @@
             wilayah: {
               required: true,
             },
+            email: {
+              email: true,
+            }
           },
           messages: {
             nama: {
@@ -319,6 +314,9 @@
             },
             wilayah: {
               required: "Wilayah harus diisi",
+            },
+            email: {
+              email: "Isi email dengan benar",
             }
           },
           errorElement: 'span',

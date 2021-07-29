@@ -18,7 +18,7 @@
       <!-- Sidebar user (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{url('/')}}/AdminLTE-master/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          <img src="{{url('/')}}/data_file/15267-202005.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="#" class="d-block">Administrator</a>
@@ -88,14 +88,6 @@
               </p>
             </a>
           </li> 
-          <li class="nav-item">
-            <a href="/admin/kelola-dokumen" class="nav-link">
-              <i class="nav-icon fas fa-book"></i>
-              <p>
-                Dokumen/Template
-              </p>
-            </a>
-          </li>
           <li class="nav-header">Proses PKL</li>  
           <li class="nav-item">
             <a href="/admin/kelola-pengajuan" class="nav-link">
@@ -176,7 +168,7 @@
           </div>
           @endif
           </div>
-          <div class="col-9">
+          <div class="col-md-9">
 <!-- general form elements -->
             <div class="card card-info" >
               <div class="card-header">
@@ -210,7 +202,7 @@
                   <div class="form-group row">
                     <label for="jurusan" class="col-sm-2 col-form-label">Jurusan<strong class="text-danger">*</strong></label>
                     <div class="col-sm-10">
-                      <select class="form-control col-form-label select2bs4" name="jurusan">
+                      <select class="form-control select2bs4" name="jurusan" style="width: 100%;">
                         <option disabled="" selected="" hidden="">Pilih Jurusan</option>
                         <option value="Akuntansi Keuangan dan Lembaga">Akuntansi Keuangan dan Lembaga</option>
                         <option value="Bisnis Daring dan Pemasaran">Bisnis Daring dan Pemasaran</option>
@@ -252,14 +244,19 @@
             </div>
             <!-- /.card -->
           </div>
-          <div class="col-3">
+          <div class="col-md-3">
             <div class="card card-orange">
               <div class="card-header ">
+                <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus text-white"></i>
+                </button>
+              </div>
                 <h3 class="card-title text-white">
                   Keterangan
                 </h3>
               </div>
-               <div class="card-body" style="padding: 1.75rem 2rem;">
+               <div class="card-body" style="padding: 1.75rem 1.75rem;">
                 <p class="text-justify">
                 Dengan menambahkan data guru pembimbing baru, maka akun untuk guru otomatis akan dibuat dengan informasi akses :<br>
                 <div class="row">
@@ -269,10 +266,39 @@
                   <div class="col-4">Password</div>
                   <div class="col-1">:</div>
                   <div class="col-6">gurukeren</div>
-              </p>
+                </div>
+                </p>
             </div>
           </div>
-        </div>
+          <div class="card card-primary">
+              <div class="card-header ">
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus text-white"></i>
+                  </button>
+                </div>
+                <h3 class="card-title text-white">
+                  Import Data
+                </h3>
+              </div>
+              <div class="card-body" style="padding: 1.75rem 1.75rem;">
+                <p class="text-justify">
+                Dapat menambahkan data guru secara sekaligus menggunakan file berekstensi *.xls atau*.xlsx. File yang diunggah harus sesuai format file excel berikut :<br></p>
+                <div class="form-group">
+                   <a class="btn btn-block btn-outline-primary" href="#"><i class="fas fa-download"></i> TEMPLATE FILE EXCEL</a>
+                </div>
+                <div class="form-group">
+                  <label for="customFile">Unggah file excel</label>
+                  <div class="custom-file">
+                    <input class="custom-file-input" type="file" name="foto" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" id="customFile" >
+                    <label class="custom-file-label" for="customFile">Pilih file</label>
+                  </div>
+                </div>
+                <div class="form-group" style="text-align:center;">
+                  <input type="submit" class="btn btn-success" value="Unggah">
+                </div>
+              </div>
+            </div>
         </div>
       </div>
     </section>

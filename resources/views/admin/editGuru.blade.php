@@ -18,7 +18,7 @@
     <!-- Sidebar user (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
       <div class="image">
-        <img src="{{url('/')}}/AdminLTE-master/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+        <img src="{{url('/')}}/data_file/15267-202005.jpg" class="img-circle elevation-2" alt="User Image">
       </div>
       <div class="info">
         <a href="#" class="d-block">Administrator</a>
@@ -88,14 +88,6 @@
               </p>
             </a>
           </li> 
-          <li class="nav-item">
-            <a href="/admin/kelola-dokumen" class="nav-link">
-              <i class="nav-icon fas fa-book"></i>
-              <p>
-                Dokumen/Template
-              </p>
-            </a>
-          </li>
           <li class="nav-header">Proses PKL</li>  
           <li class="nav-item">
             <a href="/admin/kelola-pengajuan" class="nav-link">
@@ -175,8 +167,15 @@
             <i class="icon fas fa-exclamation-triangle"></i> {{$pesan}}
           </div>
           @endif
+          @if (\Session::has('success'))
+                  <div class="alert alert-success alert-dismissible shadow">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <i class="icon fas fa-exclamation-triangle"></i>
+                 {!! \Session::get('success') !!}
+                 </div>
+            @endif
           </div>
-          <div class="col-9">
+          <div class="col-md-9">
             <div class="card card-info" >
               <div class="card-header">
                 <h3 class="card-title">
@@ -211,7 +210,7 @@
                   <div class="form-group row">
                     <label for="jurusan" class="col-sm-2 col-form-label">Jurusan<strong class="text-danger">*</strong></label>
                     <div class="col-sm-10">
-                      <select class="form-control col-form-label select2bs4" name="jurusan">
+                      <select class="form-control select2bs4" name="jurusan" style="width: 100%;">
                         <option selected="" value="{{$guru->jurusan}}">{{$guru->jurusan}}</option>
                         <option value="Akuntansi Keuangan dan Lembaga">Akuntansi Keuangan dan Lembaga</option>
                         <option value="Bisnis Daring dan Pemasaran">Bisnis Daring dan Pemasaran</option>
@@ -258,14 +257,19 @@
             </div>
             <!-- /.card -->
           </div>
-          <div class="col-3">
+          <div class="col-md-3">
             <div class="card card-orange">
               <div class="card-header ">
+                <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus text-white"></i>
+                </button>
+              </div>
                 <h3 class="card-title text-white">
                   Akun
                 </h3>
               </div>
-               <div class="card-body" style="padding: 1.75rem 2rem;">
+               <div class="card-body" style="padding: 1rem 2rem;">
                 <p class="text-justify">
                 <div class="row">
                   <div class="col-4">Username</div>
@@ -277,7 +281,8 @@
                   </div>
                   <div class="col-4">Password</div>
                   <div class="col-1">:</div>
-                  <div class="col-6"><a href="">Reset password</a></div>
+                  <div class="col-6">
+                    <a onclick="resetConfirm()" href="#">Reset password</a></div>
               </p>
             </div>
           </div>
@@ -286,6 +291,25 @@
       </div>
     </section>
     @endsection
+    @section('modal')
+<div class="modal fade" id="resetModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top:150px;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel">Apakah anda yakin?</h4>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">Password akan kembali ke setelan awal (gurukeren).</div>
+      <div class="modal-footer justify-content-between">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        <a id="btn-delete" class="btn btn-danger" href="{{url('/')}}/admin/kelola-guru/reset-password/{{$guru->username}}">Reset</a>
+      </div>
+    </div>
+  </div>
+</div>
+@endsection
     @section('javascript')
     <!-- jquery-validation -->
     <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/jquery.validate.min.js"></script>
@@ -343,5 +367,8 @@
       function myFunction() {
         document.getElementById("formguru").reset();
       }
+      function resetConfirm(){
+  $('#resetModal').modal();
+  }
     </script>
     @endsection

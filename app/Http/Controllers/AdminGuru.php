@@ -145,19 +145,50 @@ class AdminGuru extends Controller
 		$guru = DB::table('guru_pembimbing')
 		->join('users', 'guru_pembimbing.username', '=', 'users.username')
 		->where('kd_pembimbing',$kd)->first();
-		$guru->foto = 'default.jpg';
-		$pesan = '';
-		$isiclass = 'hapus';
-		return view('admin.editGuru', ['pesan' => $pesan, 'isiclass' => $isiclass, 'guru' => $guru]);  
+		if ($guru != null) {
+			$guru->foto = 'default.jpg';
+			$pesan = '';
+			$isiclass = 'hapus';
+			return view('admin.editGuru', ['pesan' => $pesan, 'isiclass' => $isiclass, 'guru' => $guru]);
+		} 
+		return redirect()->back(); 
 	}
 	public function hapusGuru($kd) {
 		$guru = Guru::firstWhere('username', $kd);
-		$image_path = public_path().'/data_file/'.$guru->foto;
-		File::delete($image_path);
-		$guru->delete();
+		if ($guru != null) {
+			$image_path = public_path().'/data_file/'.$guru->foto;
+			File::delete($image_path);
+			$user = User::find($kd);
+			$user->delete();
+			//hurung hapus file
+			return redirect()->back()->with('success', '1 Data berhasil dihapus.');   
+		}
+		return redirect()->route('kelola_guru');
+	}
+	public function truncate_guru(Request $request) {
+		$input = $request->hapus;
+		$count = 0;
+		if ($input != null) {
+		foreach ($input as $i) {
+			$user = User::find($i);
+			$user->delete();
+			$count++;
+		}
+		return redirect()->back()->with('success', $count.' Data berhasil dihapus.'); 
+	}
+		return redirect()->back();
+	}
+	public function resetPassword ($kd) {
 		$user = User::find($kd);
-		$user->delete();
-		//hurung hapus file
-		return redirect()->back()->with('success', '1 Data berhasil dihapus.');   
+		if ($user != null) {
+			$guru = Guru::find($kd);
+			$psw = "gurukeren";
+			$psw = Hash::make($psw);
+			$user->password = $psw;
+			$user->save();
+
+			return redirect()->back()->with('success', 'Password berhasil direset.'); 
+		}
+		return redirect()->back();
 	}
 }

@@ -18,7 +18,7 @@
     <!-- Sidebar user (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
       <div class="image">
-        <img src="{{url('/')}}/AdminLTE-master/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+        <img src="{{url('/')}}/data_file/15267-202005.jpg" class="img-circle elevation-2" alt="User Image">
       </div>
       <div class="info">
         <a href="#" class="d-block">Administrator</a>
@@ -88,14 +88,6 @@
               </p>
             </a>
           </li> 
-          <li class="nav-item">
-            <a href="/admin/kelola-dokumen" class="nav-link">
-              <i class="nav-icon fas fa-book"></i>
-              <p>
-                Dokumen/Template
-              </p>
-            </a>
-          </li>
           <li class="nav-header">Proses PKL</li>  
           <li class="nav-item">
             <a href="/admin/kelola-pengajuan" class="nav-link">
@@ -176,8 +168,15 @@
             <i class="icon fas fa-exclamation-triangle"></i> {{$pesan}}
           </div>
           @endif
+          @if (\Session::has('success'))
+                  <div class="alert alert-success alert-dismissible shadow">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <i class="icon fas fa-exclamation-triangle"></i>
+                 {!! \Session::get('success') !!}
+                 </div>
+            @endif
         </div>
-        <div class="col-9">
+        <div class="col-md-9">
           <!-- general form elements -->
           <div class="card card-info" >
             <div class="card-header">
@@ -213,7 +212,7 @@
                 <div class="form-group row">
                   <label for="kd_kelas" class="col-sm-2 col-form-label" class="col-sm-2 col-form-label">Kelas<strong class="text-danger">*</strong></label>
                   <div class="col-sm-10">
-                    <select class="form-control col-form-label select2bs4" name="kd_kelas">
+                    <select class="form-control select2bs4" name="kd_kelas" style="width: 100%;">
                       <option <?php echo $siswa->kd_kelas == '1' ? 'selected': '' ?> value="1">XI MM 1</option>
                       <option <?php echo $siswa->kd_kelas == '2' ? 'selected': '' ?> value="2">XI MM 2</option>
                     </select>
@@ -262,9 +261,14 @@
           </div>
           <!-- /.card -->
         </div>
-        <div class="col-3">
+        <div class="col-md-3">
           <div class="card card-orange">
             <div class="card-header ">
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus text-white"></i>
+                </button>
+              </div>
               <h3 class="card-title text-white">
                 Akun
               </h3>
@@ -282,7 +286,7 @@
                   <div class="col-4">Password</div>
                   <div class="col-1">:</div>
                   <div class="col-6">
-                    <a href="">Reset password</a></div>
+                    <a onclick="resetConfirm()" href="#">Reset password</a></div>
                   </p>
                 </div>
               </div>
@@ -290,73 +294,95 @@
           </div>
         </section>
         @endsection
-        @section('javascript')
-        <!-- jquery-validation -->
-        <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/jquery.validate.min.js"></script>
-        <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/additional-methods.min.js"></script>
-        <!-- Select2 -->
-      <script src="{{url('/')}}/AdminLTE-master/plugins/select2/js/select2.full.min.js"></script>
-      <script src="{{url('/')}}/AdminLTE-master/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
-        <!-- Page specific script -->
-        <script>
-          $(function () {
-            bsCustomFileInput.init();
-             //Initialize Select2 Elements
-            $('.select2').select2()
-            //Initialize Select2 Elements
-            $('.select2bs4').select2({
-              theme: 'bootstrap4'
-            })
-            $.validator.setDefaults({});
-            $('#formsiswa').validate({
-              rules: {
-                nis: {
-                  required: true,
-                  number: true,
-                },
-                nama: {
-                  required: true,
-                },
-                tgl_lahir: {
-                  required: true,
-                  date: true,
-                },
-                kd_kelas: {
-                  required: true,
-                }
-              },
-              messages: {
-                nis: {
-                  required: "NIS harus diisi",
-                  number: "Mohon isi NIS dengan benar"
-                },
-                nama: {
-                  required: "Nama lengkap harus diisi",
-                },
+@section('modal')
+<div class="modal fade" id="resetModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top:150px;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel">Apakah anda yakin?</h4>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">Password akan kembali ke setelan awal (Tanggal lahir siswa).</div>
+      <div class="modal-footer justify-content-between">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        <a id="btn-delete" class="btn btn-danger" href="{{url('/')}}/admin/kelola-siswa/reset-password/{{$siswa->nis}}">Reset</a>
+      </div>
+    </div>
+  </div>
+</div>
+@endsection
+@section('javascript')
+<!-- jquery-validation -->
+<script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/jquery.validate.min.js"></script>
+<script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/additional-methods.min.js"></script>
+<!-- Select2 -->
+<script src="{{url('/')}}/AdminLTE-master/plugins/select2/js/select2.full.min.js"></script>
+<script src="{{url('/')}}/AdminLTE-master/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+<!-- Page specific script -->
+<script>
+  $(function () {
+    bsCustomFileInput.init();
+     //Initialize Select2 Elements
+     $('.select2').select2()
+     //Initialize Select2 Elements
+     $('.select2bs4').select2({
+      theme: 'bootstrap4'
+    })
+     $.validator.setDefaults({});
+     $('#formsiswa').validate({
+      rules: {
+        nis: {
+          required: true,
+          number: true,
+        },
+        nama: {
+          required: true,
+        },
+        tgl_lahir: {
+          required: true,
+          date: true,
+        },
+        kd_kelas: {
+          required: true,
+        }
+      },
+      messages: {
+        nis: {
+          required: "NIS harus diisi",
+          number: "Mohon isi NIS dengan benar"
+        },
+        nama: {
+          required: "Nama lengkap harus diisi",
+        },
 
-                tgl_lahir: {
-                  required: "Tanggal lahir harus diisi",
-                  date: "Mohon isi tanggal dengan benar"
-                },
-                kd_kelas: {
-                  required: "Kelas harus diisi",
-                }
-              },
-              errorElement: 'span',
-              errorPlacement: function (error, element) {
-                error.addClass('invalid-feedback');
-                element.closest('.form-group').append(error);
-              },
-              highlight: function (element, errorClass, validClass) {
-                $(element).addClass('is-invalid');
-              },
-              unhighlight: function (element, errorClass, validClass) {
-                $(element).removeClass('is-invalid');
-              }
-            });
-          });
-          function myFunction() {
-            document.getElementById("formsiswa").reset();
-          }
-        </script>
-        @endsection
+        tgl_lahir: {
+          required: "Tanggal lahir harus diisi",
+          date: "Mohon isi tanggal dengan benar"
+        },
+        kd_kelas: {
+          required: "Kelas harus diisi",
+        }
+      },
+      errorElement: 'span',
+      errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+      },
+      highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+      },
+      unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+      }
+    });
+   });
+  function myFunction() {
+    document.getElementById("formsiswa").reset();
+  }
+  function resetConfirm(){
+  $('#resetModal').modal();
+  }
+</script>
+@endsection
