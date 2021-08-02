@@ -131,7 +131,7 @@ class AdminSiswa extends Controller
 				$tujuan_upload = 'data_file';
 				$file->move($tujuan_upload,$nama_file);
 			}
-		} else if ($request->ganti == 'hapus'){
+		} else if ($request->ganti == 'alert-danger'){
 			//ngilangi foto 
 			$nama_file = 'default.jpg';
 			$image_path = public_path().'/data_file/'.$siswa->foto;
@@ -173,7 +173,7 @@ class AdminSiswa extends Controller
 		if ($siswa != null){
 			$siswa->foto = 'default.jpg';
 			$pesan = '';
-			$isiclass = 'hapus';
+			$isiclass = 'alert-danger';
 			return view('admin.editSiswa', ['pesan' => $pesan, 'isiclass' => $isiclass, 'siswa' => $siswa]);
 		}  
 		return redirect()->back();

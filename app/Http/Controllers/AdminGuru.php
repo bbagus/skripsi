@@ -30,9 +30,12 @@ class AdminGuru extends Controller
 		$guru = DB::table('guru_pembimbing')
 		->join('users', 'guru_pembimbing.username', '=', 'users.username')
 		->where('kd_pembimbing',$kd_pembimbing)->first();
+		if ($guru != null){
 		$pesan = '';
 		$isiclass = 'alert-danger';
 		return view('admin.editGuru', ['pesan' => $pesan, 'isiclass' => $isiclass, 'guru' => $guru]);
+		}
+		return redirect()->action([AdminGuru::class, 'index']);
 	}
 	public function proses_upload(Request $request){
 		$cekkd = Guru::find($request->nama);
@@ -119,7 +122,7 @@ class AdminGuru extends Controller
 				$tujuan_upload = 'data_file';
 				$file->move($tujuan_upload,$nama_file);
 			}
-		} else if ($request->ganti == 'hapus'){
+		} else if ($request->ganti == 'alert-danger'){
 			//ngilangi foto 
 			$nama_file = 'default.jpg';
 			$image_path = public_path().'/data_file/'.$guru->foto;
@@ -148,7 +151,7 @@ class AdminGuru extends Controller
 		if ($guru != null) {
 			$guru->foto = 'default.jpg';
 			$pesan = '';
-			$isiclass = 'hapus';
+			$isiclass = 'alert-danger';
 			return view('admin.editGuru', ['pesan' => $pesan, 'isiclass' => $isiclass, 'guru' => $guru]);
 		} 
 		return redirect()->back(); 

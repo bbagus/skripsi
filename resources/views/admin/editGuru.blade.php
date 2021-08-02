@@ -235,6 +235,7 @@
                       <a class="close" title="hapus foto(jangan lupa klik simpan)" style="float: left;
                       margin-left: 5px;" href="{{url('/')}}/admin/kelola-guru/hapus-foto/{{$guru->kd_pembimbing}}">x</a>
                       @endif
+                      <input type="hidden" name="ganti" value="{{$isiclass}}" />
                       <div class="custom-file">
                       <input class="custom-file-input" type="file" name="foto" accept="image/png, image/jpeg" id="customFile" >
                      <label class="custom-file-label" for="customFile">Pilih file</label>

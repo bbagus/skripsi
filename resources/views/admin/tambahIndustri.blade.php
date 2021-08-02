@@ -178,7 +178,7 @@
               <!-- form start -->
               <form class="form-horizontal" id="formindustri" action="{{route('upload_industri')}}" method="POST" enctype="multipart/form-data">
                 {{ csrf_field() }}
-                <div class="card-body" style="padding: 1.75rem 5rem;">
+                <div class="card-body " style="padding: 1.75rem 5rem;">
                   <div class="form-group row">
                     <label for="nama" class="col-sm-2 col-form-label">Nama<strong class="text-danger">*</strong></label>
                     <div class="col-sm-9">

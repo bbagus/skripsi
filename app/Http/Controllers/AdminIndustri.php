@@ -16,7 +16,6 @@ class AdminIndustri extends Controller
 	}
 	public function index() {
 		$industri = DB::table('industri')->get();
-
 		return view('admin.industri', ['industri' => $industri]);
 	}
 	public function tambahIndustri(){
@@ -26,9 +25,12 @@ class AdminIndustri extends Controller
 	}
 	public function editIndustri($kd_industri){
 		$industri = DB::table('industri')->where('kd_industri',$kd_industri)->first();
+		if($industri != null){
 		$pesan = '';
 		$isiclass = 'alert-danger';
 		return view('admin.editIndustri', ['pesan' => $pesan, 'isiclass' => $isiclass, 'industri' => $industri]);
+		}
+		return redirect()->action([AdminIndustri::class, 'index']);
 	}
 	public function proses_upload(Request $request){
 		$ceknama = Industri::find($request->nama);
@@ -114,7 +116,7 @@ class AdminIndustri extends Controller
 				$tujuan_upload = 'data_file';
 				$file->move($tujuan_upload,$nama_file);
 			}
-		} else if ($request->ganti == 'hapus'){
+		} else if ($request->ganti == 'alert-danger'){
 			//ngilangi foto 
 			$nama_file = 'default.jpg';
 			$image_path = public_path().'/data_file/'.$industri->foto;
@@ -142,7 +144,7 @@ class AdminIndustri extends Controller
 		if ($industri != null) {
 			$industri->foto = 'default.jpg';
 			$pesan = '';
-			$isiclass = 'hapus';
+			$isiclass = 'alert-danger';
 			return view('admin.editIndustri', ['pesan' => $pesan, 'isiclass' => $isiclass, 'industri' => $industri]);
 		}  
 		return redirect()->back();
@@ -153,9 +155,9 @@ class AdminIndustri extends Controller
 			$image_path = public_path().'/data_file/'.$industri->foto;
 			File::delete($image_path);
 			DB::table('industri')->where('kd_industri',$kd)->delete();
-			//hurung hapus file
 			return redirect()->back()->with('success', '1 Data berhasil dihapus.');   
 		}
+		return redirect()->action([AdminIndustri::class, 'index']);
 	}
 	public function truncate_industri(Request $request) {
 		$input = $request->hapus;

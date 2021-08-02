@@ -44,6 +44,11 @@ Route::get('admin/kelola-industri/hapus-foto/{kd}', [AdminIndustri::class, 'hapu
 
 //kelola-informasi
 Route::get('admin/kelola-informasi', [AdminInfo::class, 'index'])->middleware('is_admin');
+Route::get('admin/kelola-informasi/tambah', [AdminInfo::class, 'tambahInfo'])->middleware('is_admin');
+Route::get('admin/kelola-informasi/{kd}', [AdminInfo::class, 'editInfo'])->middleware('is_admin');
+Route::get('admin/kelola-informasi/hapus/{kd}', [AdminInfo::class, 'hapusInfo'])->middleware('is_admin');
+Route::get('admin/kelola-informasi/hapus-foto/{kd}', [AdminInfo::class, 'hapusFoto'])->middleware('is_admin');
+
 
 Route::get('siswa', function () {
     return view('siswa.doble');
@@ -74,6 +79,12 @@ Route::post('admin/kelola-guru/hapus-guru', [AdminGuru::class, 'truncate_guru'])
 Route::post('admin/kelola-industri/tambah', [AdminIndustri::class, 'proses_upload'])->name('upload_industri')->middleware('is_admin');
 Route::post('admin/kelola-industri/edit', [AdminIndustri::class, 'proses_edit'])->name('edit_industri')->middleware('is_admin');
 Route::post('admin/kelola-industri/hapus-industri', [AdminIndustri::class, 'truncate_industri'])->name('hapus_industri')->middleware('is_admin');
+//post-informasi
+Route::post('admin/kelola-informasi/tambah', [AdminInfo::class, 'proses_upload'])->name('upload_info')->middleware('is_admin');
+Route::post('admin/kelola-informasi/simpan', [AdminInfo::class, 'proses_simpan'])->name('simpan_info')->middleware('is_admin');
+Route::post('admin/kelola-informasi/edit', [AdminInfo::class, 'proses_edit'])->name('edit_info')->middleware('is_admin');
+Route::post('admin/kelola-informasi/hapus-informasi', [AdminInfo::class, 'truncate_info'])->name('hapus_info')->middleware('is_admin');
+
 
 Route::fallback(function () {
     //

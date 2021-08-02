@@ -1,9 +1,11 @@
 @extends('layout.master')
-@section('title', 'SI-PKL : Ubah Data Industri')
+@section('title', 'SI-PKL : Tambah Pengumuman')
 @section('head')
 <!-- Select2 -->
   <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/select2/css/select2.min.css">
   <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <!-- summernote -->
+  <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/summernote/summernote-bs4.min.css">
 @endsection
 @section('sidebar')
 <!-- Main Sidebar Container -->
@@ -50,14 +52,14 @@
           </li>
           <li class="nav-header">Kelola Data</li>  
           <li class="nav-item">
-            <a href="/admin/kelola-informasi" class="nav-link">
+            <a href="/admin/kelola-informasi" class="nav-link active">
               <i class="nav-icon fas fa-edit"></i>
               <p>
                 Pengumuman
               </p>
             </a>
           </li> 
-          <li class="nav-item ">
+          <li class="nav-item">
             <a href="/admin/kelola-informasi" class="nav-link ">
               <i class="nav-icon fas fa-user"></i>
               <p>
@@ -73,7 +75,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/admin/kelola-guru" class="nav-link">
+                <a href="/admin/kelola-guru" class="nav-link ">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Guru Pembimbing</p>
                 </a>
@@ -81,7 +83,7 @@
             </ul>
           </li>  
           <li class="nav-item">
-            <a href="/admin/kelola-industri" class="nav-link active">
+            <a href="/admin/kelola-industri" class="nav-link">
               <i class="nav-icon fas fa-building"></i>
               <p>
                 Industri
@@ -106,7 +108,7 @@
             </a>
           </li> 
           <li class="nav-item">
-            <a href="/admin/kelola-informasi" class="nav-link">
+            <a href="/admin/kelola-monitoring" class="nav-link">
               <i class="nav-icon fas fa-binoculars"></i>
               <p>
                 Monitoring
@@ -146,7 +148,7 @@
       <!-- /.sidebar -->
     </aside>
     @endsection
-    @section('judul', 'Mengubah Data Industri')
+    @section('judul', 'Menambah Pengumuman')
     @section('content')
     <section class="content">
       <div class="container-fluid">
@@ -168,81 +170,43 @@
               <i class="icon fas fa-exclamation-triangle"></i> {{$pesan}}
             </div>
             @endif
-            <div class="card card-info" >
+            <!-- /.card -->
+            <div class="card card-info">
               <div class="card-header">
                 <h3 class="card-title">
-                  <a href="/admin/kelola-industri"><i class="fas fa-arrow-left"></i>&nbsp; Kembali</a>
+                   <a href="/admin/kelola-informasi"><i class="fas fa-arrow-left"></i>&nbsp; Kembali</a>
                 </h3>
               </div>
               <!-- /.card-header -->
-              <!-- form start -->
-              <form class="form-horizontal" id="formindustri" action="{{route('edit_industri')}}" method="POST" enctype="multipart/form-data">
+               <!-- form start -->
+              <form id="forminfo" method="POST" enctype="multipart/form-data">
                 {{ csrf_field() }}
-                <input type="hidden" name="kd_industri" value="{{$industri->kd_industri}}" />
-
-                <div class="card-body" style="padding: 1.75rem 5rem;">
-                  <div class="form-group row">
-                    <label for="nama" class="col-sm-2 col-form-label">Nama<strong class="text-danger">*</strong></label>
-                    <div class="col-sm-9">
-                      <input type="text" class="form-control" id="nama" name="nama" placeholder="Tulis nama industri.." maxlength="50" value="{{$industri->nama}}">
-                    </div>
-                  </div>
-                  <div class="form-group row">
-                    <label for="bidang_kerja" class="col-sm-2 col-form-label">Bidang kerja<strong class="text-danger">*</strong></label>
-                    <div class="col-sm-9">
-                      <input type="text" class="form-control" name="bidang_kerja" placeholder="Tulis bidang kerja.." maxlength="50" value="{{$industri->bidang_kerja}}">
-                    </div>
-                  </div>
-                  <div class="form-group row">
-                    <label for="deskripsi" class="col-sm-2 col-form-label">Deskripsi<strong class="text-danger">*</strong></label>
-                    <div class="col-sm-9">
-                      <textarea type="text" name="deskripsi" class="form-control" placeholder="Tulis deskripsi.."s>{{$industri->deskripsi}}</textarea>
-                    </div>
-                  </div>
-                  <div class="form-group row">
-                    <label for="alamat" class="col-sm-2 col-form-label">Alamat<strong class="text-danger">*</strong></label>
-                    <div class="col-sm-9">
-                      <textarea type="text" name="alamat" class="form-control" placeholder="Tulis alamat lengkap.."s>{{$industri->alamat}}</textarea>
-                    </div>
-                  </div>
-                  <div class="form-group row">
-                    <label for="wilayah" class="col-sm-2 col-form-label">Wilayah<strong class="text-danger">*</strong></label>
-                    <div class="col-sm-3">
-                      <input type="text" name="wilayah" class="form-control" placeholder="Tulis wilayah/kota.." maxlength="50" value="{{$industri->wilayah}}">
-                    </div>
-                    <div class="col-sm-1"></div>
-                    <label for="website" class="col-sm-1 col-form-label">Website</label>
-                    <div class="col-sm-4">
-                      <input type="text" name="website" class="form-control"  placeholder="Tulis alamat website.." maxlength="50" value="{{$industri->website}}">
-                    </div>
-                  </div>
-                  <div class="form-group row">
-                    <label for="telp" class="col-sm-2 col-form-label">No. Telepon</label>
-                    <div class="col-sm-3">
-                      <input type="text" name="telp" class="form-control" placeholder="Tulis nomor telepon.." maxlength="20" value="{{$industri->telp}}">
-                    </div>
-                    <div class="col-sm-1"></div>
-                    <label for="email" class="col-sm-1 col-form-label">Email</label>
-                    <div class="col-sm-4">
-                      <input type="email" name="email" class="form-control"  placeholder="Tulis alamat email.." maxlength="50" value="{{$industri->email}}">
-                    </div>
-                  </div>
-                  <div class="form-group row">
-                    <label for="kuota" class="col-sm-2 col-form-label">Kuota</label>
-                    <div class="col-sm-3">
-                      <input type="text" name="kuota" class="form-control"  placeholder="Tulis kuota.." maxlength="50" value="{{$industri->kuota}}">
-                    </div>
-                  </div>
-                  <div class="form-group row">
-                    <label for="foto" class="col-sm-2 col-form-label">Logo industri</label>
-                    <div class="col-sm-9">
-                      @if($industri->foto != 'default.jpg')
-                      <img class="img-fluid mb-3" style="width: 150px;float:left;" src="{{url('/')}}/data_file/{{$industri->foto}}" alt="">
-                      <a class="close" title="hapus foto(jangan lupa klik simpan)" style="float: left;
-                      margin-left: 5px;" href="{{url('/')}}/admin/kelola-industri/hapus-foto/{{$industri->kd_industri}}">x</a>
-                      @endif
-                       <input type="hidden" name="ganti" value="{{$isiclass}}" />
-                     <div class="custom-file">
+              <div class="card-body" style="padding: 1.75rem 2rem;">
+                <div class="form-group mb-3">
+                  <label for="judul">Judul pengumuman<strong class="text-danger">*</strong></label>
+                  <input type="text" class="form-control" name="judul" placeholder="Tulis judul..">
+                </div>
+                <div class="form-group mb-3">
+                  <label for="isi">isi pengumuman<strong class="text-danger">*</strong></label>
+                    <textarea id="compose-textarea" name="isi" class="form-control" style="height: 300px"></textarea>
+                </div>
+                <div class="form-group mb-3 col-sm-5">
+                  <label for="kd_label">Label</label>
+                  <select class="form-control select2bs4" name="kd_label" style="width: 100%;">
+                        <option disabled="" selected="" hidden="">Pilih label</option>
+                        <option value="1">Pengajuan</option>
+                        <option value="2">Laporan</option>
+                        <option value="3">Tips</option>
+                        <option value="4">Lain-lain</option>
+                    </select>
+                </div>
+                <div class="form-group mb-3 col-sm-5">
+                  <label for="penulis">Penulis</label>
+                  <input type="text" class="form-control" name="penulis" value="Admin" placeholder="Tulis nama penulis..">
+                </div>
+                <div class="form-group mb-3 col-sm-5">
+                  <label for="foto">Thumbnail</label>
+                  <div class="custom-file">
                       <input class="custom-file-input" type="file" name="foto" accept="image/png, image/jpeg" id="customFile" >
                      <label class="custom-file-label" for="customFile">Pilih file</label>
                       <font color="red">
@@ -250,17 +214,14 @@
                         Format file : jpg, jpeg, png.
                       </font>
                     </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- /.card-body -->
-                <div class="card-footer" style="padding: .75rem 5rem;">
-                  <input type="submit" class="btn btn-success" value="Simpan">
-                  &nbsp;
-                  <input type="button" onclick="myFunction()" class="btn btn-default" value="Reset">
-                </div>
-                <!-- /.card-footer -->
-              </form>
+              </div>
+              <!-- /.card-body -->
+              <div class="card-footer">
+                <button type="submit" class="btn btn-success" formaction="{{route('upload_info')}}"> Umumkan</button>&nbsp;
+                <button type="submit" class="btn btn-primary"formaction="{{route('simpan_info')}}">Simpan ke draft</button>&nbsp;
+                <input type="button" onclick="myFunction()" class="btn btn-default" value="Reset">
+              </div>
+              <!-- /.card-footer -->
             </div>
             <!-- /.card -->
           </div>
@@ -275,6 +236,8 @@
     <!-- Select2 -->
     <script src="{{url('/')}}/AdminLTE-master/plugins/select2/js/select2.full.min.js"></script>
     <script src="{{url('/')}}/AdminLTE-master/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+    <!-- Summernote -->
+<script src="{{url('/')}}/AdminLTE-master/plugins/summernote/summernote-bs4.min.js"></script>
     <!-- Page specific script -->
     <script>
       $(function () {
@@ -285,63 +248,44 @@
         $('.select2bs4').select2({
           theme: 'bootstrap4'
         })
-        $.validator.setDefaults({});
-        $('#formindustri').validate({
-         rules: {
-          nama: {
-            required: true,
+    //Add text editor
+      $('#compose-textarea').summernote({
+        minHeight: 400,
+        });
+
+       $.validator.setDefaults({});
+       $('#forminfo').validate({
+          rules: {
+            judul: {
+              required: true,
+            },
+            isi: {
+              required: true,
+            }
           },
-          bidang_kerja: {
-            required: true,
+          messages: {
+            judul: {
+              required: "Judul harus diisi",
+            },
+            isi: {
+              required: "informasi harus diisi",
+            }
           },
-          deskripsi: {
-            required: true,
+          errorElement: 'span',
+          errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
           },
-          alamat: {
-            required: true,
+          highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
           },
-          wilayah: {
-            required: true,
-          },
-          email: {
-            email: true,
+          unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
           }
-        },
-        messages: {
-          nama: {
-            required: "Nama harus diisi",
-          },
-          bidang_kerja: {
-            required: "Bidang kerja harus diisi",
-          },
-          deskripsi: {
-            required: "Deskripsi harus diisi",
-          },
-          alamat: {
-            required: "Alamat harus diisi",
-          },
-          wilayah: {
-            required: "Wilayah harus diisi",
-          },
-          email : {
-            email: "Isi email dengan benar",
-          }
-        },
-        errorElement: 'span',
-        errorPlacement: function (error, element) {
-          error.addClass('invalid-feedback');
-          element.closest('.form-group').append(error);
-        },
-        highlight: function (element, errorClass, validClass) {
-          $(element).addClass('is-invalid');
-        },
-        unhighlight: function (element, errorClass, validClass) {
-          $(element).removeClass('is-invalid');
-        }
-      });
+        });
       });
       function myFunction() {
-        document.getElementById("formindustri").reset();
+        document.getElementById("forminfo").reset();
       }
     </script>
     @endsection
