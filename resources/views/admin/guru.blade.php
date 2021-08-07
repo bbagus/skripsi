@@ -13,7 +13,7 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{url('/')}}" class="brand-link navbar-dark">
-      <img src="{{url('/')}}/data_file/smk-n-1-pengasih-seeklogo.webp" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <img src="{{url('/')}}/data_file/smk-n-1-pengasih-seeklogo.webp" alt="logo SMK N 1 Pengasih" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">Sistem Informasi PKL</span>
     </a>
 
@@ -158,6 +158,15 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
+            @if(count($errors) > 0)
+           <div class="alert alert-danger alert-dismissible shadow">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="icon fas fa-exclamation-triangle"></i>
+            @foreach ($errors->all() as $error)
+            {{ $error }} <br/>
+            @endforeach
+          </div>
+          @endif
             @if (\Session::has('success'))
                   <div class="alert alert-success alert-dismissible shadow">
                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>

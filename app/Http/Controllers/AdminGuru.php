@@ -22,26 +22,24 @@ class AdminGuru extends Controller
 		return view('admin.guru', ['guru' => $guru]);
 	}
 	public function tambahGuru(){
-		$pesan = '';
-		$isiclass = 'alert-danger';
-		return view('admin.tambahGuru', ['pesan' => $pesan, 'isiclass' => $isiclass]);
+		return view('admin.tambahGuru');
 	}
 	public function editGuru($kd_pembimbing){
 		$guru = DB::table('guru_pembimbing')
 		->join('users', 'guru_pembimbing.username', '=', 'users.username')
 		->where('kd_pembimbing',$kd_pembimbing)->first();
 		if ($guru != null){
-		$pesan = '';
-		$isiclass = 'alert-danger';
-		return view('admin.editGuru', ['pesan' => $pesan, 'isiclass' => $isiclass, 'guru' => $guru]);
+
+		return view('admin.editGuru', ['guru' => $guru]);
 		}
 		return redirect()->action([AdminGuru::class, 'index']);
 	}
 	public function proses_upload(Request $request){
-		$cekkd = Guru::find($request->nama);
+		$cekkd = Guru::firstWhere('nama', $request->nama);
 		if ($cekkd == null) {
 			$this->validate($request, [
 				'nama' => 'required',
+				'nip' => 'numeric|nullable',
 				'jurusan' => 'required',
 				'telp' => 'string|max:20|nullable',
 			]);
@@ -76,24 +74,24 @@ class AdminGuru extends Controller
 				'wilayah' => $request->wilayah,
 				'foto' => $nama_file,
 			]);
-			$isiclass = 'alert-success';
-			$pesan = 'Input data guru pembimbing berhasil!';
-			return view('admin.tambahGuru', ['isiclass' => $isiclass, 'pesan' => $pesan]);
+			return redirect()->back()->with('success', 'Input data guru pembimbing berhasil!');
 			return redirect()->back();
 		}
 		else {
-			$isiclass = 'alert-danger';
-			$pesan = 'Nama yang sama sudah ada!';
-			return view('admin.tambahGuru', ['isiclass' => $isiclass, 'pesan' => $pesan]);
+			return redirect()->back()->withErrors('Nama yang sama sudah ada!');
 		}
 	}
 	public function proses_edit (Request $request) {
 		$kd = $request->kd_pembimbing;
+		$cekkd = Guru::find($kd);
+		$ceknama = Guru::firstWhere('nama', $request->nama);
+		if ($ceknama == null || $cekkd->nama == $request->nama) {
 		$guru = DB::table('guru_pembimbing')->where('kd_pembimbing',$kd)->first();
 		$nama_file = $guru->foto;
 		$this->validate($request, [
 			'nama' => 'required',
 			'jurusan' => 'required',
+			'nip' => 'numeric|nullable',
 			'telp' => 'string|max:20|nullable',
 		]);
 		$unik = $guru->username;
@@ -122,7 +120,7 @@ class AdminGuru extends Controller
 				$tujuan_upload = 'data_file';
 				$file->move($tujuan_upload,$nama_file);
 			}
-		} else if ($request->ganti == 'alert-danger'){
+		} else if ($request->hapus == 'hapus'){
 			//ngilangi foto 
 			$nama_file = 'default.jpg';
 			$image_path = public_path().'/data_file/'.$guru->foto;
@@ -136,13 +134,15 @@ class AdminGuru extends Controller
 		$guru->wilayah = $request->wilayah;
 		$guru->foto = $nama_file;
 		$guru->save();
-		$isiclass = 'alert-success';
-		$pesan = 'Mengubah data guru berhasil!';
 		$guru = DB::table('guru_pembimbing')
 		->join('users', 'guru_pembimbing.username', '=', 'users.username')
 		->where('kd_pembimbing',$kd)->first();
-		return view('admin.editGuru', ['isiclass' => $isiclass, 'pesan' => $pesan, 'guru' => $guru]);
+		return redirect()->back()->with('success', 'Mengubah data guru pembimbing berhasil!')
+			->with('guru', $guru);
 		return redirect()->back()->withInput();
+		} else {
+			return redirect()->back()->withErrors('Nama yang sama sudah ada!');
+		}
 	}
 	public function hapusFoto($kd) {
 		$guru = DB::table('guru_pembimbing')
@@ -150,9 +150,7 @@ class AdminGuru extends Controller
 		->where('kd_pembimbing',$kd)->first();
 		if ($guru != null) {
 			$guru->foto = 'default.jpg';
-			$pesan = '';
-			$isiclass = 'alert-danger';
-			return view('admin.editGuru', ['pesan' => $pesan, 'isiclass' => $isiclass, 'guru' => $guru]);
+			return view('admin.editGuru', ['guru' => $guru]);
 		} 
 		return redirect()->back(); 
 	}
@@ -179,7 +177,7 @@ class AdminGuru extends Controller
 		}
 		return redirect()->back()->with('success', $count.' Data berhasil dihapus.'); 
 	}
-		return redirect()->back();
+		return redirect()->back()->withErrors('Tidak ada yang ditandai.');
 	}
 	public function resetPassword ($kd) {
 		$user = User::find($kd);

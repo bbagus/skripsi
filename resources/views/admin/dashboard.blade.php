@@ -1,5 +1,4 @@
 @extends('layout.master')
-
 @section('title', 'SI-PKL : Admin - Dashboard')
 @section('sidebar')
 <!-- Main Sidebar Container -->

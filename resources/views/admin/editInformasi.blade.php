@@ -156,7 +156,7 @@
           <div class="col-12">
             <!-- general form elements -->
             @if(count($errors) > 0)
-            <div class="alert {{$isiclass}} alert-dismissible shadow">
+            <div class="alert alert-danger alert-dismissible shadow">
               <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
               <i class="icon fas fa-exclamation-triangle"></i>
               @foreach ($errors->all() as $error)
@@ -164,10 +164,11 @@
               @endforeach
             </div>
             @endif
-            @if($pesan != '')
-            <div class="alert {{$isiclass}} alert-dismissible shadow">
+             @if (\Session::has('success'))
+            <div class="alert alert-success alert-dismissible shadow">
               <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-              <i class="icon fas fa-exclamation-triangle"></i> {{$pesan}}
+              <i class="icon fas fa-exclamation-triangle"></i>
+              {!! \Session::get('success') !!}
             </div>
             @endif
             <!-- /.card -->
@@ -218,7 +219,7 @@
                     <a class="close" title="hapus foto(jangan lupa klik simpan)" style="margin-left: 5px;float:right;" href="{{url('/')}}/admin/kelola-informasi/hapus-foto/{{$info->kd_info}}">x</a>
                     <img class="img-fluid mb-3" style="width: 150px;float:right;" src="{{url('/')}}/data_file/{{$info->foto}}" alt="">
                     @endif
-                    <input type="hidden" name="ganti" value="{{$isiclass}}" />
+                    <input type="hidden" name="hapus" value="hapus" />
                   <div class="custom-file">
                       <input class="custom-file-input" type="file" name="foto" accept="image/png, image/jpeg" id="customFile" >
                      <label class="custom-file-label" for="customFile">Pilih file</label>

@@ -24,16 +24,12 @@ class AdminInfo extends Controller
 		return view('admin.informasi',['info' => $info]);
 	}
     public function tambahInfo(){
-        $pesan = '';
-        $isiclass = 'alert-danger';
-        return view('admin.tambahInformasi', ['pesan' => $pesan, 'isiclass' => $isiclass]);
+        return view('admin.tambahInformasi');
     }
     public function editInfo($kd_info){
         $info = DB::table('informasi')->where('kd_info',$kd_info)->first();
         if ($info != null){
-        $pesan = '';
-        $isiclass = 'alert-danger';
-        return view('admin.editInformasi', ['pesan' => $pesan, 'isiclass' => $isiclass, 'info' => $info]);
+        return view('admin.editInformasi', ['info' => $info]);
         }
         return redirect()->action([AdminInfo::class, 'index']);
     }
@@ -67,9 +63,7 @@ class AdminInfo extends Controller
                 'slug' => $slug,
                 'status' => 'Diumumkan'
             ]);
-            $isiclass = 'alert-success';
-            $pesan = 'Pengumuman berhasil ditambahkan!';
-            return view('admin.tambahInformasi', ['isiclass' => $isiclass, 'pesan' => $pesan]);
+            return redirect()->back()->with('success', 'Pengumuman berhasil ditambahkan!');
             return redirect()->back();
     }
     public function proses_simpan(Request $request){
@@ -100,11 +94,9 @@ class AdminInfo extends Controller
                 'foto' => $nama_file,
                 'tanggal' => $date,
                 'slug' => $slug,
-                'status' => 'Disimpan'
+                'status' => 'Draf'
             ]);
-            $isiclass = 'alert-success';
-            $pesan = 'Pengumuman berhasil disimpan ke draf!';
-            return view('admin.tambahInformasi', ['isiclass' => $isiclass, 'pesan' => $pesan]);
+            return redirect()->back()->with('success', 'Pengumuman berhasil disimpan ke draf!');
             return redirect()->back();
     }
     public function proses_edit (Request $request) {
@@ -140,7 +132,7 @@ class AdminInfo extends Controller
                 $tujuan_upload = 'data_file';
                 $file->move($tujuan_upload,$nama_file);
             }
-        } else if ($request->ganti == 'alert-danger'){
+        } else if ($request->hapus == 'hapus'){
             //ngilangi foto 
             $nama_file = 'default.jpg';
             $image_path = public_path().'/data_file/'.$info->foto;
@@ -158,18 +150,15 @@ class AdminInfo extends Controller
         $info->slug = $slug;
         $info->status = $request->status;
         $info->save();
-        $isiclass = 'alert-success';
-        $pesan = 'Mengubah pengumuman berhasil!';
-        return view('admin.editInformasi', ['isiclass' => $isiclass, 'pesan' => $pesan, 'info' => $info]);
+        return redirect()->back()->with('success', 'Mengubah pengumuman berhasil!')
+            ->with('info', $info);
         return redirect()->back()->withInput();
     }
     public function hapusFoto($kd) {
         $info = Informasi::find($kd);
         if ($info != null) {
             $info->foto = 'default.jpg';
-            $pesan = '';
-            $isiclass = 'alert-danger';
-            return view('admin.editInformasi', ['pesan' => $pesan, 'isiclass' => $isiclass, 'info' => $info]);
+            return view('admin.editInformasi', ['info' => $info]);
         }  
         return redirect()->back();
     }
@@ -194,7 +183,7 @@ class AdminInfo extends Controller
         }
         return redirect()->back()->with('success', $count.' Data berhasil dihapus.'); 
     }
-        return redirect()->back();
+        return redirect()->back()->withErrors('Tidak ada yang ditandai.');
     }
 }
 

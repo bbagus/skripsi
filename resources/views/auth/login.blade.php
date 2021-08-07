@@ -3,7 +3,7 @@
 @section('content')
 
                 <div class="card card-dark">
-                    <h3 class="card-header text-center">Login</h3>
+                    <h4 class="card-header text-center">Login</h4>
                     <div class="card-body login-card-body">
                         <p class="login-box-msg">
                          @if(session('success'))

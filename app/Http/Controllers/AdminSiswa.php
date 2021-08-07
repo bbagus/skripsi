@@ -24,18 +24,15 @@ class AdminSiswa extends Controller
 		return view('admin.siswa', ['siswa' => $siswa]);
 	}
 	public function tambahSiswa(){
-		$pesan = '';
-		$isiclass = 'alert-danger';
-		return view('admin.tambahSiswa', ['pesan' => $pesan, 'isiclass' => $isiclass]);
+
+		return view('admin.tambahSiswa');
 	}
 	public function editSiswa($nis){
 		$siswa = DB::table('siswa')
 		->join('users', 'siswa.nis', '=', 'users.username')
 		->where('nis',$nis)->first();
 		if ($siswa != null){
-			$pesan = '';
-			$isiclass = 'alert-danger';
-			return view('admin.editSiswa', ['pesan' => $pesan, 'isiclass' => $isiclass, 'siswa' => $siswa]);
+			return view('admin.editSiswa', ['siswa' => $siswa]);
 		}
 		return redirect()->action([AdminSiswa::class, 'index']);
 	}
@@ -81,15 +78,11 @@ class AdminSiswa extends Controller
 				'kd_kelas' => $request->kd_kelas,
 				'foto' => $nama_file,
 			]);
-			$isiclass = 'alert-success';
-			$pesan = 'Input data siswa berhasil!';
-			return view('admin.tambahSiswa', ['isiclass' => $isiclass, 'pesan' => $pesan]);
+			return redirect()->back()->with('success', 'Input data siswa berhasil!');
 			return redirect()->back();
 		}
 		else {
-			$isiclass = 'alert-danger';
-			$pesan = 'NIS yang sama sudah ada!';
-			return view('admin.tambahSiswa', ['isiclass' => $isiclass, 'pesan' => $pesan]);
+			return redirect()->back()->withErrors('NIS yang sama sudah ada!');
 		}
 	}
 	public function proses_edit (Request $request) {
@@ -131,7 +124,7 @@ class AdminSiswa extends Controller
 				$tujuan_upload = 'data_file';
 				$file->move($tujuan_upload,$nama_file);
 			}
-		} else if ($request->ganti == 'alert-danger'){
+		} else if ($request->hapus == 'hapus'){
 			//ngilangi foto 
 			$nama_file = 'default.jpg';
 			$image_path = public_path().'/data_file/'.$siswa->foto;
@@ -152,10 +145,9 @@ class AdminSiswa extends Controller
 			$siswa = DB::table('siswa')
 			->join('users', 'siswa.nis', '=', 'users.username')
 			->where('nis',$request->nis)->first();
-			$isiclass = 'alert-success';
-			$pesan = 'Mengubah data siswa berhasil!';
-			return view('admin.editSiswa', ['isiclass' => $isiclass, 'pesan' => $pesan, 'siswa' => $siswa]);
-			return redirect()->back();
+			return redirect()->back()->with('success','Mengubah data siswa berhasil!')
+				->with('siswa', $siswa);
+			return redirect()->back()->withInput();
 		}
 		else {
 		$siswa = DB::table('siswa')
@@ -163,7 +155,7 @@ class AdminSiswa extends Controller
 			->where('nis',$nis)->first();
 		$pesan = 'NIS yang sama sudah ada!';
 		$isiclass = 'alert-danger';
-		return view('admin.editSiswa', ['pesan' => $pesan, 'isiclass' => $isiclass, 'siswa' => $siswa]);  
+		return redirect()->back()->withErrors('NIS yang sama sudah ada!');
 	}
 	}
 	public function hapusFoto($nis) {
@@ -172,9 +164,7 @@ class AdminSiswa extends Controller
 			->where('nis',$nis)->first();
 		if ($siswa != null){
 			$siswa->foto = 'default.jpg';
-			$pesan = '';
-			$isiclass = 'alert-danger';
-			return view('admin.editSiswa', ['pesan' => $pesan, 'isiclass' => $isiclass, 'siswa' => $siswa]);
+			return view('admin.editSiswa',['siswa' => $siswa]);
 		}  
 		return redirect()->back();
 	}
@@ -200,7 +190,7 @@ class AdminSiswa extends Controller
 		}
 		return redirect()->back()->with('success', $count.' Data berhasil dihapus.'); 
 	}
-		return redirect()->back();
+		return redirect()->back()->withErrors('Tidak ada yang ditandai.');
 	}
 	public function resetPassword ($nis) {
 		$user = User::find($nis);

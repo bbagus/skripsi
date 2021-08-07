@@ -153,7 +153,7 @@
         <div class="row">
           <div class="col-12">
            @if(count($errors) > 0)
-           <div class="alert {{$isiclass}} alert-dismissible shadow">
+           <div class="alert alert-danger alert-dismissible shadow">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
             <i class="icon fas fa-exclamation-triangle"></i>
             @foreach ($errors->all() as $error)
@@ -161,12 +161,13 @@
             @endforeach
           </div>
           @endif
-          @if($pesan != '')
-          <div class="alert {{$isiclass}} alert-dismissible shadow">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <i class="icon fas fa-exclamation-triangle"></i> {{$pesan}}
-          </div>
-          @endif
+          @if (\Session::has('success'))
+                  <div class="alert alert-success alert-dismissible shadow">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <i class="icon fas fa-exclamation-triangle"></i>
+                 {!! \Session::get('success') !!}
+                 </div>
+            @endif
           </div>
           <div class="col-md-9">
             <!-- general form elements -->
@@ -206,6 +207,15 @@
                         <option disabled="" selected="" hidden="">Pilih kelas</option>
                         <option value="1">XI MM 1</option>
                         <option value="2">XI MM 2</option>
+                        <option value="3">XI MM 3</option>
+                        <option value="4">XI AKL 1</option>
+                        <option value="5">XI AKL 2</option>
+                        <option value="6">XI OTKP 1</option>
+                        <option value="7">XI OTKP 2</option>
+                        <option value="8">XI BDP 1</option>
+                        <option value="9">XI BDP 2</option>
+                        <option value="10">XI TB</option>
+                        <option value="11">XI PH</option>
                       </select>
                     </div>
                   </div>

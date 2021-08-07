@@ -158,6 +158,15 @@
   <div class="container-fluid">
       <div class="row">
         <div class="col-12">
+          @if(count($errors) > 0)
+           <div class="alert alert-danger alert-dismissible shadow">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="icon fas fa-exclamation-triangle"></i>
+            @foreach ($errors->all() as $error)
+            {{ $error }} <br/>
+            @endforeach
+          </div>
+          @endif
             @if (\Session::has('success'))
             <div class="alert alert-success alert-dismissible shadow">
               <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -183,7 +192,7 @@
               <ul class="nav nav-pills flex-column">
                 <li class="nav-item">
                   <a href="#" class="nav-link text-primary">
-                    <i class="far fa-copy"></i> &nbsp;Semua
+                    <i class="fa fa-list-ul"></i> &nbsp;Semua
                   </a>
                 </li>
                 <li class="nav-item">

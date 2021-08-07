@@ -19,21 +19,17 @@ class AdminIndustri extends Controller
 		return view('admin.industri', ['industri' => $industri]);
 	}
 	public function tambahIndustri(){
-		$pesan = '';
-		$isiclass = 'alert-danger';
-		return view('admin.tambahIndustri', ['pesan' => $pesan, 'isiclass' => $isiclass]);
+		return view('admin.tambahIndustri');
 	}
 	public function editIndustri($kd_industri){
 		$industri = DB::table('industri')->where('kd_industri',$kd_industri)->first();
 		if($industri != null){
-		$pesan = '';
-		$isiclass = 'alert-danger';
-		return view('admin.editIndustri', ['pesan' => $pesan, 'isiclass' => $isiclass, 'industri' => $industri]);
+		return view('admin.editIndustri',['industri' => $industri]);
 		}
 		return redirect()->action([AdminIndustri::class, 'index']);
 	}
 	public function proses_upload(Request $request){
-		$ceknama = Industri::find($request->nama);
+		$ceknama = Industri::firstWhere('nama',$request->nama);
 		if ($ceknama == null) {
 			$this->validate($request, [
 				'nama' => 'required',
@@ -69,19 +65,18 @@ class AdminIndustri extends Controller
 				'kuota' => $request->kuota,
 				'foto' => $nama_file,
 			]);
-			$isiclass = 'alert-success';
-			$pesan = 'Input data Industri berhasil!';
-			return view('admin.tambahIndustri', ['isiclass' => $isiclass, 'pesan' => $pesan]);
+			return redirect()->back()->with('success', 'Input data industri berhasil!');
 			return redirect()->back();
 		}
 		else {
-			$isiclass = 'alert-danger';
-			$pesan = 'Nama yang sama sudah ada!';
-			return view('admin.tambahIndustri', ['isiclass' => $isiclass, 'pesan' => $pesan]);
+			return redirect()->back()->withErrors('Nama yang sama sudah ada!');
 		}
 	}
 	public function proses_edit (Request $request) {
 		$kd = $request->kd_industri;
+		$cekkd = Industri::find($kd);
+		$ceknama = Industri::firstWhere('nama', $request->nama);
+		if($ceknama == null || $cekkd->nama == $request->nama){
 		$industri = DB::table('industri')->where('kd_industri',$kd)->first();
 		$nama_file = $industri->foto;
 		$this->validate($request, [
@@ -116,7 +111,7 @@ class AdminIndustri extends Controller
 				$tujuan_upload = 'data_file';
 				$file->move($tujuan_upload,$nama_file);
 			}
-		} else if ($request->ganti == 'alert-danger'){
+		} else if ($request->hapus == 'alert-danger'){
 			//ngilangi foto 
 			$nama_file = 'default.jpg';
 			$image_path = public_path().'/data_file/'.$industri->foto;
@@ -136,16 +131,18 @@ class AdminIndustri extends Controller
 		$industri->save();
 		$isiclass = 'alert-success';
 		$pesan = 'Mengubah data industri berhasil!';
-		return view('admin.editIndustri', ['isiclass' => $isiclass, 'pesan' => $pesan, 'industri' => $industri]);
+		return redirect()->back()->with('success', 'Mengubah data industri berhasil!')
+			->with('industri', $industri);
 		return redirect()->back()->withInput();
+		} else {
+			return redirect()->back()->withErrors('Nama yang sama sudah ada!');
+		}
 	}
 	public function hapusFoto($kd) {
 		$industri = Industri::find($kd);
 		if ($industri != null) {
 			$industri->foto = 'default.jpg';
-			$pesan = '';
-			$isiclass = 'alert-danger';
-			return view('admin.editIndustri', ['pesan' => $pesan, 'isiclass' => $isiclass, 'industri' => $industri]);
+			return view('admin.editIndustri', ['industri' => $industri]);
 		}  
 		return redirect()->back();
 	}
@@ -170,6 +167,6 @@ class AdminIndustri extends Controller
 		}
 		return redirect()->back()->with('success', $count.' Data berhasil dihapus.'); 
 	}
-		return redirect()->back();
+		return redirect()->back()->withErrors('Tidak ada yang ditandai.');
 	}
 }

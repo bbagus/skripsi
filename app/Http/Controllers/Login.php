@@ -24,11 +24,16 @@ class Login extends Controller
         $credentials = $request->only('username', 'password');
         $remember_me = $request->has('remember') ? true : false; 
         if (Auth::attempt($credentials, $remember_me)) {
-           if (auth()->user()->role == 'admin') {
+            $role = auth()->user()->role;
+           if ($role == 'admin') {
                  $request->session()->regenerate();//tambahan
-                 return redirect('admin')->withSuccess('Berhasil login');
-             }else{
-                return redirect('/')->withSuccess('Berhasil login');
+                 return redirect('admin');
+             }else if ($role == 'siswa'){
+                $request->session()->regenerate();//tambahan
+                return redirect('siswa');
+             }else if ($role == 'guru'){
+                $request->session()->regenerate();//tambahan
+                return redirect('guru');
              }
          }
          return redirect("login")->withSuccess('Username atau Password salah!');
@@ -63,6 +68,6 @@ class Login extends Controller
     Auth::logout();
     $request->session()->invalidate();
     $request->session()->regenerateToken();
-    return Redirect('login');
+    return Redirect('login')->withSuccess('Berhasil log-out');
 }
 }

@@ -2,12 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Home;
+use App\Http\Controllers\Login;
+//admin
 use App\Http\Controllers\AdminDashboard;
 use App\Http\Controllers\AdminSiswa;
-use App\Http\Controllers\Login;
 use App\Http\Controllers\AdminGuru;
 use App\Http\Controllers\AdminIndustri;
 use App\Http\Controllers\AdminInfo;
+use App\Http\Controllers\AdminPengajuan;
+
+//siswa
+use App\Http\Controllers\SiswaDashboard;
+use App\Http\Controllers\SiswaProfil;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,6 +27,7 @@ use App\Http\Controllers\AdminInfo;
 //get
 Route::get('/', [Home::class, 'index']);
 Route::get('admin', [AdminDashboard::class, 'dashboard'])->middleware('is_admin');
+Route::get('siswa', [SiswaDashboard::class, 'dashboard'])->middleware('is_siswa');
 //kelola-siswa
 Route::get('admin/kelola-siswa', [AdminSiswa::class, 'index'])->name('kelola_siswa')->middleware('is_admin');
 Route::get('admin/kelola-siswa/tambah', [AdminSiswa::class, 'tambahSiswa'])->middleware('is_admin');
@@ -28,6 +35,7 @@ Route::get('admin/kelola-siswa/{nis}', [AdminSiswa::class, 'editSiswa'])->middle
 Route::get('admin/kelola-siswa/hapus/{nis}', [AdminSiswa::class, 'hapusSiswa'])->middleware('is_admin');
 Route::get('admin/kelola-siswa/hapus-foto/{nis}', [AdminSiswa::class, 'hapusFoto'])->middleware('is_admin');
 Route::get('admin/kelola-siswa/reset-password/{nis}', [AdminSiswa::class, 'resetPassword'])->middleware('is_admin');
+
 //kelola-guru
 Route::get('admin/kelola-guru', [AdminGuru::class, 'index'])->name('kelola_guru')->middleware('is_admin');
 Route::get('admin/kelola-guru/tambah', [AdminGuru::class, 'tambahGuru'])->middleware('is_admin');
@@ -35,6 +43,7 @@ Route::get('admin/kelola-guru/{kd}', [AdminGuru::class, 'editGuru'])->middleware
 Route::get('admin/kelola-guru/hapus/{kd}', [AdminGuru::class, 'hapusGuru'])->middleware('is_admin');
 Route::get('admin/kelola-guru/hapus-foto/{kd}', [AdminGuru::class, 'hapusFoto'])->middleware('is_admin');
 Route::get('admin/kelola-guru/reset-password/{kd}', [AdminGuru::class, 'resetPassword'])->middleware('is_admin');
+
 //kelola-industri
 Route::get('admin/kelola-industri', [AdminIndustri::class, 'index'])->middleware('is_admin');
 Route::get('admin/kelola-industri/tambah', [AdminIndustri::class, 'tambahIndustri'])->middleware('is_admin');
@@ -49,10 +58,17 @@ Route::get('admin/kelola-informasi/{kd}', [AdminInfo::class, 'editInfo'])->middl
 Route::get('admin/kelola-informasi/hapus/{kd}', [AdminInfo::class, 'hapusInfo'])->middleware('is_admin');
 Route::get('admin/kelola-informasi/hapus-foto/{kd}', [AdminInfo::class, 'hapusFoto'])->middleware('is_admin');
 
+//kelola-pengajuan
+Route::get('admin/kelola-pengajuan', [AdminPengajuan::class, 'index'])->middleware('is_admin');
 
-Route::get('siswa', function () {
-    return view('siswa.doble');
-});
+//kelola-penempatan
+//monitoring
+
+//profil
+Route::get('siswa/profil', [SiswaProfil::class, 'index'])->middleware('is_siswa');
+
+
+
 Route::get('guru', function () {
     return view('guru.dashboard');
 });
@@ -85,7 +101,9 @@ Route::post('admin/kelola-informasi/simpan', [AdminInfo::class, 'proses_simpan']
 Route::post('admin/kelola-informasi/edit', [AdminInfo::class, 'proses_edit'])->name('edit_info')->middleware('is_admin');
 Route::post('admin/kelola-informasi/hapus-informasi', [AdminInfo::class, 'truncate_info'])->name('hapus_info')->middleware('is_admin');
 
+//siswa ganti_password
+Route::post('siswa/profil/ubah-password', [SiswaProfil::class, 'ganti_password'])->name('ganti_password')->middleware('is_siswa');
 
 Route::fallback(function () {
-    //
+    abort(404);
 });

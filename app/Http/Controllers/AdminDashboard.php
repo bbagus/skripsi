@@ -2,10 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;define('', '');
-
-
 class AdminDashboard extends Controller
 {
 	public function __construct()

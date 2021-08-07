@@ -10,7 +10,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
   <a href="{{url('/')}}" class="brand-link navbar-dark">
-    <img src="{{url('/')}}/data_file/smk-n-1-pengasih-seeklogo.webp" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+    <img src="{{url('/')}}/data_file/smk-n-1-pengasih-seeklogo.webp" alt="logo SMK N 1 Pengasih" class="brand-image img-circle elevation-3" style="opacity: .8">
     <span class="brand-text font-weight-light">Sistem Informasi PKL</span>
   </a>
   <!-- Sidebar -->
@@ -154,18 +154,12 @@
         <div class="row">
           <div class="col-12">
            @if(count($errors) > 0)
-           <div class="alert {{$isiclass}} alert-dismissible shadow">
+           <div class="alert alert-danger alert-dismissible shadow">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
             <i class="icon fas fa-exclamation-triangle"></i>
             @foreach ($errors->all() as $error)
             {{ $error }} <br/>
             @endforeach
-          </div>
-          @endif
-          @if($pesan != '')
-          <div class="alert {{$isiclass}} alert-dismissible shadow">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <i class="icon fas fa-exclamation-triangle"></i> {{$pesan}}
           </div>
           @endif
           @if (\Session::has('success'))
@@ -215,6 +209,15 @@
                     <select class="form-control select2bs4" name="kd_kelas" style="width: 100%;">
                       <option <?php echo $siswa->kd_kelas == '1' ? 'selected': '' ?> value="1">XI MM 1</option>
                       <option <?php echo $siswa->kd_kelas == '2' ? 'selected': '' ?> value="2">XI MM 2</option>
+                      <option <?php echo $siswa->kd_kelas == '3' ? 'selected': '' ?> value="1">XI MM 3</option>
+                      <option <?php echo $siswa->kd_kelas == '4' ? 'selected': '' ?> value="2">XI AKL 1</option>
+                      <option <?php echo $siswa->kd_kelas == '5' ? 'selected': '' ?> value="1">XI AKL 2</option>
+                      <option <?php echo $siswa->kd_kelas == '6' ? 'selected': '' ?> value="2">XI OTKP 1</option>
+                      <option <?php echo $siswa->kd_kelas == '7' ? 'selected': '' ?> value="1">XI OTKP 2</option>
+                      <option <?php echo $siswa->kd_kelas == '8' ? 'selected': '' ?> value="2">XI BDP 1</option>
+                      <option <?php echo $siswa->kd_kelas == '9' ? 'selected': '' ?> value="1">XI BDP 2</option>
+                      <option <?php echo $siswa->kd_kelas == '10' ? 'selected': '' ?> value="2">XI TB</option>
+                      <option <?php echo $siswa->kd_kelas == '11' ? 'selected': '' ?> value="1">XI PH</option>
                     </select>
                   </div>
                 </div>
@@ -238,7 +241,7 @@
                     <a class="close" title="hapus foto(jangan lupa klik simpan)" style="float: left;
                     margin-left: 5px;" href="{{url('/')}}/admin/kelola-siswa/hapus-foto/{{$siswa->nis}}">x</a>
                     @endif
-                    <input type="hidden" name="ganti" value="{{$isiclass}}" />
+                    <input type="hidden" name="hapus" value="hapus" />
                     <div class="custom-file">
                       <input class="custom-file-input" type="file" name="foto" accept="image/png, image/jpeg" id="customFile" >
                      <label class="custom-file-label" for="customFile">Pilih file</label>

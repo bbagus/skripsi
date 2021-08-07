@@ -1,19 +1,19 @@
 @extends('layout.master')
-@section('title', 'SI-PKL : Admin - Data Siswa')
+@section('title', 'SI-PKL : Admin - Pengajuan')
 @section('head')
-<!-- DataTables -->
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- DataTables -->
   <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-   <!-- icheck bootstrap -->
-  <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
 @endsection
 @section('sidebar')
 <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{url('/')}}" class="brand-link navbar-dark">
-      <img src="{{url('/')}}/data_file/smk-n-1-pengasih-seeklogo.webp" alt="logo SMK N 1 Pengasih" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <img src="{{url('/')}}/data_file/smk-n-1-pengasih-seeklogo.webp" alt="Logo SIPKL" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">Sistem Informasi PKL</span>
     </a>
 
@@ -47,7 +47,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="{{url('/')}}/admin/" class="nav-link">
+            <a href="/admin/" class="nav-link ">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
@@ -56,15 +56,15 @@
           </li>
           <li class="nav-header">Kelola Data</li>  
           <li class="nav-item">
-            <a href="/admin/kelola-informasi" class="nav-link">
+            <a href="/admin/kelola-informasi" class="nav-link ">
               <i class="nav-icon fas fa-edit"></i>
               <p>
                 Pengumuman
               </p>
             </a>
           </li> 
-          <li class="nav-item menu-open">
-            <a href="#" class="nav-link active">
+          <li class="nav-item">
+            <a href="/admin/kelola-informasi" class="nav-link">
               <i class="nav-icon fas fa-user"></i>
               <p>
                 Pengguna
@@ -73,7 +73,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/admin/kelola-siswa" class="nav-link active">
+                <a href="/admin/kelola-siswa" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Siswa</p>
                 </a>
@@ -96,7 +96,7 @@
           </li> 
           <li class="nav-header">Proses PKL</li>  
           <li class="nav-item">
-            <a href="/admin/kelola-pengajuan" class="nav-link">
+            <a href="/admin/kelola-pengajuan" class="nav-link active">
               <i class="nav-icon fas fa-copy"></i>
               <p>
                 Pengajuan
@@ -112,7 +112,7 @@
             </a>
           </li> 
           <li class="nav-item">
-            <a href="/admin/kelola-monitoring" class="nav-link">
+            <a href="/admin/kelola-informasi" class="nav-link">
               <i class="nav-icon fas fa-binoculars"></i>
               <p>
                 Monitoring
@@ -152,105 +152,179 @@
     <!-- /.sidebar -->
   </aside>
 @endsection
-@section('judul', 'Kelola Data Siswa')
+@section('judul', 'Kelola Pengajuan')
 @section('content')
- <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-12">
-            @if(count($errors) > 0)
-           <div class="alert alert-danger alert-dismissible shadow">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <i class="icon fas fa-exclamation-triangle"></i>
-            @foreach ($errors->all() as $error)
-            {{ $error }} <br/>
-            @endforeach
-          </div>
-          @endif
+<section class="content">
+  <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
             @if (\Session::has('success'))
-                  <div class="alert alert-success alert-dismissible shadow">
-                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <i class="icon fas fa-exclamation-triangle"></i>
-                 {!! \Session::get('success') !!}
-                 </div>
+            <div class="alert alert-success alert-dismissible shadow">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+              <i class="icon fas fa-exclamation-triangle"></i>
+              {!! \Session::get('success') !!}
+            </div>
             @endif
-            <!-- /.card -->
-            <div class="card card-primary card-outline">
-            <!-- form start -->
-              <form onSubmit="return confirm('Apakah Anda yakin ingin menghapus seluruh data yang ditandai?')" action="{{route('hapus_siswa')}}" method="POST">
-                {{ csrf_field() }}
-              <div class="card-header">
-                <h3 class="card-title">
-                  <a href="/admin/kelola-siswa/tambah" class="btn btn-small btn-success"><i class="fas fa-plus"></i> Tambah siswa</a>
-                </h3>
+        </div>
+        <div class="col-md-3">
+          <a href="/admin/kelola-informasi/tambah" class="btn btn-success btn-block mb-3"><i class="fa fa-edit"></i> Buat Pengumuman</a>
+
+          <div class="card card-info">
+            <div class="card-header">
+              <h3 class="card-title">Status</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
               </div>
-              <!-- /.card-header -->
-              <div class="card-body table-responsive">
-                <table id="example1" class="table table-bordered table-striped">
+            </div>
+            <div class="card-body p-0">
+              <ul class="nav nav-pills flex-column">
+                <li class="nav-item">
+                  <a href="#" class="nav-link text-primary">
+                    <i class="far fa-copy"></i> &nbsp;Semua
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-paper-plane"></i> &nbsp;Diumumkan
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-file-alt"></i> &nbsp;Draf
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="fas fa-save"></i> &nbsp;Disimpan
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+          <div class="card card-orange">
+            <div class="card-header">
+              <h3 class="card-title text-white">Label</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus text-white"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body p-0">
+              <ul class="nav nav-pills flex-column">
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle text-danger"></i>
+                    Pengajuan
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle text-warning"></i> Laporan
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle text-info"></i>
+                    Tips
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle text-primary"></i>
+                    Lain-lain
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-9">
+          <div class="card card-primary card-outline">
+            <form onSubmit="return confirm('Apakah Anda yakin ingin menghapus seluruh data yang ditandai?')" action="{{route('hapus_info')}}" method="POST">
+                {{ csrf_field() }}
+            <div class="card-header">
+              <h3 class="card-title">List Pengumuman</h3>
+              <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+              <div class="table-responsive mailbox-messages" style="padding: .5rem;">
+                <table id="example1" class="table table-hover table-striped">
                   <thead>
                   <tr>
-                    <th>
-                    </th>
-                    <th>NIS</th>
-                    <th>Nama Lengkap</th>
-                    <th>Tanggal Lahir</th>
-                    <th>Kelas</th>
-                    <th>Nomor Telepon</th>
-                    <th>Alamat</th>
-                    <th>Foto</th>
+                    <th></th>
+                    <th>Judul</th>
+                    <th>Penulis</th>
+                    <th>Tanggal</th>
+                    <th>Status</th>
+                    <th>Label</th>
                     <th>Action</th>
                   </tr>
                   </thead>
                   <tbody>
-                    @foreach ($siswa as $s)
-                    <tr>
-                      <td style="vertical-align: middle;" width="30px">
-                        <div class="icheck-primary">
-                        <input type="checkbox" name="hapus[]" value="{{$s->nis}}" id="{{$s->nis}}">
-                        <label for="{{$s->nis}}"></label>
+                    @foreach ($info as $info)
+                  <tr>
+                    <td style="vertical-align: middle;max-width: 30px;">
+                      <div class="icheck-primary">
+                        <input type="checkbox" name="hapus[]" value="{{$info->kd_info}}" id="{{$info->kd_info}}">
+                        <label for="{{$info->kd_info}}"></label>
                       </div>
+                    </td>
+                    <td class="mailbox-name" style="vertical-align: middle;">
+                      <a href="#">{{$info->judul}}</a>
+                    </td>
+                    <td style="vertical-align: middle;" class="mailbox-subject" style="vertical-align: middle;">{{$info->penulis}}
+                    </td>
+                    <td style="vertical-align: middle;" class="mailbox-date">{{$info->tanggal}}</td>
+                    <td style="vertical-align: middle;" class="">{{$info->status}}</td>
+                    <td style="vertical-align: middle;" class="">{{$info->nama}}</td>
+                    <td style="vertical-align: middle;" width="130px" >
+                              <a href="{{url('/')}}/admin/kelola-informasi/{{$info->kd_info}}" class="btn btn-small btn-success"><i class="fas fa-edit"></i></a>
+                              <a onclick="deleteConfirm('{{url('/')}}/admin/kelola-informasi/hapus/{{$info->kd_info}}')" href="#!" class="btn btn-small btn-danger"><i class="fas fa-trash"></i></a>
                       </td>
-                      <td style="vertical-align: middle;">{{ $s->nis }}</td>
-                      <td style="vertical-align: middle;">{{ $s->nama}}</td>
-                      <td style="vertical-align: middle;">{{ $s->tgl_lahir}}</td>
-                      <td style="vertical-align: middle;">{{ $s->kelas}}</td>
-                      <td style="vertical-align: middle;">{{ $s->telp}}</td>
-                      <td style="vertical-align: middle;">{{ $s->alamat}}</td>
-                      <td style="vertical-align: middle;padding:0.2rem;" width="100px">
-                        <img class="img-fluid" src="{{url('/')}}/data_file/{{$s->foto}}" alt="">
-                      </td>
-                      <td style="vertical-align: middle;" width="160px" >
-                              <a href="{{url('/')}}/admin/kelola-siswa/{{$s->nis}}" class="btn btn-small btn-success"><i class="fas fa-edit"></i>Edit</a>
-                              <a onclick="deleteConfirm('{{url('/')}}/admin/kelola-siswa/hapus/{{$s->nis}}')" href="#!" class="btn btn-small btn-danger"><i class="fas fa-trash"></i> Hapus</a>
-                      </td>
-                    </tr>
-                    @endforeach
+                  </tr>
+                  @endforeach
                   </tbody>
                 </table>
+                <!-- /.table -->
               </div>
-              <!-- /.card-body -->
-              <div class="card-footer">
-                <div class="mailbox-controls">
+              <!-- /.mail-box-messages -->
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer p-0">
+              <div class="mailbox-controls">
                 <!-- Check all button -->
-                <button type="button" class="btn btn-outline-dark btn-small checkbox-toggle"><i class="far fa-square"></i> Tandai Semua
+                <button type="button" class="btn btn-default btn-sm checkbox-toggle">
+                  <i class="far fa-square"></i>
                 </button>
                 <div class="btn-group">
-                  <input type="submit" class="btn btn-danger" value="Hapus">
+                  <button type="submit" class="btn btn-default btn-sm">
+                    <i class="far fa-trash-alt text-danger"></i>
+                  </button>
                 </div>
-                <!-- /.btn-group -->
-                </div>
+                <!-- /.float-right -->
               </div>
-                <!-- /.card-footer -->
-              </form>
             </div>
-            <!-- /.card -->
+          </form>
           </div>
-          <!-- /.col -->
+          <!-- /.card -->
         </div>
-        <!-- /.row -->
+        <!-- /.col -->
       </div>
-      <!-- /.container-fluid -->
-    </section>
+      <!-- /.row -->
+    </div>
+</section>
+    <!-- /.content -->
 @endsection
 @section('modal')
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top:150px;">
@@ -303,33 +377,48 @@
       var clicks = $(this).data('clicks')
       if (clicks) {
         //Uncheck all checkboxes
-        $('#example1 input[type=\'checkbox\']').prop('checked', false)
+        $('.mailbox-messages input[type=\'checkbox\']').prop('checked', false)
         $('.checkbox-toggle .far.fa-check-square').removeClass('fa-check-square').addClass('fa-square')
       } else {
         //Check all checkboxes
-        $('#example1 input[type=\'checkbox\']').prop('checked', true)
+        $('.mailbox-messages input[type=\'checkbox\']').prop('checked', true)
         $('.checkbox-toggle .far.fa-square').removeClass('fa-square').addClass('fa-check-square')
       }
       $(this).data('clicks', !clicks)
     })
+
+    //Handle starring for font awesome
+    $('.mailbox-star').click(function (e) {
+      e.preventDefault()
+      //detect type
+      var $this = $(this).find('a > i')
+      var far   = $this.hasClass('far')
+      var fas   = $this.hasClass('fas')
+
+      //Switch states
+      if (far) {
+        $this.toggleClass('far fa-star')
+        $this.toggleClass('fas fa-star')
+      } else if (fas) {
+        $this.toggleClass('far fa-star')
+        $this.toggleClass('fas fa-star')
+      }
+    })
   })
- $(document).ready(function () {
+  $(document).ready(function () {
     $("#example1").DataTable({
       "processing": true,
       "columns": [
             { "data": "checkbox"},
-            { "data": "nis" },
-            { "data": "nama" },
-            { "data": "tgl_lahir" },
-            { "data": "kelas" },
-            { "data": "telp" },
-            { "data": "alamat" },
-            { "data": "foto" },
+            { "data": "judul" },
+            { "data": "penulis" },
+            { "data": "tanggal" },
+            { "data": "status" },
+            { "data": "label" },
             { "data": "action"}
         ],
-      "responsive": true, "lengthChange": true, "autoWidth": false,
-      "buttons": ["colvis", "print", "pdf", "excel"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+      "ordering": true, "responsive": true, "lengthChange": true, "autoWidth": false,
+    })
   });
 </script>
 <script>
