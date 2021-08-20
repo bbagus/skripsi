@@ -1,13 +1,5 @@
 @extends('layout.master')
-@section('title', 'SI-PKL : Admin - Pengajuan')
-@section('head')
-  <!-- icheck bootstrap -->
-  <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <!-- DataTables -->
-  <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-  <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-@endsection
+@section('title', 'SI-PKL : Admin - Monitoring Laporan Mingguan')
 @section('sidebar')
 <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -56,7 +48,7 @@
           </li>
           <li class="nav-header">Kelola Data</li>  
           <li class="nav-item">
-            <a href="/admin/kelola-informasi" class="nav-link ">
+            <a href="/admin/kelola-informasi" class="nav-link">
               <i class="nav-icon fas fa-edit"></i>
               <p>
                 Pengumuman
@@ -96,7 +88,7 @@
           </li> 
           <li class="nav-header">Proses PKL</li>  
           <li class="nav-item">
-            <a href="/admin/kelola-pengajuan" class="nav-link active">
+            <a href="/admin/kelola-pengajuan" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
                 Pengajuan
@@ -111,8 +103,8 @@
               </p>
             </a>
           </li> 
-          <li class="nav-item">
-            <a href="/admin/kelola-informasi" class="nav-link">
+          <li class="nav-item menu-open">
+            <a href="/admin/kelola-informasi" class="nav-link active">
               <i class="nav-icon fas fa-binoculars"></i>
               <p>
                 Monitoring
@@ -121,7 +113,7 @@
             </a>
              <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/admin/kelola-laporan-mingguan" class="nav-link">
+                <a href="/admin/kelola-laporan-mingguan" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
                   laporan mingguan
@@ -152,13 +144,7 @@
     <!-- /.sidebar -->
   </aside>
 @endsection
-@section('judul', 'Kelola Pengajuan')
+@section('judul', 'Monitoring Laporan Mingguan')
 @section('content')
-
-@endsection
-@section('modal')
-
-@endsection
-@section('javascript')
-
+admin
 @endsection

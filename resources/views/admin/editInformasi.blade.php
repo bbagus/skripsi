@@ -218,8 +218,9 @@
                   @if($info->foto != 'default.jpg')
                     <a class="close" title="hapus foto(jangan lupa klik simpan)" style="margin-left: 5px;float:right;" href="{{url('/')}}/admin/kelola-informasi/hapus-foto/{{$info->kd_info}}">x</a>
                     <img class="img-fluid mb-3" style="width: 150px;float:right;" src="{{url('/')}}/data_file/{{$info->foto}}" alt="">
+                    @else
+                       <input type="hidden" name="hapus" value="hapus" />
                     @endif
-                    <input type="hidden" name="hapus" value="hapus" />
                   <div class="custom-file">
                       <input class="custom-file-input" type="file" name="foto" accept="image/png, image/jpeg" id="customFile" >
                      <label class="custom-file-label" for="customFile">Pilih file</label>

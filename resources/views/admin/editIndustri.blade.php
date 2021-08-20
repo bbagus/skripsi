@@ -188,6 +188,20 @@
                       <input type="text" class="form-control" id="nama" name="nama" placeholder="Tulis nama industri.." maxlength="50" value="{{$industri->nama}}">
                     </div>
                   </div>
+                   <div class="form-group row">
+                    <label for="jurusan" class="col-sm-2 col-form-label">Jurusan<strong class="text-danger">*</strong></label>
+                    <div class="col-sm-9">
+                      <select class="form-control select2bs4" name="jurusan" style="width: 100%;">
+                        <option selected="" value="{{$industri->jurusan}}">{{$industri->jurusan}}</option>
+                        <option value="Akuntansi Keuangan dan Lembaga">Akuntansi Keuangan dan Lembaga</option>
+                        <option value="Bisnis Daring dan Pemasaran">Bisnis Daring dan Pemasaran</option>
+                        <option value="Otomatisasi dan Tata Kelola Perkantoran">Otomatisasi dan Tata Kelola Perkantoran</option>
+                        <option value="Perhotelan">Perhotelan</option>
+                        <option value="Multimedia">Multimedia</option>
+                        <option value="Tata Busana">Tata Busana</option>
+                      </select>
+                    </div>
+                  </div>
                   <div class="form-group row">
                     <label for="bidang_kerja" class="col-sm-2 col-form-label">Bidang kerja<strong class="text-danger">*</strong></label>
                     <div class="col-sm-9">
@@ -195,7 +209,7 @@
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label for="deskripsi" class="col-sm-2 col-form-label">Deskripsi<strong class="text-danger">*</strong></label>
+                    <label for="deskripsi" class="col-sm-2 col-form-label">Deskripsi</label>
                     <div class="col-sm-9">
                       <textarea type="text" name="deskripsi" class="form-control" placeholder="Tulis deskripsi.."s>{{$industri->deskripsi}}</textarea>
                     </div>
@@ -223,14 +237,19 @@
                       <input type="text" name="telp" class="form-control" placeholder="Tulis nomor telepon.." maxlength="20" value="{{$industri->telp}}">
                     </div>
                     <div class="col-sm-1"></div>
-                    <label for="email" class="col-sm-1 col-form-label">Email</label>
+                    <label for="nama_kontak" class="col-sm-1 col-form-label">Nama kontak</label>
                     <div class="col-sm-4">
-                      <input type="email" name="email" class="form-control"  placeholder="Tulis alamat email.." maxlength="50" value="{{$industri->email}}">
+                      <input type="text" name="nama_kontak" class="form-control"  placeholder="Tulis nama kontak.." maxlength="50" value="{{$industri->nama_kontak}}">
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label for="kuota" class="col-sm-2 col-form-label">Kuota</label>
+                    <label for="email" class="col-sm-2 col-form-label">Email</label>
                     <div class="col-sm-3">
+                      <input type="email" name="email" class="form-control"  placeholder="Tulis alamat email.." maxlength="50" value="{{$industri->email}}">
+                    </div>
+                    <div class="col-sm-1"></div>
+                    <label for="kuota" class="col-sm-1 col-form-label">Kuota</label>
+                    <div class="col-sm-4">
                       <input type="text" name="kuota" class="form-control"  placeholder="Tulis kuota.." maxlength="50" value="{{$industri->kuota}}">
                     </div>
                   </div>
@@ -241,8 +260,9 @@
                       <img class="img-fluid mb-3" style="width: 150px;float:left;" src="{{url('/')}}/data_file/{{$industri->foto}}" alt="">
                       <a class="close" title="hapus foto(jangan lupa klik simpan)" style="float: left;
                       margin-left: 5px;" href="{{url('/')}}/admin/kelola-industri/hapus-foto/{{$industri->kd_industri}}">x</a>
-                      @endif
+                      @else
                        <input type="hidden" name="hapus" value="hapus" />
+                      @endif
                      <div class="custom-file">
                       <input class="custom-file-input" type="file" name="foto" accept="image/png, image/jpeg" id="customFile" >
                      <label class="custom-file-label" for="customFile">Pilih file</label>
@@ -292,10 +312,10 @@
           nama: {
             required: true,
           },
-          bidang_kerja: {
-            required: true,
+          jurusan: {
+              required: true,
           },
-          deskripsi: {
+          bidang_kerja: {
             required: true,
           },
           alamat: {
@@ -312,11 +332,11 @@
           nama: {
             required: "Nama harus diisi",
           },
+          jurusan: {
+              required: "Jurusan harus diisi",
+            },
           bidang_kerja: {
             required: "Bidang kerja harus diisi",
-          },
-          deskripsi: {
-            required: "Deskripsi harus diisi",
           },
           alamat: {
             required: "Alamat harus diisi",

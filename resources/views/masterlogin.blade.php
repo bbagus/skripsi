@@ -45,7 +45,7 @@
     </div>
     <div class="d-flex justify-content-center align-items-center">
       <h2 class="text-center text-white" style="margin-top: 2vh;margin-bottom: 4vh;"> Selamat Datang di<br>
-        Sistem Informasi Praktik Kerja Lapangan<br>
+        <a style="color: white;" href="/">Sistem Informasi Praktik Kerja Lapangan</a><br>
         <a target="_blank" rel="noopener noreferrer" href="http://v5.smkn1pengasih.sch.id/" style="color: white;"><b>SMK Negeri 1 Pengasih</b></a></h2>
     </div>
       <div class="d-flex justify-content-center align-items-center">

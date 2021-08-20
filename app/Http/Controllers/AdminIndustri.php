@@ -23,9 +23,7 @@ class AdminIndustri extends Controller
 	}
 	public function editIndustri($kd_industri){
 		$industri = DB::table('industri')->where('kd_industri',$kd_industri)->first();
-		if($industri != null){
-		return view('admin.editIndustri',['industri' => $industri]);
-		}
+		if($industri != null) return view('admin.editIndustri',['industri' => $industri]);
 		return redirect()->action([AdminIndustri::class, 'index']);
 	}
 	public function proses_upload(Request $request){
@@ -33,8 +31,8 @@ class AdminIndustri extends Controller
 		if ($ceknama == null) {
 			$this->validate($request, [
 				'nama' => 'required',
+				'jurusan' => 'required',
 				'bidang_kerja' => 'required',
-				'deskripsi' => 'required',
 				'alamat' => 'required',
 				'wilayah' => 'required',
 				'telp' => 'string|max:20|nullable',
@@ -55,6 +53,7 @@ class AdminIndustri extends Controller
 			}
 			Industri::create([
 				'nama' => $request->nama,
+				'jurusan' => $request->jurusan,
 				'bidang_kerja' => $request->bidang_kerja,
 				'deskripsi' => $request->deskripsi,
 				'alamat' => $request->alamat,
@@ -68,75 +67,61 @@ class AdminIndustri extends Controller
 			return redirect()->back()->with('success', 'Input data industri berhasil!');
 			return redirect()->back();
 		}
-		else {
-			return redirect()->back()->withErrors('Nama yang sama sudah ada!');
-		}
+		return redirect()->back()->withErrors('Nama yang sama sudah ada!');
 	}
 	public function proses_edit (Request $request) {
 		$kd = $request->kd_industri;
 		$cekkd = Industri::find($kd);
 		$ceknama = Industri::firstWhere('nama', $request->nama);
 		if($ceknama == null || $cekkd->nama == $request->nama){
-		$industri = DB::table('industri')->where('kd_industri',$kd)->first();
-		$nama_file = $industri->foto;
-		$this->validate($request, [
-			'nama' => 'required',
-			'bidang_kerja' => 'required',
-			'deskripsi' => 'required',
-			'alamat' => 'required',
-			'wilayah' => 'required',
-			'telp' => 'string|max:20|nullable',
-		]);
-		if ($request->file('foto') != null) {
+			$industri = Industri::find($kd);
+			$nama_file = $industri->foto;
 			$this->validate($request, [
-				'foto' => 'file|image|mimes:jpeg,png,jpg|max:700',
+				'nama' => 'required',
+				'jurusan' => 'required',
+				'bidang_kerja' => 'required',
+				'alamat' => 'required',
+				'wilayah' => 'required',
+				'telp' => 'string|max:20|nullable',
 			]);
-			
-			if($industri->foto == 'default.jpg'){
-				//mau ada foto
+			if ($request->file('foto') != null) {
+				$this->validate($request, [
+					'foto' => 'file|image|mimes:jpeg,png,jpg|max:700',
+				]);
+
+				if($industri->foto != 'default.jpg'){
+				//mau ganti foto, 
+					$image_path = public_path().'/data_file/'.$industri->foto;
+					File::delete($image_path);
+				} 
 				$file = $request->file('foto');
 				$extension = $request->foto->getClientOriginalExtension();
 				$nama_file = 'Industri'.'-'.$request->nama.'.'.$extension;
-	      	        // isi dengan nama folder tempat kemana file diupload
 				$tujuan_upload = 'data_file';
 				$file->move($tujuan_upload,$nama_file);
-			} 
-			else {
-				//mau ganti foto, 
+			} else if ($request->hapus == 'alert-danger'){
+			//ngilangi foto 
+				$nama_file = 'default.jpg';
 				$image_path = public_path().'/data_file/'.$industri->foto;
 				File::delete($image_path);
-				$file = $request->file('foto');
-				$extension = $request->foto->getClientOriginalExtension();
-				$nama_file = 'Industri'.'-'.$request->nama.'.'.$extension;
-				$tujuan_upload = 'data_file';
-				$file->move($tujuan_upload,$nama_file);
 			}
-		} else if ($request->hapus == 'alert-danger'){
-			//ngilangi foto 
-			$nama_file = 'default.jpg';
-			$image_path = public_path().'/data_file/'.$industri->foto;
-			File::delete($image_path);
-		}
-		$industri = Industri::find($kd);
-		$industri->nama = $request->nama;
-		$industri->bidang_kerja = $request->bidang_kerja;
-		$industri->deskripsi = $request->deskripsi;
-		$industri->alamat = $request->alamat;
-		$industri->wilayah = $request->wilayah;
-		$industri->telp = $request->telp;
-		$industri->website = $request->website;
-		$industri->email = $request->email;
-		$industri->kuota = $request->kuota;
-		$industri->foto = $nama_file;
-		$industri->save();
-		$isiclass = 'alert-success';
-		$pesan = 'Mengubah data industri berhasil!';
-		return redirect()->back()->with('success', 'Mengubah data industri berhasil!')
+			$industri->nama = $request->nama;
+			$industri->jurusan = $request->jurusan;
+			$industri->bidang_kerja = $request->bidang_kerja;
+			$industri->deskripsi = $request->deskripsi;
+			$industri->alamat = $request->alamat;
+			$industri->wilayah = $request->wilayah;
+			$industri->telp = $request->telp;
+			$industri->website = $request->website;
+			$industri->email = $request->email;
+			$industri->kuota = $request->kuota;
+			$industri->foto = $nama_file;
+			$industri->save();
+			return redirect()->back()->with('success', 'Mengubah data industri berhasil!')
 			->with('industri', $industri);
-		return redirect()->back()->withInput();
-		} else {
-			return redirect()->back()->withErrors('Nama yang sama sudah ada!');
-		}
+			return redirect()->back()->withInput();
+		} 
+		return redirect()->back()->withErrors('Nama yang sama sudah ada!');
 	}
 	public function hapusFoto($kd) {
 		$industri = Industri::find($kd);
@@ -160,13 +145,13 @@ class AdminIndustri extends Controller
 		$input = $request->hapus;
 		$count = 0;
 		if ($input != null) {
-		foreach ($input as $i) {
-			$industri = Industri::find($i);
-			$industri->delete();
-			$count++;
+			foreach ($input as $i) {
+				$industri = Industri::find($i);
+				$industri->delete();
+				$count++;
+			}
+			return redirect()->back()->with('success', $count.' Data berhasil dihapus.'); 
 		}
-		return redirect()->back()->with('success', $count.' Data berhasil dihapus.'); 
-	}
 		return redirect()->back()->withErrors('Tidak ada yang ditandai.');
 	}
 }

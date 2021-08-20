@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'SI-PKL : Admin - Pengajuan')
+@section('title', 'SI-PKL : Admin - Penempatan')
 @section('head')
   <!-- icheck bootstrap -->
   <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
@@ -96,7 +96,7 @@
           </li> 
           <li class="nav-header">Proses PKL</li>  
           <li class="nav-item">
-            <a href="/admin/kelola-pengajuan" class="nav-link active">
+            <a href="/admin/kelola-pengajuan" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
                 Pengajuan
@@ -104,7 +104,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="/admin/kelola-penempatan" class="nav-link">
+            <a href="/admin/kelola-penempatan" class="nav-link active">
               <i class="nav-icon fas fa-map-marker-alt"></i>
               <p>
                 Penempatan
@@ -152,7 +152,7 @@
     <!-- /.sidebar -->
   </aside>
 @endsection
-@section('judul', 'Kelola Pengajuan')
+@section('judul', 'Kelola Penempatan')
 @section('content')
 
 @endsection

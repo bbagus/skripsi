@@ -13,8 +13,9 @@ class Login extends Controller
 {
     use AuthenticatesUsers;
     public function index()
-    {
+    {  
         return view('auth.login');
+        
     }
     public function customLogin(Request $request){
         $request->validate([

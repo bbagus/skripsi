@@ -187,13 +187,27 @@
                     </div>
                   </div>
                   <div class="form-group row">
+                    <label for="jurusan" class="col-sm-2 col-form-label">Jurusan<strong class="text-danger">*</strong></label>
+                    <div class="col-sm-9">
+                      <select class="form-control select2bs4" name="jurusan" style="width: 100%;">
+                        <option disabled="" selected="" hidden="">Pilih Jurusan</option>
+                        <option value="Akuntansi Keuangan dan Lembaga">Akuntansi Keuangan dan Lembaga</option>
+                        <option value="Bisnis Daring dan Pemasaran">Bisnis Daring dan Pemasaran</option>
+                        <option value="Otomatisasi dan Tata Kelola Perkantoran">Otomatisasi dan Tata Kelola Perkantoran</option>
+                        <option value="Perhotelan">Perhotelan</option>
+                        <option value="Multimedia">Multimedia</option>
+                        <option value="Tata Busana">Tata Busana</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group row">
                     <label for="bidang_kerja" class="col-sm-2 col-form-label">Bidang kerja<strong class="text-danger">*</strong></label>
                     <div class="col-sm-9">
                       <input type="text" class="form-control" name="bidang_kerja" placeholder="Tulis bidang kerja.." maxlength="50">
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label for="deskripsi" class="col-sm-2 col-form-label">Deskripsi<strong class="text-danger">*</strong></label>
+                    <label for="deskripsi" class="col-sm-2 col-form-label">Deskripsi</label>
                     <div class="col-sm-9">
                       <textarea type="text" name="deskripsi" class="form-control" placeholder="Tulis deskripsi.."s></textarea>
                     </div>
@@ -221,15 +235,20 @@
                       <input type="text" name="telp" class="form-control" placeholder="Tulis nomor telepon.." maxlength="20">
                     </div>
                     <div class="col-sm-1"></div>
-                    <label for="email" class="col-sm-1 col-form-label">Email</label>
+                    <label for="nama_kontak" class="col-sm-1 col-form-label">Nama kontak</label>
                     <div class="col-sm-4">
-                      <input type="text" name="email" class="form-control"  placeholder="Tulis alamat email.." maxlength="50">
+                      <input type="text" name="nama_kontak" class="form-control"  placeholder="Tulis nama kontak.." maxlength="50">
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label for="kuota" class="col-sm-2 col-form-label">Kuota</label>
+                    <label for="email" class="col-sm-2 col-form-label">Email</label>
                     <div class="col-sm-3">
-                      <input type="text" name="kuota" class="form-control"  placeholder="Tulis kuota.." maxlength="50">
+                      <input type="email" name="email" class="form-control"  placeholder="Tulis alamat email.." maxlength="50">
+                    </div>
+                     <div class="col-sm-1"></div>
+                    <label for="kuota" class="col-sm-1 col-form-label">Kuota</label>
+                    <div class="col-sm-4">
+                      <input type="text" name="kuota" class="form-control"  placeholder="Tulis kuota.." maxlength="10">
                     </div>
                   </div>
                   <div class="form-group row">
@@ -284,10 +303,10 @@
             nama: {
               required: true,
             },
-            bidang_kerja: {
+            jurusan: {
               required: true,
             },
-            deskripsi: {
+            bidang_kerja: {
               required: true,
             },
             alamat: {
@@ -307,8 +326,8 @@
             bidang_kerja: {
               required: "Bidang kerja harus diisi",
             },
-            deskripsi: {
-              required: "Deskripsi harus diisi",
+            jurusan: {
+              required: "Jurusan harus diisi",
             },
             alamat: {
               required: "Alamat harus diisi",

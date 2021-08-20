@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'SI-PKL : Siswa - Dashboard')
+@section('title', 'SI-PKL : Siswa - Nilai')
 @section('sidebar')
 <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -43,7 +43,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="/siswa/" class="nav-link active">
+            <a href="/siswa/" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
@@ -78,7 +78,7 @@
             </a>
              <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/siswa/laporan-mingguan" class="nav-link">
+                <a href="/siswa/laporan-mingguan" class="nav-link ">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
                   laporan mingguan
@@ -86,7 +86,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/siswa/laporan-pkl" class="nav-link">
+                <a href="/siswa/laporan-pkl" class="nav-link ">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
                   laporan PKL
@@ -96,7 +96,7 @@
               </ul> 
           </li> 
               <li class="nav-item">
-                <a href="/siswa/nilai" class="nav-link">
+                <a href="/siswa/nilai" class="nav-link active">
                   <i class="far fa-star nav-icon"></i>
                   <p>
                   Nilai
@@ -111,5 +111,5 @@
   </aside>
 @endsection
 @section('content')
-siswa
+Nilai
 @endsection

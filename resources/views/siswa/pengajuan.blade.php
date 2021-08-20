@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'SI-PKL : Siswa - Dashboard')
+@section('title', 'SI-PKL : Siswa - Pengajuan PKL')
 @section('sidebar')
 <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -43,7 +43,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="/siswa/" class="nav-link active">
+            <a href="/siswa/" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
@@ -61,7 +61,7 @@
           </li> 
           <li class="nav-header">Proses PKL</li>  
           <li class="nav-item">
-            <a href="/siswa/pengajuan" class="nav-link">
+            <a href="/siswa/pengajuan" class="nav-link active">
               <i class="nav-icon fas fa-pencil-alt"></i>
               <p>
                 Pengajuan
@@ -111,5 +111,5 @@
   </aside>
 @endsection
 @section('content')
-siswa
+Pengajaun
 @endsection

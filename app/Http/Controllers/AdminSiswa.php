@@ -13,39 +13,36 @@ use Illuminate\Support\Facades\Hash;
 class AdminSiswa extends Controller
 {
 	public function __construct()
-    {
-        $this->middleware('auth');
-    }
-    public function index(){
-    	$siswa = DB::table('siswa')
-    	->join('kelas','siswa.kd_kelas', '=', 'kelas.kd_kelas')
-    	->select('siswa.nis', 'siswa.nama', 'siswa.tgl_lahir', 'kelas.nama as kelas', 'siswa.telp','siswa.alamat', 'siswa.foto')
-    	->get();
+	{
+		$this->middleware('auth');
+	}
+	public function index(){
+		$siswa = DB::table('siswa')
+		->join('kelas','siswa.kd_kelas', '=', 'kelas.kd_kelas')
+		->select('siswa.nis', 'siswa.nama', 'siswa.tgl_lahir', 'kelas.nama as kelas', 'siswa.telp','siswa.alamat', 'siswa.foto')
+		->get();
 		return view('admin.siswa', ['siswa' => $siswa]);
 	}
 	public function tambahSiswa(){
-
 		return view('admin.tambahSiswa');
 	}
 	public function editSiswa($nis){
 		$siswa = DB::table('siswa')
 		->join('users', 'siswa.nis', '=', 'users.username')
 		->where('nis',$nis)->first();
-		if ($siswa != null){
-			return view('admin.editSiswa', ['siswa' => $siswa]);
-		}
+		if ($siswa != null)	return view('admin.editSiswa', ['siswa' => $siswa]);
 		return redirect()->action([AdminSiswa::class, 'index']);
 	}
 	public function proses_upload(Request $request){
 		$ceknis = Siswa::find($request->nis);
 		if ($ceknis == null) {
 			$this->validate($request, [
-					'nis' => 'required',
-					'nama' => 'required',
-					'tgl_lahir' => 'required',
-					'kd_kelas' => 'required',
-					'telp' => 'string|max:20|nullable',
-				]);
+				'nis' => 'required',
+				'nama' => 'required',
+				'tgl_lahir' => 'required',
+				'kd_kelas' => 'required',
+				'telp' => 'string|max:20|nullable',
+			]);
 			$unik = substr(uniqid('', true), -5);
 			if ($request->file('foto') != null) {
 				$this->validate($request, [
@@ -54,7 +51,7 @@ class AdminSiswa extends Controller
 				// menyimpan data file yang diupload ke variabel $file
 				$file = $request->file('foto');
 				$extension = $request->foto->getClientOriginalExtension();
-	 			$nama_file = $unik.'-'.$request->nis.'.'.$extension;
+				$nama_file = $unik.'-'.$request->nis.'.'.$extension;
 	      	        // isi dengan nama folder tempat kemana file diupload
 				$tujuan_upload = 'data_file';
 				$file->move($tujuan_upload,$nama_file);
@@ -81,9 +78,7 @@ class AdminSiswa extends Controller
 			return redirect()->back()->with('success', 'Input data siswa berhasil!');
 			return redirect()->back();
 		}
-		else {
 			return redirect()->back()->withErrors('NIS yang sama sudah ada!');
-		}
 	}
 	public function proses_edit (Request $request) {
 		$ceknis = Siswa::find($request->nis);
@@ -99,37 +94,28 @@ class AdminSiswa extends Controller
 			$siswa = DB::table('siswa')->where('nis',$nis)->first();
 			$nama_file = $siswa->foto;
 			$unik = substr(uniqid('', true), -5);
-		if ($request->file('foto') != null) {
-			$this->validate($request, [
-				'foto' => 'file|image|mimes:jpeg,png,jpg|max:700',
-			]);
-			
-			if($siswa->foto == 'default.jpg'){
+			if ($request->file('foto') != null) {
+				$this->validate($request, [
+					'foto' => 'file|image|mimes:jpeg,png,jpg|max:700',
+				]);
+
+				if($siswa->foto != 'default.jpg'){
 				//mau ada foto
-				$file = $request->file('foto');
-				$extension = $request->foto->getClientOriginalExtension();
-	 			$nama_file = $unik.'-'.$request->nis.'.'.$extension;
-	      	        // isi dengan nama folder tempat kemana file diupload
-				$tujuan_upload = 'data_file';
-				$file->move($tujuan_upload,$nama_file);
-			} 
-			else {
-				//mau ganti foto, 
+					$image_path = public_path().'/data_file/'.$siswa->foto;
+					File::delete($image_path);
+				} 
+					$file = $request->file('foto');
+					$extension = $request->foto->getClientOriginalExtension();
+					$nama_file = $unik.'-'.$request->nis.'.'.$extension;
+		      	        // isi dengan nama folder tempat kemana file diupload
+					$tujuan_upload = 'data_file';
+					$file->move($tujuan_upload,$nama_file);
+			} else if ($request->hapus == 'hapus'){
+			//ngilangi foto 
+				$nama_file = 'default.jpg';
 				$image_path = public_path().'/data_file/'.$siswa->foto;
 				File::delete($image_path);
-				$file = $request->file('foto');
-		 		$extension = $request->foto->getClientOriginalExtension();
-	 			$nama_file = $unik.'-'.$request->nis.'.'.$extension;
-		      	        // isi dengan nama folder tempat kemana file diupload
-				$tujuan_upload = 'data_file';
-				$file->move($tujuan_upload,$nama_file);
 			}
-		} else if ($request->hapus == 'hapus'){
-			//ngilangi foto 
-			$nama_file = 'default.jpg';
-			$image_path = public_path().'/data_file/'.$siswa->foto;
-			File::delete($image_path);
-		}
 			$user = User::find($nis);
 			$user->username = $request->nis;
 			$user->save();
@@ -141,27 +127,16 @@ class AdminSiswa extends Controller
 			$siswa->kd_kelas = $request->kd_kelas;
 			$siswa->foto = $nama_file;
 			$siswa->save();
-
-			$siswa = DB::table('siswa')
-			->join('users', 'siswa.nis', '=', 'users.username')
-			->where('nis',$request->nis)->first();
 			return redirect()->back()->with('success','Mengubah data siswa berhasil!')
-				->with('siswa', $siswa);
+			->with('siswa', $siswa);
 			return redirect()->back()->withInput();
 		}
-		else {
-		$siswa = DB::table('siswa')
-			->join('users', 'siswa.nis', '=', 'users.username')
-			->where('nis',$nis)->first();
-		$pesan = 'NIS yang sama sudah ada!';
-		$isiclass = 'alert-danger';
 		return redirect()->back()->withErrors('NIS yang sama sudah ada!');
-	}
 	}
 	public function hapusFoto($nis) {
 		$siswa = DB::table('siswa')
-			->join('users', 'siswa.nis', '=', 'users.username')
-			->where('nis',$nis)->first();
+		->join('users', 'siswa.nis', '=', 'users.username')
+		->where('nis',$nis)->first();
 		if ($siswa != null){
 			$siswa->foto = 'default.jpg';
 			return view('admin.editSiswa',['siswa' => $siswa]);
@@ -183,13 +158,13 @@ class AdminSiswa extends Controller
 		$input = $request->hapus;
 		$count = 0;
 		if ($input != null) {
-		foreach ($input as $i) {
-			$user = User::find($i);
-			$user->delete();
-			$count++;
+			foreach ($input as $i) {
+				$user = User::find($i);
+				$user->delete();
+				$count++;
+			}
+			return redirect()->back()->with('success', $count.' Data berhasil dihapus.'); 
 		}
-		return redirect()->back()->with('success', $count.' Data berhasil dihapus.'); 
-	}
 		return redirect()->back()->withErrors('Tidak ada yang ditandai.');
 	}
 	public function resetPassword ($nis) {

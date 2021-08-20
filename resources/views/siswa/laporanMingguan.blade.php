@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'SI-PKL : Siswa - Dashboard')
+@section('title', 'SI-PKL : Siswa - Laporan Mingguan')
 @section('sidebar')
 <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -43,7 +43,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="/siswa/" class="nav-link active">
+            <a href="/siswa/" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
@@ -68,8 +68,8 @@
               </p>
             </a>
           </li>
-          <li class="nav-item">
-            <a href="/siswa/bimbingan" class="nav-link">
+          <li class="nav-item menu-open">
+            <a href="/siswa/bimbingan" class="nav-link active">
               <i class="nav-icon fas fa-comments"></i>
               <p>
                 Bimbingan
@@ -78,7 +78,7 @@
             </a>
              <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/siswa/laporan-mingguan" class="nav-link">
+                <a href="/siswa/laporan-mingguan" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
                   laporan mingguan
@@ -111,5 +111,5 @@
   </aside>
 @endsection
 @section('content')
-siswa
+laporan mingguan
 @endsection

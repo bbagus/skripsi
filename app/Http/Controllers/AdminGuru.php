@@ -18,7 +18,6 @@ class AdminGuru extends Controller
 	}
 	public function index(){
 		$guru = DB::table('guru_pembimbing')->get();
-
 		return view('admin.guru', ['guru' => $guru]);
 	}
 	public function tambahGuru(){
@@ -28,10 +27,7 @@ class AdminGuru extends Controller
 		$guru = DB::table('guru_pembimbing')
 		->join('users', 'guru_pembimbing.username', '=', 'users.username')
 		->where('kd_pembimbing',$kd_pembimbing)->first();
-		if ($guru != null){
-
-		return view('admin.editGuru', ['guru' => $guru]);
-		}
+		if ($guru != null) return view('admin.editGuru', ['guru' => $guru]);
 		return redirect()->action([AdminGuru::class, 'index']);
 	}
 	public function proses_upload(Request $request){
@@ -77,72 +73,56 @@ class AdminGuru extends Controller
 			return redirect()->back()->with('success', 'Input data guru pembimbing berhasil!');
 			return redirect()->back();
 		}
-		else {
-			return redirect()->back()->withErrors('Nama yang sama sudah ada!');
-		}
+		return redirect()->back()->withErrors('Nama yang sama sudah ada!');
 	}
 	public function proses_edit (Request $request) {
 		$kd = $request->kd_pembimbing;
 		$cekkd = Guru::find($kd);
 		$ceknama = Guru::firstWhere('nama', $request->nama);
 		if ($ceknama == null || $cekkd->nama == $request->nama) {
-		$guru = DB::table('guru_pembimbing')->where('kd_pembimbing',$kd)->first();
-		$nama_file = $guru->foto;
-		$this->validate($request, [
-			'nama' => 'required',
-			'jurusan' => 'required',
-			'nip' => 'numeric|nullable',
-			'telp' => 'string|max:20|nullable',
-		]);
-		$unik = $guru->username;
-		if ($request->file('foto') != null) {
+			$guru = Guru::find($kd);
+			$nama_file = $guru->foto;
 			$this->validate($request, [
-				'foto' => 'file|image|mimes:jpeg,png,jpg|max:700',
+				'nama' => 'required',
+				'jurusan' => 'required',
+				'nip' => 'numeric|nullable',
+				'telp' => 'string|max:20|nullable',
 			]);
-			
-			if($guru->foto == 'default.jpg'){
-				//mau ada foto
-				$file = $request->file('foto');
-				$extension = $request->foto->getClientOriginalExtension();
-				$nama_file = $unik.'-'.$request->nama.'.'.$extension;
-	      	        // isi dengan nama folder tempat kemana file diupload
-				$tujuan_upload = 'data_file';
-				$file->move($tujuan_upload,$nama_file);
-			} 
-			else {
+			$unik = $guru->username;
+			if ($request->file('foto') != null) {
+				$this->validate($request, [
+					'foto' => 'file|image|mimes:jpeg,png,jpg|max:700',
+				]);
+				
+				if($guru->foto != 'default.jpg'){
 				//mau ganti foto, 
-				$image_path = public_path().'/data_file/'.$guru->foto;
-				File::delete($image_path);
+					$image_path = public_path().'/data_file/'.$guru->foto;
+					File::delete($image_path);
+				} 
 				$file = $request->file('foto');
 				$extension = $request->foto->getClientOriginalExtension();
 				$nama_file = $unik.'-'.$request->nama.'.'.$extension;
 		      	        // isi dengan nama folder tempat kemana file diupload
 				$tujuan_upload = 'data_file';
 				$file->move($tujuan_upload,$nama_file);
-			}
-		} else if ($request->hapus == 'hapus'){
+			} else if ($request->hapus == 'hapus'){
 			//ngilangi foto 
-			$nama_file = 'default.jpg';
-			$image_path = public_path().'/data_file/'.$guru->foto;
-			File::delete($image_path);
-		}
-		$guru = Guru::find($kd);
-		$guru->nama = $request->nama;
-		$guru->nip = $request->nip;
-		$guru->telp = $request->telp;
-		$guru->jurusan = $request->jurusan;
-		$guru->wilayah = $request->wilayah;
-		$guru->foto = $nama_file;
-		$guru->save();
-		$guru = DB::table('guru_pembimbing')
-		->join('users', 'guru_pembimbing.username', '=', 'users.username')
-		->where('kd_pembimbing',$kd)->first();
-		return redirect()->back()->with('success', 'Mengubah data guru pembimbing berhasil!')
+				$nama_file = 'default.jpg';
+				$image_path = public_path().'/data_file/'.$guru->foto;
+				File::delete($image_path);
+			}
+			$guru->nama = $request->nama;
+			$guru->nip = $request->nip;
+			$guru->telp = $request->telp;
+			$guru->jurusan = $request->jurusan;
+			$guru->wilayah = $request->wilayah;
+			$guru->foto = $nama_file;
+			$guru->save();
+			return redirect()->back()->with('success', 'Mengubah data guru pembimbing berhasil!')
 			->with('guru', $guru);
-		return redirect()->back()->withInput();
-		} else {
-			return redirect()->back()->withErrors('Nama yang sama sudah ada!');
+			return redirect()->back()->withInput();
 		}
+		return redirect()->back()->withErrors('Nama yang sama sudah ada!');
 	}
 	public function hapusFoto($kd) {
 		$guru = DB::table('guru_pembimbing')
@@ -170,13 +150,13 @@ class AdminGuru extends Controller
 		$input = $request->hapus;
 		$count = 0;
 		if ($input != null) {
-		foreach ($input as $i) {
-			$user = User::find($i);
-			$user->delete();
-			$count++;
+			foreach ($input as $i) {
+				$user = User::find($i);
+				$user->delete();
+				$count++;
+			}
+			return redirect()->back()->with('success', $count.' Data berhasil dihapus.'); 
 		}
-		return redirect()->back()->with('success', $count.' Data berhasil dihapus.'); 
-	}
 		return redirect()->back()->withErrors('Tidak ada yang ditandai.');
 	}
 	public function resetPassword ($kd) {

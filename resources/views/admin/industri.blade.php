@@ -191,6 +191,7 @@
                     <tr>
                       <th></th>
                       <th>Nama</th>
+                      <th>Jurusan</th>
                       <th>Bidang Kerja</th>
                       <th>Alamat</th>
                       <th>Wilayah</th>
@@ -209,6 +210,7 @@
                       </div>
                       </td>
                       <td style="vertical-align: middle;">{{ $s->nama }}</td>
+                      <td style="vertical-align: middle;">{{ $s->jurusan}}</td>
                       <td style="vertical-align: middle;">{{ $s->bidang_kerja}}</td>
                       <td style="vertical-align: middle;">{{ $s->alamat}}</td>
                       <td style="vertical-align: middle;">{{ $s->wilayah}}</td>
@@ -316,6 +318,7 @@
         "columns": [
         { "data": "checkbox"},
         { "data": "nama" },
+        { "data": "jurusan" },
         { "data": "bidang_kerja" },
         { "data": "alamat" },
         { "data": "wilayah" },

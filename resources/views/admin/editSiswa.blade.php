@@ -240,8 +240,9 @@
                     <img class="img-fluid mb-3" style="width: 150px;float:left;" src="{{url('/')}}/data_file/{{$siswa->foto}}" alt="">
                     <a class="close" title="hapus foto(jangan lupa klik simpan)" style="float: left;
                     margin-left: 5px;" href="{{url('/')}}/admin/kelola-siswa/hapus-foto/{{$siswa->nis}}">x</a>
-                    @endif
-                    <input type="hidden" name="hapus" value="hapus" />
+                    @else
+                     <input type="hidden" name="hapus" value="hapus" />
+                    @endif         
                     <div class="custom-file">
                       <input class="custom-file-input" type="file" name="foto" accept="image/png, image/jpeg" id="customFile" >
                      <label class="custom-file-label" for="customFile">Pilih file</label>

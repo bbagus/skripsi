@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File; 
 
 
-class AdminPengajuan extends Controller
+class AdminMonitoring extends Controller
 {
 	public function __construct()
     {
@@ -16,12 +16,15 @@ class AdminPengajuan extends Controller
     }
     public function index(){
 
-		return view('admin.pengajuan');
+		return view('admin.laporanMingguan');
 	}
 
-   public function penempatan(){
+   public function laporanPKL(){
 
-        return view('admin.penempatan');
+        return view('admin.laporanPkl');
+    }
+    public function nilai(){
+        return view('admin.nilai');
     }
 }
 
