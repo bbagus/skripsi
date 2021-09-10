@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'SI-PKL : Siswa - Laporan Mingguan')
+@section('title', 'SI-PKL : Siswa - Laporan kegiatan')
 @section('sidebar')
 <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -21,7 +21,7 @@
           @endif
         </div>
         <div class="info" style="padding: 0 5px 0 15px;white-space: normal;">
-          <a href="#" class="d-block">{{$user->nama}}<br>
+          <a href="siswa/profil" class="d-block">{{$user->nama}}<br>
             <sup>{{$user->nis}}</sup>
           </a>
         </div>
@@ -78,10 +78,10 @@
             </a>
              <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/siswa/laporan-mingguan" class="nav-link active">
+                <a href="/siswa/laporan-kegiatan" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
-                  laporan mingguan
+                  laporan kegiatan
                   </p>
                 </a>
               </li>
@@ -111,5 +111,5 @@
   </aside>
 @endsection
 @section('content')
-laporan mingguan
+laporan kegiatan
 @endsection

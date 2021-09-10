@@ -22,11 +22,15 @@
     <!-- Sidebar user (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
       <div class="image">
-        <img src="{{url('/')}}/data_file/15267-202005.jpg" class="img-circle elevation-2" alt="User Image">
-      </div>
-      <div class="info">
-        <a href="#" class="d-block">Administrator</a>
-      </div>
+          @if ($user->foto != 'default.jpg')
+          <img src="{{url('/')}}/data_file/{{$user->foto}}" class="img-circle elevation-2" alt="Foto Profil">
+          @else
+          <img src="{{url('/')}}/data_file/guru-default.jpeg" class="img-circle elevation-2" alt="Foto Profil">
+          @endif
+        </div>
+        <div class="info">
+          <a href="/admin/profil" class="d-block">{{$user->nama}}</a>
+        </div>
     </div>
 
     <!-- SidebarSearch Form -->
@@ -121,10 +125,10 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/admin/kelola-laporan-mingguan" class="nav-link">
+                <a href="/admin/kelola-laporan-kegiatan" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
-                    laporan mingguan
+                    laporan kegiatan
                   </p>
                 </a>
               </li>
@@ -186,7 +190,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="example1" class="table table-bordered table-striped table-hover">
                   <thead>
                     <tr>
                       <th></th>
@@ -195,10 +199,32 @@
                       <th>Bidang Kerja</th>
                       <th>Alamat</th>
                       <th>Wilayah</th>
+                      <th>Nama Kontak</th>
                       <th>No. Telepon</th>
                       <th>Logo</th>
-                      <th>Action</th>
+                      <th>Aksi</th>
                     </tr>
+                    <tr id="filter">
+                        <th>
+                        </th>
+                        <th><input class="nama form-control" type="text" placeholder="Nama" /></th>
+                        <th><select class="jurusan form-control">
+                        <option selected="" value="">Jurusan</option>
+                        <option value="Akuntansi Keuangan dan Lembaga">Akuntansi Keuangan dan Lembaga</option>
+                        <option value="Bisnis Daring dan Pemasaran">Bisnis Daring dan Pemasaran</option>
+                        <option value="Otomatisasi dan Tata Kelola Perkantoran">Otomatisasi dan Tata Kelola Perkantoran</option>
+                        <option value="Perhotelan">Perhotelan</option>
+                        <option value="Multimedia">Multimedia</option>
+                        <option value="Tata Busana">Tata Busana</option>
+                      </select></th>
+                      <th><input class="bidang form-control" type="text" placeholder="Bidang Kerja" /></th>
+                      <th><input class="alamat form-control" type="text" placeholder="Alamat" /></th>
+                        <th><input class="wilayah form-control" type="text" placeholder="Wilayah" /></th>
+                        <Th><input class="kontak form-control" type="text" placeholder="Nama Kontak" /></th>
+                        <th><input class="telp form-control" type="text" placeholder="No. Telepon" /></th>
+                        <th></th>
+                        <th></th>
+                      </tr>
                   </thead>
                   <tbody>
                     @foreach ($industri as $s)
@@ -212,8 +238,9 @@
                       <td style="vertical-align: middle;">{{ $s->nama }}</td>
                       <td style="vertical-align: middle;">{{ $s->jurusan}}</td>
                       <td style="vertical-align: middle;">{{ $s->bidang_kerja}}</td>
-                      <td style="vertical-align: middle;">{{ $s->alamat}}</td>
+                      <td style="vertical-align: middle;max-width: 350px;">{{ $s->alamat}}</td>
                       <td style="vertical-align: middle;">{{ $s->wilayah}}</td>
+                      <td style="vertical-align: middle;">{{ $s->nama_kontak}}</td>
                       <td style="vertical-align: middle;">{{ $s->telp}}</td>
                       <td style="vertical-align: middle;padding:0.2rem;" width="100px">
                         <img class="img-fluid" src="{{url('/')}}/data_file/{{$s->foto}}" alt="">
@@ -313,8 +340,9 @@
     })
   })
      $(document).ready(function () {
-      $("#example1").DataTable({
+      var table = $("#example1").DataTable({
         "processing": true,
+        "orderCellsTop": true,
         "columns": [
         { "data": "checkbox"},
         { "data": "nama" },
@@ -322,14 +350,66 @@
         { "data": "bidang_kerja" },
         { "data": "alamat" },
         { "data": "wilayah" },
+        { "data": "nama_kontak"},
         { "data": "telp" },
         { "data": "foto" },
-        { "data": "action"}
+        { "data": "aksi"}
         ],
         "responsive": true, "lengthChange": true, "autoWidth": false,
-        "buttons": ["colvis", "print", "pdf", "excel"]
-      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    });
+        "buttons": [{
+        extend: "colvis", className: "btn-info"
+    },{
+        extend: "print", className: "btn-info"
+    }, {
+        extend: "pdf", className: "btn-info"
+    }, {
+        extend: "excel", className: "btn-info"
+    }]
+    })
+      table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+     $('#filter th').on( 'keyup', 'input.nama', function () {
+          table
+          .columns(1)
+          .search($(this).val(), true, false)
+          .draw();
+        });
+     $('#filter th').on( 'change', 'select', function () {
+          table
+          .columns(2)
+          .search($(this).val(), true, false)
+          .draw();
+        });
+     $('#filter th').on( 'keyup', 'input.bidang', function () {
+          table
+          .columns(3)
+          .search($(this).val(), true, false)
+          .draw();
+        });
+     $('#filter th').on( 'keyup', 'input.alamat', function () {
+          table
+          .columns(4)
+          .search($(this).val(), true, false)
+          .draw();
+        });
+     $('#filter th').on( 'keyup', 'input.wilayah', function () {
+          table
+          .columns(5)
+          .search($(this).val(), true, false)
+          .draw();
+        });
+     $('#filter th').on( 'keyup', 'input.kontak', function () {
+          table
+          .columns(6)
+          .search($(this).val(), true, false)
+          .draw();
+        });
+     $('#filter th').on( 'keyup', 'input.telp', function () {
+          table
+          .columns(7)
+          .search($(this).val(), true, false)
+          .draw();
+        });
+      });
   </script>
   <script>
     function deleteConfirm(url){

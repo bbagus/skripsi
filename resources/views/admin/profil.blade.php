@@ -1,122 +1,156 @@
 @extends('layout.master')
-@section('title', 'SI-PKL : Siswa - Profil')
+@section('title', 'SI-PKL : Admin - Profil')
 @section('head')
 @endsection
 @section('sidebar')
 <!-- Main Sidebar Container -->
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
-  <!-- Brand Logo -->
-  <a href="{{url('/')}}" class="brand-link">
-    <img src="{{url('/')}}/data_file/smk-n-1-pengasih-seeklogo.webp" alt="logo SMK N 1 Pengasih" class="brand-image img-circle elevation-3" style="opacity: .8">
-    <span class="brand-text font-weight-light">Sistem Informasi PKL</span>
-  </a>
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="{{url('/')}}" class="brand-link">
+      <img src="{{url('/')}}/data_file/smk-n-1-pengasih-seeklogo.webp" alt="ogo SMK N 1 Pengasih" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <span class="brand-text font-weight-light">Sistem Informasi PKL</span>
+    </a>
 
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <!-- Sidebar user (optional) -->
-    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-      <div class="image">
-       @if ($user->foto != 'default.jpg')
-       <img src="{{url('/')}}/data_file/{{$user->foto}}" class="img-circle elevation-2 mt-2" alt="User Image">
-       @else
-       <img src="{{url('/')}}/data_file/siswa-default.jpg" class="img-circle elevation-2 mt-2" alt="User Image">
-       @endif
-     </div>
-     <div class="info" style="padding: 0 5px 0 15px;white-space: normal;">
-      <a href="siswa/profil" class="d-block">{{$user->nama}}<br>
-        <sup>{{$user->nis}}</sup>
-      </a>
-    </div>
-  </div>
-
-  <!-- SidebarSearch Form -->
-  <div class="form-inline">
-    <div class="input-group" data-widget="sidebar-search">
-      <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-      <div class="input-group-append">
-        <button class="btn btn-sidebar">
-          <i class="fas fa-search fa-fw"></i>
-        </button>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user (optional) -->
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+          @if ($user->foto != 'default.jpg')
+          <img src="{{url('/')}}/data_file/{{$user->foto}}" class="img-circle elevation-2" alt="Foto Profil">
+          @else
+          <img src="{{url('/')}}/data_file/guru-default.jpeg" class="img-circle elevation-2" alt="Foto Profil">
+          @endif
+        </div>
+        <div class="info" style="white-space: normal;">
+          <a href="/admin/profil" class="d-block">{{$user->nama}}<br>
+        </div>
       </div>
-    </div>
-  </div>
-
-  <!-- Sidebar Menu -->
-  <nav class="mt-2">
-    <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
+      <!-- SidebarSearch Form -->
+      <div class="form-inline">
+        <div class="input-group" data-widget="sidebar-search">
+          <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+          <div class="input-group-append">
+            <button class="btn btn-sidebar">
+              <i class="fas fa-search fa-fw"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
-           with font-awesome or any other icon font library -->
-           <li class="nav-item">
-            <a href="/siswa" class="nav-link">
+               with font-awesome or any other icon font library -->
+          <li class="nav-item">
+            <a href="/admin/" class="nav-link ">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
               </p>
             </a>
-          </li> 
+          </li>
           <li class="nav-header">Kelola Data</li>  
           <li class="nav-item">
-            <a href="/siswa/profil" class="nav-link active">
+            <a href="/admin/kelola-informasi" class="nav-link ">
+              <i class="nav-icon fas fa-edit"></i>
+              <p>
+                Pengumuman
+              </p>
+            </a>
+          </li> 
+          <li class="nav-item">
+            <a href="/admin/kelola-informasi" class="nav-link">
               <i class="nav-icon fas fa-user"></i>
               <p>
-                Profil
+                Pengguna
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/admin/kelola-siswa" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Siswa</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/kelola-guru" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Guru Pembimbing</p>
+                </a>
+              </li>
+            </ul>
+          </li>  
+          <li class="nav-item">
+            <a href="/admin/kelola-industri" class="nav-link">
+              <i class="nav-icon fas fa-building"></i>
+              <p>
+                Industri
               </p>
             </a>
           </li> 
           <li class="nav-header">Proses PKL</li>  
           <li class="nav-item">
-            <a href="/siswa/pengajuan" class="nav-link">
-              <i class="nav-icon fas fa-pencil-alt"></i>
+            <a href="/admin/kelola-pengajuan" class="nav-link">
+              <i class="nav-icon fas fa-copy"></i>
               <p>
                 Pengajuan
               </p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="/siswa/bimbingan" class="nav-link">
-              <i class="nav-icon fas fa-comments"></i>
+            <a href="/admin/kelola-penempatan" class="nav-link">
+              <i class="nav-icon fas fa-map-marker-alt"></i>
               <p>
-                Bimbingan
+                Penempatan
+              </p>
+            </a>
+          </li> 
+          <li class="nav-item">
+            <a href="/admin/kelola-informasi" class="nav-link">
+              <i class="nav-icon fas fa-binoculars"></i>
+              <p>
+                Monitoring
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
-            <ul class="nav nav-treeview">
+             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/siswa/laporan-kegiatan" class="nav-link">
+                <a href="/admin/kelola-laporan-kegiatan" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
-                    laporan kegiatan
+                  laporan kegiatan
                   </p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/siswa/laporan-pkl" class="nav-link">
+                <a href="/admin/kelola-laporan-pkl" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
-                    laporan PKL
+                  laporan PKL
                   </p>
                 </a>
               </li>
-            </ul> 
-          </li> 
-          <li class="nav-item">
-            <a href="/siswa/nilai" class="nav-link">
-              <i class="far fa-star nav-icon"></i>
-              <p>
-                Nilai
-              </p>
-            </a>
-          </li>  
+              <li class="nav-item">
+                <a href="/admin/kelola-nilai" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>
+                  Nilai
+                  </p>
+                </a>
+              </li>  
+          </li>   
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
   </aside>
-  @endsection
-  @section('judul', 'Profil Siswa')
-  @section('content')
-  <section class="content">
+@endsection
+  @section('judul', 'Profil Admin')
+@section('content')
+<section class="content">
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
@@ -148,13 +182,13 @@
                 alt="User profile picture" style="min-height:150px;">
                 @else
                 <img class="img-fluid"
-                src="{{url('/')}}/data_file/siswa-default.jpg"
+                src="{{url('/')}}/data_file/guru-default.jpeg"
                 alt="User profile picture" style="min-height:150px;">
                 @endif
               </div>
               <ul class="list-group list-group-unbordered mb-3">
                 <li class="list-group-item"> 
-                  <a href="/siswa/profil/edit" class="btn btn-success btn-block"><i class="fa fa-edit"></i> Perbarui Detail Akun</a>
+                  <a href="/admin/profil/edit" class="btn btn-success btn-block"><i class="fa fa-edit"></i> Perbarui Detail Akun</a>
                 </li>
               </ul>
             </div>
@@ -183,34 +217,14 @@
                           <td>{{$user->nama}} </td>
                         </tr>
                         <tr>
-                          <td>NIS</td>
+                          <td>NIP</td>
                           <td>:</td>
-                          <td>{{$user->nis}}</td>
-                        </tr>
-                        <tr>
-                          <td>Kelas</td>
-                          <td>:</td>
-                          <td>{{$kelas->nama}}</td>
-                        </tr>
-                        <tr>
-                          <td>Jurusan</td>
-                          <td>:</td>
-                          <td>{{$kelas->jurusan}}</td>
-                        </tr>
-                        <tr>
-                          <td>Tanggal Lahir</td>
-                          <td>:</td>
-                          <td>{{date('d F Y', strtotime($user->tgl_lahir))}}</td>
+                          <td>{{$user->nip}}</td>
                         </tr>
                         <tr>
                           <td>No. Telp</td>
                           <td>:</td>
                           <td>{{$user->telp}}</td>
-                        </tr>
-                        <tr>
-                          <td>Alamat</td>
-                          <td>:</td>
-                          <td>{{$user->alamat}}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -224,12 +238,12 @@
                       <tr>
                         <td class="col-sm-3">Username</td>
                         <td>:</td>
-                        <td>{{Auth::user()->username}} </td>
+                        <td>{{Auth::user()->username}}</td>
                       </tr>
                       <tr>
                         <td>Email</td>
                         <td>:</td>
-                        <td>{{Auth::user()->email}}</td>
+                        <td colspan="2">{{Auth::user()->email}}</td>
                       </tr>
                       <tr>
                         <td>Password</td>
@@ -265,7 +279,7 @@
           <span aria-hidden="true">×</span>
         </button>
       </div>
-      <form id="formpassword" action="{{route('ganti_password')}}" method="POST">
+      <form id="formpassword" action="{{route('admin_password')}}" method="POST">
        {{ csrf_field() }}
        <div class="modal-body">
         <div class="form-group">

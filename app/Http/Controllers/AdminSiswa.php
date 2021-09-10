@@ -9,28 +9,34 @@ use App\Models\Siswa;
 use App\Models\User;
 use Illuminate\Support\Facades\File; 
 use Illuminate\Support\Facades\Hash;
+use App\Repositories\UserRepository;
+
 
 class AdminSiswa extends Controller
 {
-	public function __construct()
-	{
-		$this->middleware('auth');
-	}
+	public function __construct(UserRepository $repository)
+    {
+        $this->middleware('auth');
+        $this->repository = $repository;
+    }
 	public function index(){
+		$user = $this->repository->getData();
 		$siswa = DB::table('siswa')
 		->join('kelas','siswa.kd_kelas', '=', 'kelas.kd_kelas')
 		->select('siswa.nis', 'siswa.nama', 'siswa.tgl_lahir', 'kelas.nama as kelas', 'siswa.telp','siswa.alamat', 'siswa.foto')
 		->get();
-		return view('admin.siswa', ['siswa' => $siswa]);
+		return view('admin.siswa', ['siswa' => $siswa, 'user' => $user]);
 	}
 	public function tambahSiswa(){
-		return view('admin.tambahSiswa');
+		$user = $this->repository->getData();
+		return view('admin.tambahSiswa')->with('user', $user);
 	}
 	public function editSiswa($nis){
+		$user = $this->repository->getData();
 		$siswa = DB::table('siswa')
 		->join('users', 'siswa.nis', '=', 'users.username')
 		->where('nis',$nis)->first();
-		if ($siswa != null)	return view('admin.editSiswa', ['siswa' => $siswa]);
+		if ($siswa != null)	return view('admin.editSiswa', ['siswa' => $siswa,'user' => $user]);
 		return redirect()->action([AdminSiswa::class, 'index']);
 	}
 	public function proses_upload(Request $request){

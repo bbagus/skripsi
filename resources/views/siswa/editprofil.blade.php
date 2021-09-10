@@ -26,7 +26,7 @@
        @endif
      </div>
      <div class="info" style="padding: 0 5px 0 15px;white-space: normal;">
-      <a href="#" class="d-block">{{$user->nama}}<br>
+      <a href="siswa/profil" class="d-block">{{$user->nama}}<br>
         <sup>{{$user->nis}}</sup>
       </a>
     </div>
@@ -85,10 +85,10 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/siswa/laporan-mingguan" class="nav-link">
+                <a href="/siswa/laporan-kegiatan" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
-                    laporan mingguan
+                    laporan kegiatan
                   </p>
                 </a>
               </li>

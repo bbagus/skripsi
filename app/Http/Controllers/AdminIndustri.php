@@ -7,23 +7,28 @@ use Illuminate\Support\Facades\DB;define('', '');
 use Illuminate\Support\Facades\Validator;
 use App\Models\Industri;
 use Illuminate\Support\Facades\File; 
+use App\Repositories\UserRepository;
 
 class AdminIndustri extends Controller
 {
-	public function __construct()
-	{
-		$this->middleware('auth');
-	}
+	public function __construct(UserRepository $repository)
+    {
+        $this->middleware('auth');
+        $this->repository = $repository;
+    }
 	public function index() {
+		$user = $this->repository->getData();
 		$industri = DB::table('industri')->get();
-		return view('admin.industri', ['industri' => $industri]);
+		return view('admin.industri', ['industri' => $industri, 'user' => $user]);
 	}
 	public function tambahIndustri(){
-		return view('admin.tambahIndustri');
+		$user = $this->repository->getData();
+		return view('admin.tambahIndustri')->with('user', $user);
 	}
 	public function editIndustri($kd_industri){
+		$user = $this->repository->getData();
 		$industri = DB::table('industri')->where('kd_industri',$kd_industri)->first();
-		if($industri != null) return view('admin.editIndustri',['industri' => $industri]);
+		if($industri != null) return view('admin.editIndustri',['industri' => $industri, 'user' => $user]);
 		return redirect()->action([AdminIndustri::class, 'index']);
 	}
 	public function proses_upload(Request $request){

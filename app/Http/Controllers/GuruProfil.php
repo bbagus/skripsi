@@ -27,7 +27,7 @@ class GuruProfil extends Controller
     }
     public function ganti_password(Request $request) {
         $this->validate($request, [
-            'passlama' => 'required|min:8',
+            'passlama' => 'required',
             'password_baru' => 'required|min:8',
             'konfirm_password_baru' => 'required|min:8|same:password_baru',
         ]);
@@ -50,6 +50,8 @@ class GuruProfil extends Controller
     public function edit_akun(Request $request){
         $data = $this->repository->getData();
         $cekuser = User::find($request->username);
+        if ( User::firstWhere('email',$request->email) == null || $cekuser->email == $request->email)
+        {
         if($cekuser == null || $data->username == $request->username){
             $ceknama = Guru::firstWhere('nama', $request->nama);
             if ($ceknama == null || $data->nama == $request->nama) 
@@ -62,7 +64,7 @@ class GuruProfil extends Controller
                     'jurusan' => 'required',
                     'nip' => 'numeric|nullable',
                     'telp' => 'string|max:20|nullable',
-                    'email' => 'email',
+                    'email' => 'email|nullable',
                 ]);
                 $unik = $guru->username;
                 if ($request->file('foto') != null) {
@@ -100,13 +102,14 @@ class GuruProfil extends Controller
             $guru->foto = $nama_file;
             $guru->save();
             Auth::login($user);
-            return redirect()->back()->with('success', 'Mengubah detail profil berhasil!')
-            ->with('guru', $guru);
+            return redirect()->back()->with('success', 'Mengubah detail profil berhasil!');
             return redirect()->back()->withInput();
             } 
         return redirect()->back()->withErrors('Nama yang sama sudah ada!');
         } 
     return redirect()->back()->withErrors('Username yang sama sudah ada!');
+    }
+    return redirect()->back()->withErrors('Email yang sama sudah ada!');
     }
 
     public function hapusFoto(){

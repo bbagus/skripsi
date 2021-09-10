@@ -23,7 +23,7 @@
           @endif
         </div>
         <div class="info" style="white-space: normal;">
-          <a href="#" class="d-block">{{$user->nama}}<br>
+          <a href="/guru/profil" class="d-block">{{$user->nama}}<br>
         </div>
       </div>
       <!-- SidebarSearch Form -->
@@ -78,10 +78,10 @@
             </a>
              <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/guru/laporan-mingguan" class="nav-link">
+                <a href="/guru/laporan-kegiatan" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
-                  laporan mingguan
+                  laporan kegiatan
                   </p>
                 </a>
               </li>
@@ -289,7 +289,6 @@
   rules: {
     passlama: {
       required: true,
-       minlength: 8,
     },
     password_baru: {
       required: true,
@@ -303,7 +302,6 @@
   messages: {
     passlama: {
       required: "Password lama harus diisi!",
-      minlength: "Password baru minimal 8 karakter!",
     },
     password_baru: {
       required: "Password baru harus diisi!",

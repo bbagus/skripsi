@@ -21,10 +21,12 @@ class IndustriSeeder extends Seeder
               // insert data ke table 
             DB::table('industri')->insert([
                 'nama' => $faker->company,
+                'jurusan' => $faker->randomElement($array = array ('Akuntansi Keuangan dan Lembaga','Bisnis Daring dan Pemasaran','Otomatisasi dan Tata Kelola Perkantoran','Perhotelan','Multimedia','Tata Busana')),
                 'bidang_kerja' => $faker->jobTitle,
                 'deskripsi' => $faker->realText($maxNbChars = 200, $indexSize = 2),
                 'alamat' => $faker->address,
-                'wilayah' => $faker->country
+                'wilayah' => $faker->city,
+                'kuota' => $faker->numberBetween($min = 1, $max = 8)
             ]);
  
         }

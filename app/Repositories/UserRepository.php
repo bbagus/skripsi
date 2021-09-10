@@ -22,8 +22,25 @@ class UserRepository
     	} else if ($role == 'guru'){
     	$user = DB::table('guru_pembimbing')->where('username',$username)->first();
     	} else {
-            $user = Auth::user();
+            $user = DB::table('admin')->where('username',$username)->first();
         }
         return $user;
     } 
+    public function getKoordinator(){
+        $koordinator = (object)array(); 
+        $koordinator->nama = 'Bagus Santosa, S.Pd.';
+        $koordinator->nip = '1234567891011';
+        return $koordinator;
+    }
+    public function getTahunAjaran(){
+        $tahunajar = '2021/2022';
+        return $tahunajar;
+    }
+
+    public function getTanggalPKL(){
+        $tanggal = (object)array(); 
+        $tanggal->mulai = '2021-04-01';
+        $tanggal->selesai = '2021-09-30';
+        return $tanggal;
+    }
 }

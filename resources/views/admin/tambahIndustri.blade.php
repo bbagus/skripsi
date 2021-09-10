@@ -17,12 +17,16 @@
   <div class="sidebar">
     <!-- Sidebar user (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-      <div class="image">
-        <img src="{{url('/')}}/data_file/15267-202005.jpg" class="img-circle elevation-2" alt="User Image">
-      </div>
-      <div class="info">
-        <a href="#" class="d-block">Administrator</a>
-      </div>
+        <div class="image">
+          @if ($user->foto != 'default.jpg')
+          <img src="{{url('/')}}/data_file/{{$user->foto}}" class="img-circle elevation-2" alt="Foto Profil">
+          @else
+          <img src="{{url('/')}}/data_file/guru-default.jpeg" class="img-circle elevation-2" alt="Foto Profil">
+          @endif
+        </div>
+        <div class="info">
+          <a href="/admin/profil" class="d-block">{{$user->nama}}</a>
+        </div>
     </div>
     <!-- SidebarSearch Form -->
     <div class="form-inline">
@@ -115,10 +119,10 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/admin/kelola-laporan-mingguan" class="nav-link">
+                <a href="/admin/kelola-laporan-kegiatan" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
-                    laporan mingguan
+                    laporan kegiatan
                   </p>
                 </a>
               </li>
@@ -246,7 +250,7 @@
                       <input type="email" name="email" class="form-control"  placeholder="Tulis alamat email.." maxlength="50">
                     </div>
                      <div class="col-sm-1"></div>
-                    <label for="kuota" class="col-sm-1 col-form-label">Kuota</label>
+                    <label for="kuota" class="col-sm-1 col-form-label">Kuota<strong class="text-danger">*</strong></label>
                     <div class="col-sm-4">
                       <input type="text" name="kuota" class="form-control"  placeholder="Tulis kuota.." maxlength="10">
                     </div>
@@ -317,6 +321,10 @@
             },
             email: {
               email: true,
+            },
+            kuota: {
+              required: true,
+              number: true,
             }
           },
           messages: {
@@ -337,6 +345,10 @@
             },
             email: {
               email: "Isi email dengan benar",
+            },
+            kuota: {
+              required: "Kuota harus diisi",
+              number: "Mohon isi kuota dengan angka",
             }
           },
           errorElement: 'span',

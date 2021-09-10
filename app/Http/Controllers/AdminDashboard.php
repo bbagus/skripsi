@@ -1,14 +1,17 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Repositories\UserRepository;
 
 class AdminDashboard extends Controller
 {
-	public function __construct()
+	public function __construct(UserRepository $repository)
     {
         $this->middleware('auth');
+        $this->repository = $repository;
     }
     public function dashboard(){
-		return view('admin.dashboard');
+        $user = $this->repository->getData();
+		return view('admin.dashboard')->with('user', $user);
 	}
 }

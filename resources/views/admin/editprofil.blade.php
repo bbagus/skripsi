@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'SI-PKL : Guru - Edit Profil')
+@section('title', 'SI-PKL : Admin - Edit Profil')
 @section('head')
 <!-- Select2 -->
   <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/select2/css/select2.min.css">
@@ -26,7 +26,7 @@
           @endif
         </div>
         <div class="info" style="white-space: normal;">
-          <a href="/guru/profil" class="d-block">{{$user->nama}}<br>
+          <a href="/admin/profil" class="d-block">{{$user->nama}}<br>
         </div>
       </div>
       <!-- SidebarSearch Form -->
@@ -46,42 +46,81 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="/guru/" class="nav-link">
+            <a href="/admin/" class="nav-link ">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
               </p>
             </a>
-          </li> 
+          </li>
           <li class="nav-header">Kelola Data</li>  
           <li class="nav-item">
-            <a href="/guru/profil" class="nav-link active">
+            <a href="/admin/kelola-informasi" class="nav-link ">
+              <i class="nav-icon fas fa-edit"></i>
+              <p>
+                Pengumuman
+              </p>
+            </a>
+          </li> 
+          <li class="nav-item">
+            <a href="/admin/kelola-informasi" class="nav-link">
               <i class="nav-icon fas fa-user"></i>
               <p>
-                Profil
+                Pengguna
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/admin/kelola-siswa" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Siswa</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/kelola-guru" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Guru Pembimbing</p>
+                </a>
+              </li>
+            </ul>
+          </li>  
+          <li class="nav-item">
+            <a href="/admin/kelola-industri" class="nav-link">
+              <i class="nav-icon fas fa-building"></i>
+              <p>
+                Industri
               </p>
             </a>
           </li> 
           <li class="nav-header">Proses PKL</li>  
           <li class="nav-item">
-            <a href="/guru/siswa-bimbingan" class="nav-link">
-              <i class="nav-icon fas fa-users"></i>
+            <a href="/admin/kelola-pengajuan" class="nav-link">
+              <i class="nav-icon fas fa-copy"></i>
               <p>
-                Daftar Siswa Bimbingan
+                Pengajuan
               </p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="/guru/bimbingan" class="nav-link">
-              <i class="nav-icon fas fa-comments"></i>
+            <a href="/admin/kelola-penempatan" class="nav-link">
+              <i class="nav-icon fas fa-map-marker-alt"></i>
               <p>
-                Bimbingan
+                Penempatan
+              </p>
+            </a>
+          </li> 
+          <li class="nav-item">
+            <a href="/admin/kelola-informasi" class="nav-link">
+              <i class="nav-icon fas fa-binoculars"></i>
+              <p>
+                Monitoring
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
              <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/guru/laporan-kegiatan" class="nav-link">
+                <a href="/admin/kelola-laporan-kegiatan" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
                   laporan kegiatan
@@ -89,23 +128,22 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/guru/laporan-pkl" class="nav-link">
+                <a href="/admin/kelola-laporan-pkl" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
                   laporan PKL
                   </p>
                 </a>
               </li>
-              </ul> 
-          </li> 
               <li class="nav-item">
-                <a href="/guru/kelola-nilai" class="nav-link">
-                  <i class="far fa-star nav-icon"></i>
+                <a href="/admin/kelola-nilai" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
                   <p>
                   Nilai
                   </p>
                 </a>
               </li>  
+          </li>   
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -141,11 +179,11 @@
           <div class="card card-primary card-outline">
              <div class="card-header">
               <h3 class="card-title">
-                <a href="/guru/profil/"><i class="fas fa-arrow-left"></i>&nbsp; Kembali</a>
+                <a href="/admin/profil/"><i class="fas fa-arrow-left"></i>&nbsp; Kembali</a>
               </h3>
             </div>
             <div class="card-body box-profile">
-              @if ($user->foto != 'default.jpg')
+             @if ($user->foto != 'default.jpg')
               <div class="text-center">
                 <img class="img-fluid"
                 src="{{url('/')}}/data_file/{{$user->foto}}"
@@ -153,7 +191,7 @@
               </div>
               <ul class="list-group list-group-unbordered mb-3" style="text-align: center;">
                 <li class="list-group-item"> 
-                  <a href="/guru/profil/hapus-foto" class="btn btn-dark"><i class="fa fa-trash-alt"></i> Hapus Foto</a>
+                  <a href="/admin/profil/hapus-foto" class="btn btn-dark"><i class="fa fa-trash-alt"></i> Hapus Foto</a>
                 </li>
               </ul>
               @else
@@ -181,13 +219,13 @@
               </h3>
             </div><!-- /.card-header -->
             <!-- form start -->
-            <form class="form-horizontal" id="formedit" action="{{url('/')}}/guru/profil/edit-akun" method="POST" enctype="multipart/form-data">
+            <form class="form-horizontal" id="formedit" action="{{url('/')}}/admin/profil/edit-akun" method="POST" enctype="multipart/form-data">
               {{ csrf_field() }}
               <div class="card-body" style="padding: 1.75rem 3rem;">
                 <div class="form-group row">
                     <label for="username" class="col-sm-2 col-form-label">Username<strong class="text-danger">*</strong></label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" id="username" name="username" placeholder="Tulis username.." maxlength="15" value="{{$user->username}}">
+                      <input type="text" class="form-control" id="nama" name="username" placeholder="Tulis username.." maxlength="15" value="{{$user->username}}">
                     </div>
                   </div>
                   <div class="form-group row">
@@ -214,26 +252,7 @@
                       <input type="email" name="email" class="form-control" id="email" placeholder="Tulis email.." value="{{Auth::user()->email}}" maxlength="50" >
                     </div>
                   </div>
-                  <div class="form-group row">
-                    <label for="jurusan" class="col-sm-2 col-form-label">Jurusan<strong class="text-danger">*</strong></label>
-                    <div class="col-sm-10">
-                      <select class="form-control select2bs4" name="jurusan" style="width: 100%;">
-                        <option selected="" value="{{$user->jurusan}}">{{$user->jurusan}}</option>
-                        <option value="Akuntansi Keuangan dan Lembaga">Akuntansi Keuangan dan Lembaga</option>
-                        <option value="Bisnis Daring dan Pemasaran">Bisnis Daring dan Pemasaran</option>
-                        <option value="Otomatisasi dan Tata Kelola Perkantoran">Otomatisasi dan Tata Kelola Perkantoran</option>
-                        <option value="Perhotelan">Perhotelan</option>
-                        <option value="Multimedia">Multimedia</option>
-                        <option value="Tata Busana">Tata Busana</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="form-group row">
-                    <label for="wilayah" class="col-sm-2 col-form-label">Wilayah</label>
-                    <div class="col-sm-10">
-                      <input type="text" name="wilayah" class="form-control" placeholder="Tulis wilayah.." maxlength="50" value="{{$user->wilayah}}">
-                    </div>
-                  </div>
+                  
                   <div class="form-group row">
                     <label for="foto" class="col-sm-2 col-form-label">Foto Profil</label>
                     <div class="col-sm-10">
@@ -285,46 +304,32 @@ $(function () {
  $.validator.setDefaults({});
  $('#formedit').validate({
   rules: {
-    username: {
+    passlama: {
       required: true,
-       maxlength: 15,
+       minlength: 8,
     },
-    nama: {
+    password_baru: {
       required: true,
+      minlength: 8,
     },
-    jurusan: {
+    konfirm_password_baru: {
       required: true,
+      minlength: 8,
     },
-    nip: {
-      number: true,
-    },
-    telp: {
-      maxlength:20,
-    },
-    email: {
-      email: true,
-    }
   },
   messages: {
-    username: {
-      required: "Username harus diisi",
-       maxlength: "Username maksimal 15 karakter!",
+    passlama: {
+      required: "Password lama harus diisi!",
+      minlength: "Password baru minimal 8 karakter!",
     },
-    nama: {
-      required: "Nama harus diisi",
+    password_baru: {
+      required: "Password baru harus diisi!",
+      minlength: "Password baru minimal 8 karakter!",
     },
-    jurusan: {
-      required: "Jurusan harus diisi",
+    konfirm_password_baru: {
+      required: "Password baru harus diisi!",
+      minlength: "Password baru minimal 8 karakter!"
     },
-    nip: {
-      number: "NIP harus diisi angka",
-    },
-    telp: {
-      maxlength:"No. Telp maksimal 20 karakter",
-    },
-    email: {
-      email: "Mohon isi email dengan benar",
-    }
   },
   errorElement: 'span',
   errorPlacement: function (error, element) {

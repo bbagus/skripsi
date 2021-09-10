@@ -41,7 +41,7 @@
             <a href="/industri" class="nav-link">Industri</a>
           </li>
           <li class="nav-item">
-            <a href="pedoman" class="nav-link">Pedoman PKL</a>
+            <a href="/pedoman" class="nav-link">Pedoman PKL</a>
           </li>
         </ul>
       </div>

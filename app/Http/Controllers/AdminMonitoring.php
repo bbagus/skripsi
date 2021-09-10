@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Repositories\UserRepository;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;define('', '');
@@ -10,21 +11,23 @@ use Illuminate\Support\Facades\File;
 
 class AdminMonitoring extends Controller
 {
-	public function __construct()
+	public function __construct(UserRepository $repository)
     {
         $this->middleware('auth');
+        $this->repository = $repository;
     }
     public function index(){
-
-		return view('admin.laporanMingguan');
+        $user = $this->repository->getData();
+		return view('admin.laporanMingguan')->with('user', $user);
 	}
 
    public function laporanPKL(){
-
-        return view('admin.laporanPkl');
+        $user = $this->repository->getData();
+        return view('admin.laporanPkl')->with('user', $user);
     }
     public function nilai(){
-        return view('admin.nilai');
+        $user = $this->repository->getData();
+        return view('admin.nilai')->with('user', $user);
     }
 }
 

@@ -20,11 +20,15 @@
     <!-- Sidebar user (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
       <div class="image">
-        <img src="{{url('/')}}/data_file/15267-202005.jpg" class="img-circle elevation-2" alt="User Image">
-      </div>
-      <div class="info">
-        <a href="#" class="d-block">Administrator</a>
-      </div>
+          @if ($user->foto != 'default.jpg')
+          <img src="{{url('/')}}/data_file/{{$user->foto}}" class="img-circle elevation-2" alt="Foto Profil">
+          @else
+          <img src="{{url('/')}}/data_file/guru-default.jpeg" class="img-circle elevation-2" alt="Foto Profil">
+          @endif
+        </div>
+        <div class="info">
+          <a href="/admin/profil" class="d-block">{{$user->nama}}</a>
+        </div>
     </div>
 
     <!-- SidebarSearch Form -->
@@ -118,10 +122,10 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/admin/kelola-laporan-mingguan" class="nav-link">
+                <a href="/admin/kelola-laporan-kegiatan" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
-                    laporan mingguan
+                    laporan kegiatan
                   </p>
                 </a>
               </li>
@@ -154,14 +158,14 @@
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="image">
             @if ($industri->foto != 'default.jpg')
-            <img src="{{url('/')}}/data_file/{{$industri->foto}}" class="img-circle elevation-2 mt-2" alt="User Image">
+            <img src="{{url('/')}}/data_file/{{$user->foto}}" class="img-circle elevation-2 mt-2" alt="User Image">
             @else
             <img src="{{url('/')}}/data_file/siswa-default.jpg" class="img-circle elevation-2 mt-2" alt="User Image">
             @endif
           </div>
           <div class="info" style="padding: 0 5px 0 15px;white-space: normal;">
-            <a href="#" class="d-block">{{$industri->nama}}<br>
-              <sup>{{$industri->nis}}</sup>
+            <a href="siswa/profil" class="d-block">{{$user->nama}}<br>
+              <sup>{{$user->nis}}</sup>
             </a>
           </div>
         </div>
@@ -219,10 +223,10 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/siswa/laporan-mingguan" class="nav-link">
+                <a href="/siswa/laporan-kegiatan" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
-                    laporan mingguan
+                    laporan kegiatan
                   </p>
                 </a>
               </li>
@@ -262,7 +266,7 @@
           @endif
         </div>
         <div class="info" style="white-space: normal;">
-          <a href="#" class="d-block">{{$user->nama}}</a>
+          <a href="guru/profil" class="d-block">{{$user->nama}}</a>
         </div>
       </div>
 
@@ -319,10 +323,10 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/guru/laporan-mingguan" class="nav-link">
+                <a href="/guru/laporan-kegiatan" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
-                    laporan mingguan
+                    laporan kegiatan
                   </p>
                 </a>
               </li>

@@ -26,11 +26,15 @@
     <!-- Sidebar user (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
       <div class="image">
-        <img src="{{url('/')}}/data_file/15267-202005.jpg" class="img-circle elevation-2" alt="User Image">
-      </div>
-      <div class="info">
-        <a href="#" class="d-block">Administrator</a>
-      </div>
+          @if ($user->foto != 'default.jpg')
+          <img src="{{url('/')}}/data_file/{{$user->foto}}" class="img-circle elevation-2" alt="Foto Profil">
+          @else
+          <img src="{{url('/')}}/data_file/guru-default.jpeg" class="img-circle elevation-2" alt="Foto Profil">
+          @endif
+        </div>
+        <div class="info">
+          <a href="/admin/profil" class="d-block">{{$user->nama}}</a>
+        </div>
     </div>
 
     <!-- SidebarSearch Form -->
@@ -124,10 +128,10 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/admin/kelola-laporan-mingguan" class="nav-link">
+                <a href="/admin/kelola-laporan-kegiatan" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
-                    laporan mingguan
+                    laporan kegiatan
                   </p>
                 </a>
               </li>
@@ -166,7 +170,7 @@
           @endif
         </div>
         <div class="info" style="padding: 0 5px 0 15px;white-space: normal;">
-          <a href="#" class="d-block">{{$user->nama}}<br>
+          <a href="siswa/profil" class="d-block">{{$user->nama}}<br>
             <sup>{{$user->nis}}</sup>
           </a>
         </div>
@@ -225,10 +229,10 @@
             </a>
              <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/siswa/laporan-mingguan" class="nav-link">
+                <a href="/siswa/laporan-kegiatan" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
-                  laporan mingguan
+                  laporan kegiatan
                   </p>
                 </a>
               </li>
@@ -268,7 +272,7 @@
           @endif
         </div>
         <div class="info" style="white-space: normal;">
-          <a href="#" class="d-block">{{$user->nama}}</a>
+          <a href="guru/profil" class="d-block">{{$user->nama}}</a>
         </div>
       </div>
 
@@ -325,10 +329,10 @@
             </a>
              <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/guru/laporan-mingguan" class="nav-link">
+                <a href="/guru/laporan-kegiatan" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
-                  laporan mingguan
+                  laporan kegiatan
                   </p>
                 </a>
               </li>
@@ -366,7 +370,7 @@
            <h5 class="text-center col-md-10 offset-md-1 p-3">Berikut merupakan daftar industri atau instansi tempat PKL. Anda dapat menemukan informasi seputar tempat industri, bidang kerja, kuota yang disediakan, dan lain lain.</h5>
           <p >
         </p>
-            <form action="/industri/c" method="GET">
+            <form action="/industri/cari" method="GET">
               
                 <div class="row">
                     <div class="col-md-10 offset-md-1">
@@ -374,11 +378,17 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label>Filter Berdasarkan :</label>
-                                    <select class="select2" name="k"  id="first-choice" data-placeholder="Any" style="width: 100%;">
+                                    <select class="form-control select2" name="k"  id="first-choice" data-placeholder="Any" style="width: 100%;">
+                                      @if(isset($search->kolom))
+                                       <option <?php echo $search->kolom == 'jurusan' ? 'selected' : '' ?> value="jurusan">Jurusan</option>
+                                        <option <?php echo $search->kolom == 'bidang_kerja' ? 'selected' : '' ?> value="bidang_kerja">Bidang kerja</option>
+                                        <option <?php echo $search->kolom == 'wilayah' ? 'selected' : '' ?> value="wilayah">Wilayah</option>
+                                      @else
                                        <option selected disabled>Pilih filter</option>
                                        <option value="jurusan">Jurusan</option>
                                         <option value="bidang_kerja">Bidang kerja</option>
                                         <option value="wilayah">Wilayah</option>
+                                      @endif
                                     </select>
                                 </div>
                             </div>
@@ -386,15 +396,21 @@
                                 <div class="form-group">
                                     <label for="filter" id="filter">Pilih :</label>
                                     <select class="select2" id="second-choice" multiple="multiple" name="f" style="width: 100%;" data-placeholder="any">
-                                        <option disabled value="iki value">Pilih filter dahulu</option>
+                                      @if(isset($search->filter))
+                                      @foreach($search->filter as $f)
+                                      <option selected value="{{$f}}">{{$f}}</option>
+                                      @endforeach
+                                      @else
+                                        <option  disabled value="iki value">Pilih filter dahulu</option>
+                                      @endif
                                     </select>
-                                     <input type="hidden" name="test" id="test">
+                                     <input type="hidden" name="test" id="test" value="<?php echo isset($search->test) ? $search->test : ''?>" >
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="input-group input-group-lg">
-                                <input type="search" name="kk" class="form-control form-control-lg" placeholder="Atau cari berdasarkan nama instansi">
+                                <input type="search" name="kk" class="form-control form-control-lg" placeholder="Cari berdasarkan nama instansi" value="<?php echo isset($search->katakunci) ? $search->katakunci : ''?>" >
                                 <div class="input-group-append">
                                 </div>
                             </div>
@@ -404,7 +420,7 @@
                               Cari &nbsp;<i class="fa fa-search"></i>
                           </button>
                            @if (isset($teks))
-                          <button onclick="window.location.href='/industri';" class="btn btn-lg btn-default ml-2">reset filter &nbsp;<i class="fa fa-sync-alt"></i>
+                          <button type="button" onClick="window.location.href='/industri';" class="btn btn-lg btn-default ml-2">reset filter &nbsp;<i class="fa fa-sync-alt"></i>
                           </button>
                           @endif
                         </div>
@@ -432,7 +448,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="example1" class="table table-bordered table-striped table-hover">
                   <thead>
                     <tr>
                       <th>No.</th>
@@ -443,7 +459,7 @@
                       <th>Wilayah</th>
                       <th>Nama Kontak</th>
                       <th>No. Telepon</th>
-                      <th>Action</th>
+                      <th>Aksi</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -460,9 +476,8 @@
                       <td style="vertical-align: middle;">{{ $s->wilayah}}</td>
                       <td style="vertical-align: middle;">{{ $s->nama_kontak}}</td>
                       <td style="vertical-align: middle;">{{ $s->telp}}</td>
-                      <td style="vertical-align: middle;text-align: center;" width="80px" >
-                        <a href="{{url('/')}}/industri/{{$s->kd_industri}}" class="btn btn-small btn-primary">Detail</a>
-                        
+                      <td style="vertical-align: middle;text-align: center;" width="90px" >
+                        <a href="{{url('/')}}/industri/{{$s->kd_industri}}" class="btn btn-small btn-primary"><i class="fas fa-eye"></i> Detail</a>
                       </td>
                     </tr>
                     @endforeach
@@ -533,11 +548,14 @@
       { "data": "wilayah" },
       { "data": "nama_kontak" },
       { "data": "telp" },
-      { "data": "action"}
+      { "data": "aksi"}
       ],
-      "responsive": true, "lengthChange": true, "autoWidth": false,"searching": false,
-      "buttons": ["colvis"]
+      "responsive": true, "lengthChange": true, "autoWidth": false,"searching": true,
+      "buttons": [{
+        extend: "colvis", className: "btn-info"
+    }]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    
   });
 
   $("#first-choice").change(function() {

@@ -9,25 +9,30 @@ use App\Models\Guru;
 use App\Models\User;
 use Illuminate\Support\Facades\File; 
 use Illuminate\Support\Facades\Hash;
+use App\Repositories\UserRepository;
 
 class AdminGuru extends Controller
 {
-	public function __construct()
-	{
-		$this->middleware('auth');
-	}
+	public function __construct(UserRepository $repository)
+    {
+        $this->middleware('auth');
+        $this->repository = $repository;
+    }
 	public function index(){
+		$user = $this->repository->getData();
 		$guru = DB::table('guru_pembimbing')->get();
-		return view('admin.guru', ['guru' => $guru]);
+		return view('admin.guru', ['guru' => $guru, 'user' => $user]);
 	}
 	public function tambahGuru(){
-		return view('admin.tambahGuru');
+		$user = $this->repository->getData();
+		return view('admin.tambahGuru')->with('user', $user);
 	}
 	public function editGuru($kd_pembimbing){
+		$user = $this->repository->getData();
 		$guru = DB::table('guru_pembimbing')
 		->join('users', 'guru_pembimbing.username', '=', 'users.username')
 		->where('kd_pembimbing',$kd_pembimbing)->first();
-		if ($guru != null) return view('admin.editGuru', ['guru' => $guru]);
+		if ($guru != null) return view('admin.editGuru', ['guru' => $guru, 'user' => $user]);
 		return redirect()->action([AdminGuru::class, 'index']);
 	}
 	public function proses_upload(Request $request){

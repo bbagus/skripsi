@@ -7,28 +7,33 @@ use Illuminate\Support\Facades\DB;define('', '');
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Models\Informasi;
-use Illuminate\Support\Facades\File; 
+use Illuminate\Support\Facades\File;
+use App\Repositories\UserRepository; 
 
 
 class AdminInfo extends Controller
 {
-	public function __construct()
+	public function __construct(UserRepository $repository)
     {
         $this->middleware('auth');
+        $this->repository = $repository;
     }
     public function index(){
+        $user = $this->repository->getData();
         $info = DB::table('informasi')
         ->leftjoin('wadah_label', 'informasi.kd_label', '=', 'wadah_label.kd_label')
         ->select('kd_info','judul', 'penulis', 'tanggal', 'status', 'nama')
         ->get();
-        return view('admin.informasi',['info' => $info]);
+        return view('admin.informasi',['info' => $info, 'user' => $user]);
     }
     public function tambahInfo(){
-        return view('admin.tambahInformasi');
+        $user = $this->repository->getData();
+        return view('admin.tambahInformasi')->with('user', $user);
     }
     public function editInfo($kd_info){
+        $user = $this->repository->getData();
         $info = DB::table('informasi')->where('kd_info',$kd_info)->first();
-        if ($info != null) return view('admin.editInformasi', ['info' => $info]);
+        if ($info != null) return view('admin.editInformasi', ['info' => $info, 'user' => $user]);
         return redirect()->action([AdminInfo::class, 'index']);
     }
     public function proses_upload(Request $request){

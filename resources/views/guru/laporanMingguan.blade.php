@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'SI-PKL : Guru - Laporan Mingguan')
+@section('title', 'SI-PKL : Guru - Laporan kegiatan')
 @section('sidebar')
 <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -21,7 +21,7 @@
           @endif
         </div>
         <div class="info" style="white-space: normal;">
-          <a href="#" class="d-block">{{$user->nama}}<br>
+          <a href="/guru/profil" class="d-block">{{$user->nama}}<br>
         </div>
       </div>
       <!-- SidebarSearch Form -->
@@ -76,10 +76,10 @@
             </a>
              <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/guru/laporan-mingguan" class="nav-link active">
+                <a href="/guru/laporan-kegiatan" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
-                  laporan mingguan
+                  laporan kegiatan
                   </p>
                 </a>
               </li>
@@ -109,5 +109,5 @@
   </aside>
 @endsection
 @section('content')
-Laporan Mingguan
+Laporan kegiatan
 @endsection
