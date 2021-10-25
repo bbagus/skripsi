@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;define('', '');
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\{DB,Validator,File};
 use Illuminate\Support\Str;
 use App\Models\Informasi;
-use Illuminate\Support\Facades\File;
 use App\Repositories\UserRepository; 
 
 
@@ -15,7 +13,6 @@ class AdminInfo extends Controller
 {
 	public function __construct(UserRepository $repository)
     {
-        $this->middleware('auth');
         $this->repository = $repository;
     }
     public function index(){

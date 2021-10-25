@@ -7,7 +7,6 @@ class AdminDashboard extends Controller
 {
 	public function __construct(UserRepository $repository)
     {
-        $this->middleware('auth');
         $this->repository = $repository;
     }
     public function dashboard(){

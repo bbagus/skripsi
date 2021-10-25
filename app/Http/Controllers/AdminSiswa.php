@@ -3,12 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;define('', '');
-use Illuminate\Support\Facades\Validator;
-use App\Models\Siswa;
-use App\Models\User;
-use Illuminate\Support\Facades\File; 
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\{DB,Validator,File,Hash};
+use App\Models\{Siswa,User};
 use App\Repositories\UserRepository;
 
 
@@ -16,7 +12,6 @@ class AdminSiswa extends Controller
 {
 	public function __construct(UserRepository $repository)
     {
-        $this->middleware('auth');
         $this->repository = $repository;
     }
 	public function index(){

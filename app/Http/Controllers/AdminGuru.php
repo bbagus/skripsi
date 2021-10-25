@@ -3,19 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;define('', '');
-use Illuminate\Support\Facades\Validator;
-use App\Models\Guru;
-use App\Models\User;
-use Illuminate\Support\Facades\File; 
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\{DB,Validator,File,Hash};
+use App\Models\{Guru,User};
+
 use App\Repositories\UserRepository;
 
 class AdminGuru extends Controller
 {
 	public function __construct(UserRepository $repository)
     {
-        $this->middleware('auth');
         $this->repository = $repository;
     }
 	public function index(){
@@ -49,11 +45,9 @@ class AdminGuru extends Controller
 				$this->validate($request, [
 					'foto' => 'file|image|mimes:jpeg,png,jpg|max:700',
 				]);
-				// menyimpan data file yang diupload ke variabel $file
 				$file = $request->file('foto');
 				$extension = $request->foto->getClientOriginalExtension();
 				$nama_file = $unik.'-'.$request->nama.'.'.$extension;
-	      	        // isi dengan nama folder tempat kemana file diupload
 				$tujuan_upload = 'data_file';
 				$file->move($tujuan_upload,$nama_file);
 			} else {
@@ -98,7 +92,6 @@ class AdminGuru extends Controller
 				$this->validate($request, [
 					'foto' => 'file|image|mimes:jpeg,png,jpg|max:700',
 				]);
-				
 				if($guru->foto != 'default.jpg'){
 				//mau ganti foto, 
 					$image_path = public_path().'/data_file/'.$guru->foto;
@@ -107,7 +100,6 @@ class AdminGuru extends Controller
 				$file = $request->file('foto');
 				$extension = $request->foto->getClientOriginalExtension();
 				$nama_file = $unik.'-'.$request->nama.'.'.$extension;
-		      	        // isi dengan nama folder tempat kemana file diupload
 				$tujuan_upload = 'data_file';
 				$file->move($tujuan_upload,$nama_file);
 			} else if ($request->hapus == 'hapus'){

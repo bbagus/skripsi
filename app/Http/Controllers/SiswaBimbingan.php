@@ -2,20 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\{DB,Validator};
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Repositories\UserRepository;
-use Illuminate\Support\Facades\Validator;
-use App\Models\User;
-use App\Models\Siswa;
+use App\Models\{User,Siswa};
 
 class SiswaBimbingan extends Controller
 {
     private $repository;
     public function __construct(UserRepository $repository)
     {
-        $this->middleware('auth');
         $this->repository = $repository;
     }
     public function laporanMingguan(UserRepository $repository){

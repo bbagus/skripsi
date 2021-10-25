@@ -2,28 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\{DB,Validator};
 use App\Repositories\UserRepository;
-use Illuminate\Support\Facades\Validator;
-use App\Models\User;
-use App\Models\Siswa;
-use App\Models\Pengajuan;
+use App\Models\{User,Siswa,Pengajuan};
 
 class SiswaPengajuan extends Controller
 {
     private $repository;
     public function __construct(UserRepository $repository)
     {
-        $this->middleware('auth');
         $this->repository = $repository;
     }
     public function index(UserRepository $repository){
         $user = $this->repository->getData();
         $tahunajaran = $this->repository->getTahunAjaran();
         $pengajuan = DB::table('pengajuan')
-        ->join('industri', 'pengajuan.kd_industri', '=', 'industri.kd_industri')
+        ->leftjoin('industri', 'pengajuan.kd_industri', '=', 'industri.kd_industri')
         ->join('siswa', 'pengajuan.nis', '=', 'siswa.nis')
         ->select('kd_pengajuan','industri.nama as industri', 'siswa.nama as nama' , 'industri.alamat as alamat' , 'pengajuan.nis as nis', 'tgl_pengajuan', 'tgl_diproses' , 'tahun_ajaran','status')
         ->where('pengajuan.nis', $user->nis)

@@ -30,7 +30,7 @@
        @endif
      </div>
      <div class="info" style="padding: 0 5px 0 15px;white-space: normal;">
-      <a href="siswa/profil" class="d-block">{{$user->nama}}<br>
+      <a href="/siswa/profil" class="d-block">{{$user->nama}}<br>
         <sup>{{$user->nis}}</sup>
       </a>
     </div>
@@ -221,7 +221,7 @@
               </select>
             </div>
           </div>
-          Detail info instansi bisa cek di <a href="{{url('/')}}/industri"> sini</a>
+          Detail info instansi bisa cek di <a href="{{url('/')}}/industri" target="_blank" rel="noopener noreferrer"> sini</a>
       </div>
       <div class="modal-footer justify-content-between">
         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>

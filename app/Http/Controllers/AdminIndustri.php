@@ -3,17 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;define('', '');
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\{DB,Validator,File}; 
 use App\Models\Industri;
-use Illuminate\Support\Facades\File; 
 use App\Repositories\UserRepository;
 
 class AdminIndustri extends Controller
 {
 	public function __construct(UserRepository $repository)
     {
-        $this->middleware('auth');
         $this->repository = $repository;
     }
 	public function index() {
@@ -50,7 +47,6 @@ class AdminIndustri extends Controller
 				$file = $request->file('foto');
 				$extension = $request->foto->getClientOriginalExtension();
 				$nama_file = 'Industri'.'-'.$request->nama.'.'.$extension;
-	      	        // isi dengan nama folder tempat kemana file diupload
 				$tujuan_upload = 'data_file';
 				$file->move($tujuan_upload,$nama_file);
 			} else {

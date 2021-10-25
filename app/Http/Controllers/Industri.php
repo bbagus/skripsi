@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\{Auth,DB};
 use Illuminate\Http\Request;
 use Response;
-use Illuminate\Support\Facades\DB;
 use App\Repositories\UserRepository;
 
 class Industri extends Controller
@@ -26,8 +25,6 @@ class Industri extends Controller
         if (Auth::check() != null ) return View('home.detailIndustri', ['industri' => $industri, 'user' => $this->repository->getData()]);
         return View('home.detailIndustri', ['industri' => $industri]);
     }
-
-
     public function filter (Request $request){
         if (isset($request->f) && isset($request->k)){
             $kolom = $request->k;

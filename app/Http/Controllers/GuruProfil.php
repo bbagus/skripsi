@@ -2,22 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\{Auth,File,DB,Validator,Hash};
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Repositories\UserRepository;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
-use App\Models\User;
-use App\Models\Guru;
+use App\Models\{User,Guru};
 
 class GuruProfil extends Controller
 {
     private $repository;
     public function __construct(UserRepository $repository)
     {
-        $this->middleware('auth');
         $this->repository = $repository;
     }
     public function index(UserRepository $repository){

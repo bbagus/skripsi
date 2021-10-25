@@ -4,14 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;define('', '');
+use Illuminate\Support\Facades\DB;
 use App\Repositories\UserRepository;
 
 class GuruBimbingan extends Controller
 {
 	public function __construct(UserRepository $repository)
     {
-        $this->middleware('auth');
         $this->repository = $repository;
     }
     public function SiswaBimbingan(UserRepository $repository){

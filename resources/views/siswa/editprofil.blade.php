@@ -26,7 +26,7 @@
        @endif
      </div>
      <div class="info" style="padding: 0 5px 0 15px;white-space: normal;">
-      <a href="siswa/profil" class="d-block">{{$user->nama}}<br>
+      <a href="/siswa/profil" class="d-block">{{$user->nama}}<br>
         <sup>{{$user->nis}}</sup>
       </a>
     </div>

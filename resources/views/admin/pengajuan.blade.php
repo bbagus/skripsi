@@ -201,7 +201,7 @@
                         <th>Nama Siswa</th>
                         <th>Kelas</th>
                         <th>Instansi</th>
-                        <th>Alamat</th>
+                        <th>Alamat Instansi</th>
                         <th>Tanggal Pengajuan</th>
                         <th>Tahun Ajaran</th>
                         <th>Aksi</th>
@@ -266,7 +266,7 @@
                           <th>Nama Siswa</th>
                           <th>kelas</th>
                           <th>Instansi</th>
-                          <th>Alamat</th>
+                          <th>Alamat Instansi</th>
                           <th>Tanggal Diproses</th>
                           <th>Tahun Ajaran</th>
                           <th>Status</th>
@@ -298,33 +298,52 @@
                             <option selected="" value="">Status</option>
                             <option value="Diterima">Diterima</option>
                             <option value="Ditolak">Ditolak</option></th>
-                          <th></th>
-                        </tr>
-                      </thead>
-                      
-                    </table>
-                    <div class="mailbox-controls">
-                      <!-- Check all button -->
-                      <button type="button" class="btn btn-outline-dark btn-small checkbox-toggle"><i class="far fa-square"></i> Tandai Semua
-                      </button>
-                      <div class="btn-group">
-                        <input type="submit" class="btn btn-danger" value="Hapus">
+                            <th></th>
+                          </tr>
+                        </thead>
+
+                      </table>
+                      <div class="mailbox-controls">
+                        <!-- Check all button -->
+                        <button type="button" class="btn btn-outline-dark btn-small checkbox-toggle"><i class="far fa-square"></i> Tandai Semua
+                        </button>
+                        <div class="btn-group">
+                          <input type="submit" class="btn btn-danger" value="Hapus">
+                        </div>
+                        <!-- /.btn-group -->
                       </div>
-                      <!-- /.btn-group -->
-                    </div>
-                  </form>
+                    </form>
+                  </div>
                 </div>
               </div>
+              <div class="card-footer">
+              </div>
             </div>
-            <div class="card-footer">
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    @endsection
-    @section('modal')
-    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top:150px;">
+            <!-- generate  -->
+            <div class="card card-orange">
+              <div class="card-header">
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                </div>
+                <h3 class="card-title text-white">
+                 Buat Otomatis Pengajuan Siswa
+               </h3>
+             </div>
+             <div class="card-body" style="padding: 1.75rem 1.75rem;">
+                <p class="text-justify">
+                Otomatis membuat pengajuan yang sudah disetujui untuk siswa yang belum mengisi form pengajuan (bagian industri kosong).  &nbsp;
+                   <a class="btn btn-outline-primary" href="{{url('/')}}/admin/kelola-pengajuan/otomatis"><i class="fas fa-pen"></i> Buat Pengajuan</a>
+              </p>
+              </div>
+           </div>
+         </div>
+       </div>
+     </section>
+     @endsection
+     @section('modal')
+     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top:150px;">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -368,7 +387,7 @@
     <script src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/buttons.colVis.min.js">
     </script>
     <script>
-      $(function () {
+  $(function () {
     //Enable check and uncheck all functionality
     $('.checkbox-toggle').click(function () {
       var clicks = $(this).data('clicks')
@@ -384,119 +403,138 @@
       $(this).data('clicks', !clicks)
     })
   })
-      $(document).ready(function () {
-        var table = $("#example1").DataTable({
-          "processing": true,
-          "orderCellsTop": true,
-          "columns": [
-          { "data": "NIS"},
-          { "data": "Nama"},
-          { "data": "Kelas"},
-          { "data": "Instansi" },
-          { "data": "Alamat" },
-          { "data": "Tanggal Pengajuan" },
-          { "data": "Tahun Ajaran" },
-          { "data": "Action" }
-          ],
-          "responsive": true, "lengthChange": true, "searching": true, "autoWidth": false,
-          "buttons": []
-        });
-        table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-        $('#filter th').on( 'keyup', 'input.nis', function () {
-          table
-          .columns(0)
-          .search($(this).val(), true, false)
-          .draw();
-        });
-        $('#filter th').on( 'keyup', 'input.nama', function () {
-          table
-          .columns(1)
-          .search($(this).val(), true, false)
-          .draw();
-        });
-        $('#filter th').on( 'change', 'select', function () {
-          table
-          .columns(2)
-          .search($(this).val(), true, false)
-          .draw();
-        });
-        $('#filter th').on( 'keyup', 'input.instansi', function () {
-          table
-          .columns(3)
-          .search($(this).val(), true, false)
-          .draw();
-        });
-        $('#filter th').on( 'keyup', 'input.alamat', function () {
-          table
-          .columns(4)
-          .search($(this).val(), true, false)
-          .draw();
-        });
-        $('#filter th').on( 'keyup', 'input.tanggal', function () {
-          table
-          .columns(5)
-          .search($(this).val(), true, false)
-          .draw();
-        });
-        $('#filter th').on( 'keyup', 'input.tahun', function () {
-          table
-          .columns(6)
-          .search($(this).val(), true, false)
-          .draw();
-        });
-        
-        tableConfig = {
-          "processing": true,
-          "orderCellsTop": true,
-          "aoColumnDefs": [
-          { "sWidth": "60px", "aTargets": [ 8 ] },
-            { "sWidth": "60px", "aTargets": [ 9 ] }
-          ],  
-          "columns": [
-          { "data": null,
-            render: function( data, type, row){
-              return ' <div class="icheck-primary"><input type="checkbox" name="hapus[]" value="'+data.kd_pengajuan+'" id="'+data.kd_pengajuan+'"><label for="'+data.kd_pengajuan+'"></label></div>';
-            }
-          },
-          { "data": "nis"},
-          { "data": "nama"},
-          { "data": "kelas"},
-          { "data": "industri" },
-          { "data": "alamat" },
-          { "data": "tgl_diproses" },
-          { "data": "tahun_ajaran" },
-          { "data": null,
-          render: function ( data, type, row ) {
-            if (data.status == 'Diterima'){
-              return '<span class="btn btn-sm btn-success">'+data.status+'</span>';
-            } else {
-              return '<span class="btn btn-sm btn-danger">'+data.status+'</span>';
-            }
-          }
-        },
-        { "data": null,
-        render: function ( data, type, row ) {
-          return '<a onclick="deleteConfirm(\'/admin/kelola-pengajuan/hapus/'+ data.kd_pengajuan +'\')" href="#!" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Hapus</a>';
-        }
-      }],
+  $(document).ready(function () {
+    var table = $("#example1").DataTable({
+      "processing": true,
+      "orderCellsTop": true,
+      "columns": [
+      { "data": "NIS"},
+      { "data": "Nama"},
+      { "data": "Kelas"},
+      { "data": "Instansi" },
+      { "data": "Alamat" },
+      { "data": "Tanggal Pengajuan" },
+      { "data": "Tahun Ajaran" },
+      { "data": "Action" }
+      ],
       "responsive": true, "lengthChange": true, "searching": true, "autoWidth": false,
-      "buttons": []
-    };
-    var table2 = $('#example2').DataTable(tableConfig);
-        table2.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-        hitung = 0;
-      $('#p2').click(function() {
-        if (hitung < 1){
-          tableConfig.ajax = {
-            "url": "{{url('/')}}/admin/kelola-pengajuan-diproses",
-            "dataSrc": ""
-          };
-          table2.destroy();
-          table2 = $('#example2').DataTable(tableConfig);
-          table2.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-          hitung++;
+      "buttons": [{
+            extend: "colvis", className: "btn-info"
+          },{
+            extend: "print", className: "btn-info"
+          }, {
+            extend: "pdf", className: "btn-info"
+          }, {
+            extend: "excel", className: "btn-info"
+          }]
+    });
+    table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    $('#filter th').on( 'keyup', 'input.nis', function () {
+      table
+      .columns(0)
+      .search($(this).val(), true, false)
+      .draw();
+    });
+    $('#filter th').on( 'keyup', 'input.nama', function () {
+      table
+      .columns(1)
+      .search($(this).val(), true, false)
+      .draw();
+    });
+    $('#filter th').on( 'change', 'select', function () {
+      table
+      .columns(2)
+      .search($(this).val(), true, false)
+      .draw();
+    });
+    $('#filter th').on( 'keyup', 'input.instansi', function () {
+      table
+      .columns(3)
+      .search($(this).val(), true, false)
+      .draw();
+    });
+    $('#filter th').on( 'keyup', 'input.alamat', function () {
+      table
+      .columns(4)
+      .search($(this).val(), true, false)
+      .draw();
+    });
+    $('#filter th').on( 'keyup', 'input.tanggal', function () {
+      table
+      .columns(5)
+      .search($(this).val(), true, false)
+      .draw();
+    });
+    $('#filter th').on( 'keyup', 'input.tahun', function () {
+      table
+      .columns(6)
+      .search($(this).val(), true, false)
+      .draw();
+    });
+var table2 = $('#example2').DataTable();      
+    tableConfig = {
+      "processing": true,
+      "orderCellsTop": true,
+      "aoColumnDefs": [
+      { "sWidth": "90px", "aTargets": [ 2 ] },
+      { "sWidth": "140px", "aTargets": [ 5 ] },
+      { "sWidth": "30px", "aTargets": [ 8 ] },
+      { "sWidth": "70px", "aTargets": [ 9 ] }
+      ],  
+      "columns": [
+      { "data": null,
+      render: function( data, type, row){
+        return ' <div class="icheck-primary"><input type="checkbox" name="hapus[]" value="'+data.kd_pengajuan+'" id="'+data.kd_pengajuan+'"><label for="'+data.kd_pengajuan+'"></label></div>';
+      }
+      },
+      { "data": "nis"},
+      { "data": "nama"},
+      { "data": "kelas"},
+      { "data": "industri" },
+      { "data": "alamat" },
+      { "data": "tgl_diproses" },
+      { "data": "tahun_ajaran" },
+      { "data": null,
+      render: function ( data, type, row ) {
+        if (data.status == 'Diterima'){
+          return '<button class="btn btn-sm btn-success" disabled>'+data.status+'</span>';
+        } else {
+          return '<button class="btn btn-sm btn-danger" disabled>'+data.status+'</span>';
         }
-        })
+        }
+      },
+      { "data": null,
+      render: function ( data, type, row ) {
+        return '<a class="btn btn-sm btn-primary" href="{{url('/')}}/admin/kelola-pengajuan/'+ data.kd_pengajuan +'"><i class="fas fa-eye"></i> Detail</a> <a onclick="deleteConfirm(\'/admin/kelola-pengajuan/hapus/'+ data.kd_pengajuan +'\')" href="#!" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Hapus</a>';
+      }
+        }],
+      "responsive": true, "lengthChange": true, "searching": true, "autoWidth": false,
+      "buttons": [{
+            extend: "colvis", className: "btn-info"
+          },{
+            extend: "print", className: "btn-info"
+          }, {
+            extend: "pdf", className: "btn-info"
+          }, {
+            extend: "excel", className: "btn-info"
+          }],
+      initComplete: function () {
+        table2.buttons().container()
+        .appendTo('#example2_wrapper .col-md-6:eq(0)');
+      }
+    };
+  hitung = 0;
+  $('#p2').click(function() {
+    if (hitung < 1){
+      tableConfig.ajax = {
+        "url": "{{url('/')}}/admin/kelola-pengajuan-diproses",
+        "dataSrc": ""
+      };
+      table2.destroy();
+      table2 = $('#example2').DataTable(tableConfig);
+      hitung++;
+    }
+  })
       //Buat Filter
       $('#filter2 th').on( 'keyup', 'input.nis', function () {
         table2
@@ -547,7 +585,7 @@
         .draw();
       });
 
-    });
+  });
 function deleteConfirm(url){
   $('#btn-delete').attr('href', url);
   $('#deleteModal').modal();
