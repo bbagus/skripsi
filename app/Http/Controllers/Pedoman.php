@@ -14,7 +14,7 @@ class Pedoman extends Controller
         $this->repository = $repository;
     }
     public function index(UserRepository $repository){
-    	if (Auth::check() != null ) {
+    	if (Auth::check()) {
         return View('home.pedoman')->with('user', $this->repository->getData());	
         }
          return View('home.pedoman');

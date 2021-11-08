@@ -53,12 +53,10 @@ class SiswaPengajuan extends Controller
             'tahun_ajaran' => $tahun,
             'status' => 'Menunggu',
         ]);
-           return redirect()->back()->with('success', 'Menambah pengajuan berhasil!');
-           return redirect()->back();
-       }
-       return redirect()->back()->withErrors('Sudah ada pengajuan yang menunggu proses!');
-   }
-   return redirect()->back()->withErrors('Pengajuan sudah ada yang diterima!');
-}
+           return back()->with('success', 'Menambah pengajuan berhasil!');
+           return back();
+       } return back()->withErrors('Sudah ada pengajuan yang menunggu proses!');
+   } return back()->withErrors('Pengajuan sudah ada yang diterima!');
+    }
 }
 

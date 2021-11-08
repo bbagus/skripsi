@@ -15,23 +15,21 @@ class AdminSiswa extends Controller
         $this->repository = $repository;
     }
 	public function index(){
-		$user = $this->repository->getData();
 		$siswa = DB::table('siswa')
 		->join('kelas','siswa.kd_kelas', '=', 'kelas.kd_kelas')
 		->select('siswa.nis', 'siswa.nama', 'siswa.tgl_lahir', 'kelas.nama as kelas', 'siswa.telp','siswa.alamat', 'siswa.foto')
 		->get();
-		return view('admin.siswa', ['siswa' => $siswa, 'user' => $user]);
+		return view('admin.siswa', ['siswa' => $siswa, 'user' => $this->repository->getData()]);
 	}
 	public function tambahSiswa(){
 		$user = $this->repository->getData();
 		return view('admin.tambahSiswa')->with('user', $user);
 	}
 	public function editSiswa($nis){
-		$user = $this->repository->getData();
 		$siswa = DB::table('siswa')
 		->join('users', 'siswa.nis', '=', 'users.username')
 		->where('nis',$nis)->first();
-		if ($siswa != null)	return view('admin.editSiswa', ['siswa' => $siswa,'user' => $user]);
+		if ($siswa != null)	return view('admin.editSiswa', ['siswa' => $siswa,'user' => $this->repository->getData()]);
 		return redirect()->action([AdminSiswa::class, 'index']);
 	}
 	public function proses_upload(Request $request){
@@ -60,8 +58,7 @@ class AdminSiswa extends Controller
 				$nama_file = 'default.jpg';
 			}
 			$ambil = strtotime($request->tgl_lahir);
-			$psw = date('dmY',$ambil);
-			$psw = Hash::make($psw);
+			$psw = bcrypt(date('dmY',$ambil));
 			User::create([
 				'username' => $request->nis,
 				'password' => $psw,
@@ -76,10 +73,9 @@ class AdminSiswa extends Controller
 				'kd_kelas' => $request->kd_kelas,
 				'foto' => $nama_file,
 			]);
-			return redirect()->back()->with('success', 'Input data siswa berhasil!');
-			return redirect()->back();
-		}
-			return redirect()->back()->withErrors('NIS yang sama sudah ada!');
+			return back()->with('success', 'Input data siswa berhasil!');
+			return back();
+		} return back()->withErrors('NIS yang sama sudah ada!');
 	}
 	public function proses_edit (Request $request) {
 		$ceknis = Siswa::find($request->nis);
@@ -128,11 +124,10 @@ class AdminSiswa extends Controller
 			$siswa->kd_kelas = $request->kd_kelas;
 			$siswa->foto = $nama_file;
 			$siswa->save();
-			return redirect()->back()->with('success','Mengubah data siswa berhasil!')
+			return back()->with('success','Mengubah data siswa berhasil!')
 			->with('siswa', $siswa);
-			return redirect()->back()->withInput();
-		}
-		return redirect()->back()->withErrors('NIS yang sama sudah ada!');
+			return back()->withInput();
+		} return back()->withErrors('NIS yang sama sudah ada!');
 	}
 	public function hapusFoto($nis) {
 		$siswa = DB::table('siswa')
@@ -140,9 +135,8 @@ class AdminSiswa extends Controller
 		->where('nis',$nis)->first();
 		if ($siswa != null){
 			$siswa->foto = 'default.jpg';
-			return view('admin.editSiswa',['siswa' => $siswa]);
-		}  
-		return redirect()->back();
+			return view('admin.editSiswa',['siswa' => $siswa, 'user' => $this->repository->getData()]);
+		} return back();
 	}
 	public function hapusSiswa($nis) {
 		$siswa = Siswa::find($nis);
@@ -151,9 +145,8 @@ class AdminSiswa extends Controller
 			File::delete($image_path);
 			$user = User::find($nis);
 			$user->delete();
-			return redirect()->back()->with('success', '1 Data berhasil dihapus.');   
-		}
-		return redirect()->route('kelola_siswa');
+			return back()->with('success', '1 Data berhasil dihapus.');   
+		} return redirect()->route('kelola_siswa');
 	}
 	public function truncate_siswa(Request $request) {
 		$input = $request->hapus;
@@ -164,22 +157,18 @@ class AdminSiswa extends Controller
 				$user->delete();
 				$count++;
 			}
-			return redirect()->back()->with('success', $count.' Data berhasil dihapus.'); 
-		}
-		return redirect()->back()->withErrors('Tidak ada yang ditandai.');
+			return back()->with('success', $count.' Data berhasil dihapus.'); 
+		} return back()->withErrors('Tidak ada yang ditandai.');
 	}
 	public function resetPassword ($nis) {
 		$user = User::find($nis);
 		if ($user != null) {
 			$siswa = Siswa::find($nis);
 			$ambil = strtotime($siswa->tgl_lahir);
-			$psw = date('dmY',$ambil);
-			$psw = Hash::make($psw);
+			$psw = bcrypt(date('dmY',$ambil));
 			$user->password = $psw;
 			$user->save();
-
-			return redirect()->back()->with('success', 'Password berhasil direset.'); 
-		}
-		return redirect()->back();
+			return back()->with('success', 'Password berhasil direset.'); 
+		} return back();
 	}
 }

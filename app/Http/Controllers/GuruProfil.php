@@ -15,9 +15,8 @@ class GuruProfil extends Controller
         $this->repository = $repository;
     }
     public function index(UserRepository $repository){
-        $user = $this->repository->getData();
         return View('guru.profil')
-        ->with('user', $user);
+        ->with('user', $this->repository->getData());
     }
     public function ganti_password(Request $request) {
         $this->validate($request, [
@@ -31,15 +30,12 @@ class GuruProfil extends Controller
             $user = User::find($data->username);
             $user->password = $passbaru;
             $user->save();
-            return redirect()->back()->with('success','Password berhasil diubah!');
-        }
-        return redirect()->back()->withErrors('Password lama salah!');
-        
+            return back()->with('success','Password berhasil diubah!');
+        } return back()->withErrors('Password lama salah!');
     }
     public function editData(UserRepository $repository){
-        $user = $this->repository->getData();
         return view('guru.editprofil')
-        ->with('user', $user);
+        ->with('user', $this->repository->getData());
     }
     public function edit_akun(Request $request){
         $data = $this->repository->getData();
@@ -96,16 +92,12 @@ class GuruProfil extends Controller
             $guru->foto = $nama_file;
             $guru->save();
             Auth::login($user);
-            return redirect()->back()->with('success', 'Mengubah detail profil berhasil!');
-            return redirect()->back()->withInput();
-            } 
-        return redirect()->back()->withErrors('Nama yang sama sudah ada!');
-        } 
-    return redirect()->back()->withErrors('Username yang sama sudah ada!');
+            return back()->with('success', 'Mengubah detail profil berhasil!');
+            return back()->withInput();
+        } return back()->withErrors('Nama yang sama sudah ada!');
+        } return back()->withErrors('Username yang sama sudah ada!');
+    } return back()->withErrors('Email yang sama sudah ada!');
     }
-    return redirect()->back()->withErrors('Email yang sama sudah ada!');
-    }
-
     public function hapusFoto(){
        $data = $this->repository->getData();
        $image_path = public_path().'/data_file/'.$data->foto;
@@ -113,7 +105,7 @@ class GuruProfil extends Controller
        $guru = Guru::find($data->kd_pembimbing);
        $guru->foto = 'default.jpg';
        $guru->save();
-       return redirect()->back()->with('success', 'Foto berhasil dihapus.');  
+       return back()->with('success', 'Foto berhasil dihapus.');  
     }
 }
 

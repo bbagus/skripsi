@@ -14,9 +14,7 @@ class Home extends Controller
         $this->repository = $repository;
     }
     public function index(UserRepository $repository){
-    	if (Auth::check() != null ) {
-        return View('home.home')->with('user', $this->repository->getData());	
-        }
-         return View('home.home');
+    	if (Auth::check()) return View('home.home')->with('user', $this->repository->getData());	
+        return View('home.home');
 	}
 }

@@ -17,13 +17,9 @@ class UserRepository
     {
     	$role = Auth::user()->role;
     	$username = Auth::user()->username;
-    	if ($role == 'siswa'){
-        $user = DB::table('siswa')->where('nis',$username)->first();
-    	} else if ($role == 'guru'){
-    	$user = DB::table('guru_pembimbing')->where('username',$username)->first();
-    	} else {
-            $user = DB::table('admin')->where('username',$username)->first();
-        }
+    	if ($role == 'siswa') $user = DB::table('siswa')->where('nis',$username)->first();
+    	else if ($role == 'guru') $user = DB::table('guru_pembimbing')->where('username',$username)->first();
+    	else $user = DB::table('admin')->where('username',$username)->first();
         return $user;
     } 
     public function getKoordinator(){

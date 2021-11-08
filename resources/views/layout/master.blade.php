@@ -251,7 +251,6 @@
        </div>
      </div><!-- /.container-fluid -->
    </section>
-
    @yield('content')
  </div>
  <!-- /.content-wrapper -->
@@ -271,8 +270,7 @@
 <!-- AdminLTE App -->
 <script src="{{url('/')}}/AdminLTE-master/dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="{{url('/')}}/AdminLTE-master/dist/js/demo.js"></script>
-<script src="{{url('/')}}/AdminLTE-master/dist/js/pages/dashboard3.js"></script>
 @yield('javascript')
 </body>
 </html>
+

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{DB,Validator,File,Hash};
+use Illuminate\Support\Facades\{DB,Validator,File};
 use App\Models\{Guru,User};
 
 use App\Repositories\UserRepository;
@@ -20,8 +20,7 @@ class AdminGuru extends Controller
 		return view('admin.guru', ['guru' => $guru, 'user' => $user]);
 	}
 	public function tambahGuru(){
-		$user = $this->repository->getData();
-		return view('admin.tambahGuru')->with('user', $user);
+		return view('admin.tambahGuru')->with('user', $this->repository->getData());
 	}
 	public function editGuru($kd_pembimbing){
 		$user = $this->repository->getData();
@@ -50,29 +49,26 @@ class AdminGuru extends Controller
 				$nama_file = $unik.'-'.$request->nama.'.'.$extension;
 				$tujuan_upload = 'data_file';
 				$file->move($tujuan_upload,$nama_file);
-			} else {
-				$nama_file = 'default.jpg';
-			}
-			$rand = $unik;
-			$psw = Hash::make('gurukeren');
+			} else $nama_file = 'default.jpg';
+			$psw = bcrypt('gurukeren');
 			User::create([
-				'username' => $rand,
+				'username' => $unik,
 				'password' => $psw,
 				'role' => 'guru',
 			]);
 			Guru::create([
 				'nama' => $request->nama,
-				'username' => $rand,
+				'username' => $unik,
 				'nip' => $request->nip,
 				'telp' => $request->telp,
 				'jurusan' => $request->jurusan,
 				'wilayah' => $request->wilayah,
 				'foto' => $nama_file,
 			]);
-			return redirect()->back()->with('success', 'Input data guru pembimbing berhasil!');
-			return redirect()->back();
+			return back()->with('success', 'Input data guru pembimbing berhasil!');
+			return back();
 		}
-		return redirect()->back()->withErrors('Nama yang sama sudah ada!');
+		return back()->withErrors('Nama yang sama sudah ada!');
 	}
 	public function proses_edit (Request $request) {
 		$kd = $request->kd_pembimbing;
@@ -115,11 +111,11 @@ class AdminGuru extends Controller
 			$guru->wilayah = $request->wilayah;
 			$guru->foto = $nama_file;
 			$guru->save();
-			return redirect()->back()->with('success', 'Mengubah data guru pembimbing berhasil!')
+			return back()->with('success', 'Mengubah data guru pembimbing berhasil!')
 			->with('guru', $guru);
-			return redirect()->back()->withInput();
+			return back()->withInput();
 		}
-		return redirect()->back()->withErrors('Nama yang sama sudah ada!');
+		return back()->withErrors('Nama yang sama sudah ada!');
 	}
 	public function hapusFoto($kd) {
 		$guru = DB::table('guru_pembimbing')
@@ -127,9 +123,9 @@ class AdminGuru extends Controller
 		->where('kd_pembimbing',$kd)->first();
 		if ($guru != null) {
 			$guru->foto = 'default.jpg';
-			return view('admin.editGuru', ['guru' => $guru]);
+			return view('admin.editGuru', ['guru' => $guru, 'user' => $this->repository->getData()]);
 		} 
-		return redirect()->back(); 
+		return back(); 
 	}
 	public function hapusGuru($kd) {
 		$guru = Guru::firstWhere('username', $kd);
@@ -139,7 +135,7 @@ class AdminGuru extends Controller
 			$user = User::find($kd);
 			$user->delete();
 			//hurung hapus file
-			return redirect()->back()->with('success', '1 Data berhasil dihapus.');   
+			return back()->with('success', '1 Data berhasil dihapus.');   
 		}
 		return redirect()->route('kelola_guru');
 	}
@@ -152,21 +148,19 @@ class AdminGuru extends Controller
 				$user->delete();
 				$count++;
 			}
-			return redirect()->back()->with('success', $count.' Data berhasil dihapus.'); 
+			return back()->with('success', $count.' Data berhasil dihapus.'); 
 		}
-		return redirect()->back()->withErrors('Tidak ada yang ditandai.');
+		return back()->withErrors('Tidak ada yang ditandai.');
 	}
 	public function resetPassword ($kd) {
 		$user = User::find($kd);
 		if ($user != null) {
 			$guru = Guru::find($kd);
-			$psw = "gurukeren";
-			$psw = Hash::make($psw);
+			$psw = bcrypt("gurukeren");
 			$user->password = $psw;
 			$user->save();
-
-			return redirect()->back()->with('success', 'Password berhasil direset.'); 
+			return back()->with('success', 'Password berhasil direset.'); 
 		}
-		return redirect()->back();
+		return back();
 	}
 }

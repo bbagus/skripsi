@@ -4,10 +4,7 @@ namespace App\Http\Controllers;
 use App\Repositories\UserRepository;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\File; 
-
+use Illuminate\Support\Facades\{DB,Validator,File};
 
 class AdminMonitoring extends Controller
 {
@@ -16,17 +13,14 @@ class AdminMonitoring extends Controller
         $this->repository = $repository;
     }
     public function index(){
-        $user = $this->repository->getData();
-		return view('admin.laporanMingguan')->with('user', $user);
+		return view('admin.laporanMingguan')->with('user', $this->repository->getData());
 	}
 
    public function laporanPKL(){
-        $user = $this->repository->getData();
-        return view('admin.laporanPkl')->with('user', $user);
+        return view('admin.laporanPkl')->with('user', $this->repository->getData());
     }
     public function nilai(){
-        $user = $this->repository->getData();
-        return view('admin.nilai')->with('user', $user);
+        return view('admin.nilai')->with('user', $this->repository->getData());
     }
 }
 

@@ -16,13 +16,12 @@ class Industri extends Controller
     }
     public function index(UserRepository $repository){
         $industri = DB::table('industri')->get();
-
-        if (Auth::check() != null ) return View('home.industri')->with('user', $this->repository->getData())->with('industri', $industri);	
+        if (Auth::check()) return View('home.industri')->with('user', $this->repository->getData())->with('industri', $industri);	
         return View('home.industri')->with(compact('industri'));
     }
     public function detailIndustri($kd_industri){
         $industri = DB::table('industri')->where('kd_industri', $kd_industri)->first();
-        if (Auth::check() != null ) return View('home.detailIndustri', ['industri' => $industri, 'user' => $this->repository->getData()]);
+        if (Auth::check()) return View('home.detailIndustri', ['industri' => $industri, 'user' => $this->repository->getData()]);
         return View('home.detailIndustri', ['industri' => $industri]);
     }
     public function filter (Request $request){
@@ -41,7 +40,7 @@ class Industri extends Controller
             $search->filter = $test;
             $search->test = $request->test;
             $search->katakunci = $katakunci;
-            if (Auth::check() != null ) return View('home.industri', ['industri' => $industri, 'user' => $this->repository->getData(), 'teks' => $teks, 'search' => $search]);
+            if (Auth::check()) return View('home.industri', ['industri' => $industri, 'user' => $this->repository->getData(), 'teks' => $teks, 'search' => $search]);
             return View('home.industri', ['industri' => $industri, 'teks' => $teks, 'search' => $search]); 
         } elseif(isset($request->kk)){
             $katakunci = $request->kk;
@@ -51,9 +50,8 @@ class Industri extends Controller
             $teks = 'Hasil pencarian :';
              $search = (object)array();
              $search->katakunci = $katakunci;
-            if (Auth::check() != null ) return View('home.industri', ['industri' => $industri, 'user' => $this->repository->getData(), 'teks' => $teks, 'search' => $search]);
+            if (Auth::check()) return View('home.industri', ['industri' => $industri, 'user' => $this->repository->getData(), 'teks' => $teks, 'search' => $search]);
             return View('home.industri', ['industri' => $industri, 'teks' => $teks, 'search' => $search]); 
-        }
-        return redirect('/industri');
+        } return redirect('/industri');
     }
 }

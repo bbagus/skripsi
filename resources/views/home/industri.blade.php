@@ -370,63 +370,62 @@
            <h5 class="text-center col-md-10 offset-md-1 p-3">Berikut merupakan daftar industri atau instansi tempat PKL. Anda dapat menemukan informasi seputar tempat industri, bidang kerja, kuota yang disediakan, dan lain lain.</h5>
           <p >
         </p>
-            <form action="/industri/cari" method="GET">
-              
-                <div class="row">
-                    <div class="col-md-10 offset-md-1">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label>Filter Berdasarkan :</label>
-                                    <select class="form-control select2" name="k"  id="first-choice" data-placeholder="Any" style="width: 100%;">
-                                      @if(isset($search->kolom))
-                                       <option <?php echo $search->kolom == 'jurusan' ? 'selected' : '' ?> value="jurusan">Jurusan</option>
-                                        <option <?php echo $search->kolom == 'bidang_kerja' ? 'selected' : '' ?> value="bidang_kerja">Bidang kerja</option>
-                                        <option <?php echo $search->kolom == 'wilayah' ? 'selected' : '' ?> value="wilayah">Wilayah</option>
-                                      @else
-                                       <option selected disabled>Pilih filter</option>
-                                       <option value="jurusan">Jurusan</option>
-                                        <option value="bidang_kerja">Bidang kerja</option>
-                                        <option value="wilayah">Wilayah</option>
-                                      @endif
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="filter" id="filter">Pilih :</label>
-                                    <select class="select2" id="second-choice" multiple="multiple" name="f" style="width: 100%;" data-placeholder="any">
-                                      @if(isset($search->filter))
-                                      @foreach($search->filter as $f)
-                                      <option selected value="{{$f}}">{{$f}}</option>
-                                      @endforeach
-                                      @else
-                                        <option  disabled value="iki value">Pilih filter dahulu</option>
-                                      @endif
-                                    </select>
-                                     <input type="hidden" name="test" id="test" value="<?php echo isset($search->test) ? $search->test : ''?>" >
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-group input-group-lg">
-                                <input type="search" name="kk" class="form-control form-control-lg" placeholder="Cari berdasarkan nama instansi" value="<?php echo isset($search->katakunci) ? $search->katakunci : ''?>" >
-                                <div class="input-group-append">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group text-center">
-                           <button type="submit" class="btn btn-lg btn-default">
-                              Cari &nbsp;<i class="fa fa-search"></i>
-                          </button>
-                           @if (isset($teks))
-                          <button type="button" onClick="window.location.href='/industri';" class="btn btn-lg btn-default ml-2">reset filter &nbsp;<i class="fa fa-sync-alt"></i>
-                          </button>
-                          @endif
-                        </div>
-                    </div>
+        <form action="/industri/cari" method="GET">
+          <div class="row">
+            <div class="col-md-10 offset-md-1">
+              <div class="row">
+                <div class="col-6">
+                  <div class="form-group">
+                    <label>Filter Berdasarkan :</label>
+                    <select class="form-control select2" name="k"  id="first-choice" data-placeholder="Any" style="width: 100%;">
+                      @if(isset($search->kolom))
+                      <option <?php echo $search->kolom == 'jurusan' ? 'selected' : '' ?> value="jurusan">Jurusan</option>
+                      <option <?php echo $search->kolom == 'bidang_kerja' ? 'selected' : '' ?> value="bidang_kerja">Bidang kerja</option>
+                      <option <?php echo $search->kolom == 'wilayah' ? 'selected' : '' ?> value="wilayah">Wilayah</option>
+                      @else
+                      <option selected disabled>Pilih filter</option>
+                      <option value="jurusan">Jurusan</option>
+                      <option value="bidang_kerja">Bidang kerja</option>
+                      <option value="wilayah">Wilayah</option>
+                      @endif
+                    </select>
+                  </div>
                 </div>
-            </form>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="filter" id="filter">Pilih :</label>
+                    <select class="select2" id="second-choice" multiple="multiple" name="f" style="width: 100%;" data-placeholder="any">
+                      @if(isset($search->filter))
+                      @foreach($search->filter as $f)
+                      <option selected value="{{$f}}">{{$f}}</option>
+                      @endforeach
+                      @else
+                      <option  disabled value="iki value">Pilih filter dahulu</option>
+                      @endif
+                    </select>
+                    <input type="hidden" name="test" id="test" value="<?php echo isset($search->test) ? $search->test : ''?>" >
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="input-group input-group-lg">
+                  <input type="search" name="kk" class="form-control form-control-lg" placeholder="Cari berdasarkan nama instansi" value="<?php echo isset($search->katakunci) ? $search->katakunci : ''?>" >
+                  <div class="input-group-append">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group text-center">
+               <button type="submit" class="btn btn-lg btn-default">
+                Cari &nbsp;<i class="fa fa-search"></i>
+              </button>
+              @if (isset($teks))
+              <button type="button" onClick="window.location.href='/industri';" class="btn btn-lg btn-default ml-2">reset filter &nbsp;<i class="fa fa-sync-alt"></i>
+              </button>
+              @endif
+            </div>
+          </div>
+        </div>
+      </form>
           </div>
            @if (isset($teks))
            <h3 class="text-center mt-5">{{$teks}}

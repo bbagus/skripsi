@@ -87,9 +87,26 @@ Route::middleware(['auth','is_admin'])->group(function () {
     Route::post('admin/kelola-pengajuan/terima', [AdminPengajuan::class, 'terima'])->name('terima');
     Route::post('admin/kelola-pengajuan/tolak', [AdminPengajuan::class, 'tolak'])->name('tolak');
     Route::post('admin/kelola-pengajuan/hapus-pengajuan', [AdminPengajuan::class, 'truncate_pengajuan'])->name('hapus_pengajuan');
-
 //kelola-penempatan
     Route::get('admin/kelola-penempatan', [AdminPenempatan::class, 'index']);
+    Route::get('admin/kelola-penempatan/instansi/{nama}', [AdminPenempatan::class, 'detailIndustri']);
+    Route::get('admin/kelola-penempatan/guru/{nama}', [AdminPenempatan::class, 'detailGuru']);
+    Route::get('admin/kelola-penempatan/siswa/{kd}', [AdminPenempatan::class, 'detailSiswa2']);
+    Route::get('admin/kelola-penempatan/guru/hapus/{kd}', [AdminPenempatan::class, 'hapusSiswaGuru']);
+    Route::get('admin/kelola-penempatan/guru', function () {
+        return redirect('admin/kelola-penempatan/');
+     });
+    Route::get('admin/kelola-penempatan/instansi', function () {
+        return redirect('admin/kelola-penempatan/');
+     });
+    Route::get('admin/kelola-penempatan/siswa', function () {
+        return redirect('admin/kelola-penempatan/');
+     });
+    Route::get('admin/kelola-penempatan/{kd}', [AdminPenempatan::class, 'detailSiswa']);
+    //post-penempatan
+    Route::post('admin/kelola-penempatan/edit', [AdminPenempatan::class, 'editSiswa']);
+    Route::post('admin/kelola-penempatan/guru/edit', [AdminPenempatan::class, 'editGuru']);
+    Route::post('admin/kelola-penempatan/instansi/edit', [AdminPenempatan::class, 'editIndustri']);
 //monitoring
     Route::get('admin/kelola-laporan-kegiatan', [AdminMonitoring::class, 'index']);
     Route::get('admin/kelola-laporan-pkl', [AdminMonitoring::class, 'laporanPKL']);
@@ -131,8 +148,6 @@ Route::middleware(['auth','is_guru'])->group(function () {
 //guru ubah-akun
     Route::post('guru/profil/edit-akun', [GuruProfil::class, 'edit_akun']);
  });
-
-
 //login
 Route::get('login', [Login::class, 'index'])->name('login');
 Route::post('custom-login', [Login::class, 'customLogin'])->name('login.custom'); 
@@ -142,9 +157,15 @@ Route::get('signout', [Login::class, 'signOut'])->name('signout');
 
 //AJAX
 Route::get('siswa/pengajuan/cari', [SiswaPengajuan::class, 'search'])->middleware('is_siswa');
-Route::get('admin/kelola-pengajuan-diproses', [AdminPengajuan::class, 'loadDiterima'])->middleware('is_admin');
-Route::get('admin/kelola-penempatan-guru', [AdminPenempatan::class, 'loadGuru'])->middleware('is_admin');
-
+Route::middleware(['auth','is_admin'])->group(function () {
+    Route::get('admin/kelola-pengajuan-diproses', [AdminPengajuan::class, 'loadDiterima']);
+     Route::get('admin/kelola-penempatan-siswa', [AdminPenempatan::class, 'loadSiswa']);
+    Route::get('admin/kelola-penempatan-guru', [AdminPenempatan::class, 'loadGuru']);
+    Route::get('admin/kelola-penempatan-industri', [AdminPenempatan::class, 'loadIndustri']);
+    Route::get('admin/kelola-penempatan-cariguru', [AdminPenempatan::class, 'searchGuru']);
+    Route::get('admin/kelola-penempatan-cariindustri', [AdminPenempatan::class, 'searchIndustri']);
+    Route::get('admin/kelola-penempatan-carisiswa', [AdminPenempatan::class, 'searchSiswa']);
+    });
 Route::fallback(function () {
     abort(404);
 });

@@ -15,9 +15,8 @@ class AdminProfil extends Controller
         $this->repository = $repository;
     }
     public function index(UserRepository $repository){
-        $user = $this->repository->getData();
         return View('admin.profil')
-        ->with('user', $user);
+        ->with('user', $this->repository->getData());
     }
     public function ganti_password(Request $request) {
         $this->validate($request, [
@@ -27,19 +26,18 @@ class AdminProfil extends Controller
         ]);
         if (Hash::check($request->passlama, auth()->user()->password)){
             $data = $this->repository->getData();
-            $passbaru = Hash::make($request->password_baru);
+            $passbaru = bcrypt($request->password_baru);
             $user = User::find($data->username);
             $user->password = $passbaru;
             $user->save();
-            return redirect()->back()->with('success','Password berhasil diubah!');
+            return back()->with('success','Password berhasil diubah!');
         }
-        return redirect()->back()->withErrors('Password lama salah!');
+        return back()->withErrors('Password lama salah!');
         
     }
     public function editData(UserRepository $repository){
-        $user = $this->repository->getData();
         return view('admin.editprofil')
-        ->with('user', $user);
+        ->with('user', $this->repository->getData());
     }
     public function edit_akun(Request $request){
         $data = $this->repository->getData();        
@@ -63,7 +61,6 @@ class AdminProfil extends Controller
                         $this->validate($request, [
                             'foto' => 'file|image|mimes:jpeg,png,jpg|max:700',
                         ]);
-
                         if($admin->foto != 'default.jpg'){
                   //mau ganti foto, 
                            $image_path = public_path().'/data_file/'.$admin->foto;
@@ -92,14 +89,14 @@ class AdminProfil extends Controller
                 $admin->foto = $nama_file;
                 $admin->save();
                 Auth::login($user);
-                return redirect()->back()->with('success', 'Mengubah detail profil berhasil!');
-                return redirect()->back()->withInput();
+                return back()->with('success', 'Mengubah detail profil berhasil!');
+                return back()->withInput();
             } 
-            return redirect()->back()->withErrors('Nama yang sama sudah ada!');
+            return back()->withErrors('Nama yang sama sudah ada!');
         } 
-        return redirect()->back()->withErrors('Username yang sama sudah ada!');
+        return back()->withErrors('Username yang sama sudah ada!');
     }
-    return redirect()->back()->withErrors('Email yang sama sudah ada!');
+    return back()->withErrors('Email yang sama sudah ada!');
 }
 
 public function hapusFoto(){
@@ -109,7 +106,7 @@ public function hapusFoto(){
  $admin = Admin::find($data->username);
  $admin->foto = 'default.jpg';
  $admin->save();
- return redirect()->back()->with('success', 'Foto berhasil dihapus.');  
+ return back()->with('success', 'Foto berhasil dihapus.');  
 }
 }
 

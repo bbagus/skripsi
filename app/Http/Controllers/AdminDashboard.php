@@ -10,7 +10,6 @@ class AdminDashboard extends Controller
         $this->repository = $repository;
     }
     public function dashboard(){
-        $user = $this->repository->getData();
-		return view('admin.dashboard')->with('user', $user);
+		return view('admin.dashboard')->with('user', $this->repository->getData());
 	}
 }

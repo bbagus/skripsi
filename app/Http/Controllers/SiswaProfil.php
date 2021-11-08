@@ -33,15 +33,13 @@ class SiswaProfil extends Controller
             $user = User::find($data->nis);
             $user->password = $passbaru;
             $user->save();
-            return redirect()->back()->with('success','Password berhasil diubah!');
-        }
-        return redirect()->back()->withErrors('Password lama salah!');
+            return back()->with('success','Password berhasil diubah!');
+        } return back()->withErrors('Password lama salah!');
         
     }
     public function editData(UserRepository $repository){
-        $user = $this->repository->getData();
         return view('siswa.editprofil')
-        ->with('user', $user);
+        ->with('user', $this->repository->getData());
     }
     public function edit_akun(Request $request){
         $data = $this->repository->getData(); 
@@ -63,11 +61,10 @@ class SiswaProfil extends Controller
             $siswa->telp = $request->telp;
             $siswa->alamat = $request->alamat;
             $siswa->save();
-            return redirect()->back()->with('success','Mengubah detail profil berhasil!')
+            return back()->with('success','Mengubah detail profil berhasil!')
             ->with('siswa', $siswa);
-            return redirect()->back()->withInput();
-        }
-        return redirect()->back()->withErrors('Email yang sama sudah ada!');
+            return back()->withInput();
+        } return back()->withErrors('Email yang sama sudah ada!');
     }
 }
 

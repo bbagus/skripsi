@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 use App\Repositories\UserRepository;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{DB,Validator,File};
+use Illuminate\Support\Facades\DB;
 use App\Models\{Pengajuan,Penempatan,Industri,Siswa};
 use Response;
-
 
 class AdminPengajuan extends Controller
 {
@@ -24,17 +23,8 @@ class AdminPengajuan extends Controller
           ->select('kd_pengajuan','industri.nama as industri', 'siswa.nama as nama', 'kelas.nama as kelas' , 'industri.alamat as alamat' , 'pengajuan.nis as nis', 'tgl_pengajuan', 'tahun_ajaran','status')
           ->where('status', 'menunggu')
           ->get();
-          $pengajuan2 = DB::table('pengajuan')
-          ->join('industri', 'pengajuan.kd_industri', '=', 'industri.kd_industri')
-          ->join('siswa', 'pengajuan.nis', '=', 'siswa.nis')
-          ->join('kelas', 'siswa.kd_kelas', '=', 'kelas.kd_kelas')
-          ->select('kd_pengajuan','pengajuan.nis as nis','siswa.nama as nama','kelas.nama as kelas' ,'industri.nama as industri',  'industri.alamat as alamat' , 'tgl_diproses', 'tahun_ajaran','status')
-          ->where('status', 'diterima')
-          ->orWhere('status', 'ditolak')
-          ->get();
 		return view('admin.pengajuan')
         ->with('user', $user)
-        ->with('pengajuan2', $pengajuan2)
         ->with('pengajuan', $pengajuan);
 	}
     public function loadDiterima(){
@@ -63,11 +53,9 @@ class AdminPengajuan extends Controller
                     'tgl_mulai' => $tanggal->mulai,
                     'tgl_selesai' => $tanggal->selesai,
                 ]);
-                 return redirect()->back()->with('success', 'Pengajuan berhasil diterima.');
-            }
-            return redirect()->back()->withErrors('Pengajuan gagal diterima karena kuota Instansi sudah penuh!');
-        }
-       return redirect()->back()->withErrors('Pengajuan gagal diterima!');
+                 return back()->with('success', 'Pengajuan berhasil diterima.');
+            } return back()->withErrors('Pengajuan gagal diterima karena kuota Instansi sudah penuh!');
+        } return back()->withErrors('Pengajuan gagal diterima!');
     }
     public function tolak(Request $request){
         $pengajuan = Pengajuan::find($request->kd);
@@ -75,18 +63,16 @@ class AdminPengajuan extends Controller
              $pengajuan->status = 'Ditolak';
              $pengajuan->tgl_diproses = date('Y-m-d H:i:s');
              $pengajuan->save();
-        return redirect()->back()->with('success', 'Pengajuan berhasil ditolak.');
+        return back()->with('success', 'Pengajuan berhasil ditolak.');
         }
-       return redirect()->back()->withErrors('Pengajuan gagal ditolak!');
+       return back()->withErrors('Pengajuan gagal ditolak!');
     }
     public function hapusPengajuan($kd_pengajuan){
         $pengajuan = Pengajuan::find($kd_pengajuan);
         if($pengajuan != null){
-
             $pengajuan->delete();
-            return redirect()->back()->with('success', 'Pengajuan berhasil dihapus.');   
-        }
-        return redirect()->back()->withErrors('Pengajuan tidak ditemukan!');
+            return back()->with('success', 'Pengajuan berhasil dihapus.');   
+        } return back()->withErrors('Pengajuan tidak ditemukan!');
     }
     public function truncate_pengajuan(Request $request) {
         $input = $request->hapus;
@@ -97,12 +83,9 @@ class AdminPengajuan extends Controller
                 //yg diterima harus delete penempatan dulu
                 $pengajuan->delete();
                 $count++;
-            }
-            return redirect()->back()->with('success', $count.' Data berhasil dihapus.'); 
-        }
-        return redirect()->back()->withErrors('Tidak ada yang ditandai.');
+            } return back()->with('success', $count.' Data berhasil dihapus.'); 
+        } return back()->withErrors('Tidak ada yang ditandai.');
     }
-
     public function detailPengajuan($kd_pengajuan){
         $user = $this->repository->getData();
         $pengajuan = Pengajuan::find($kd_pengajuan);
@@ -120,7 +103,6 @@ class AdminPengajuan extends Controller
           ->with('industri', $industri)
           ->with('tahunajaran',$this->repository->getTahunAjaran());
     }
-
     public function generatePengajuan(){
         $nis = Siswa::leftjoin('pengajuan', 'siswa.nis','=','pengajuan.nis')
         ->select('siswa.nis')
@@ -129,7 +111,6 @@ class AdminPengajuan extends Controller
         $nis2 = Pengajuan::where('status','Ditolak')
         ->select('nis')
         ->get();
-
          $date = date('Y-m-d H:i:s');
          $tahun = $this->repository->getTahunAjaran();
          $tanggal = $this->repository->getTanggalPKL();
@@ -166,8 +147,7 @@ class AdminPengajuan extends Controller
             ]);
             $count++;
             }
-        }
-        return redirect()->back()->with('success', $count.' Pengajuan berhasil ditambahkan!');
+        }  return back()->with('success', $count.' Pengajuan berhasil ditambahkan!');
     }
 }
 

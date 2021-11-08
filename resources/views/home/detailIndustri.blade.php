@@ -3,7 +3,6 @@
 @section('navbar')
 @endsection
 @section('head')
-
 @endsection
 @section('sidebar')
 <!-- Main Sidebar Container -->
@@ -14,7 +13,7 @@
     <img src="{{url('/')}}/data_file/smk-n-1-pengasih-seeklogo.webp" alt="logo SMK N 1 Pengasih" class="brand-image img-circle elevation-3" style="opacity: .8">
     <span class="brand-text font-weight-light">Sistem Informasi PKL</span>
   </a>
-  @if (Auth::user()->role == 'admin')
+  @if (Auth()->user()->role == 'admin')
   <!-- Sidebar -->
   <div class="sidebar">
     <!-- Sidebar user (optional) -->
@@ -30,7 +29,6 @@
           <a href="/admin/profil" class="d-block">{{$user->nama}}</a>
         </div>
     </div>
-
     <!-- SidebarSearch Form -->
     <div class="form-inline">
       <div class="input-group" data-widget="sidebar-search">

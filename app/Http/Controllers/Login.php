@@ -14,7 +14,6 @@ class Login extends Controller
     public function index()
     {  
         return view('auth.login');
-        
     }
     public function customLogin(Request $request){
         $request->validate([
@@ -35,39 +34,13 @@ class Login extends Controller
                 $request->session()->regenerate();//tambahan
                 return redirect('guru');
              }
-         }
-         return redirect("login")->withSuccess('Username atau Password salah!');
-     }
-
-    public function registrasi()
-    {
-        return view('auth.registrasi');
+         } return redirect("login")->withSuccess('Username atau Password salah!');
     }
-    public function customRegistrasi(Request $request)
-    {  
-        $request->validate([
-            'username' => 'required|unique:users',
-            'password' => 'required|min:6',
-        ]);
-
-        $data = $request->all();
-        $check = $this->create($data);
-
-        return redirect("home")->withSuccess('Berhasil Masuk');
+    public function signOut(Request $request) {
+        Session::flush();
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return Redirect('login')->withSuccess('Berhasil log-out');
     }
-    public function create(array $data)
-    {
-      return User::create([
-        'username' => $data['username'],
-        'password' => Hash::make($data['password'])
-    ]);
-  }
-
-  public function signOut(Request $request) {
-    Session::flush();
-    Auth::logout();
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
-    return Redirect('login')->withSuccess('Berhasil log-out');
-}
 }

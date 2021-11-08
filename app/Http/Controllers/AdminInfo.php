@@ -24,8 +24,7 @@ class AdminInfo extends Controller
         return view('admin.informasi',['info' => $info, 'user' => $user]);
     }
     public function tambahInfo(){
-        $user = $this->repository->getData();
-        return view('admin.tambahInformasi')->with('user', $user);
+        return view('admin.tambahInformasi')->with('user', $this->repository->getData());
     }
     public function editInfo($kd_info){
         $user = $this->repository->getData();
@@ -63,8 +62,8 @@ class AdminInfo extends Controller
             'slug' => $slug,
             'status' => 'Diumumkan'
         ]);
-        return redirect()->back()->with('success', 'Pengumuman berhasil ditambahkan!');
-        return redirect()->back();
+        return back()->with('success', 'Pengumuman berhasil ditambahkan!');
+        return back();
     }
     public function proses_simpan(Request $request){
         $this->validate($request, [
@@ -81,9 +80,7 @@ class AdminInfo extends Controller
             $tujuan_upload = 'data_file';
             $file->move($tujuan_upload,$nama_file);
         }
-        else {
-            $nama_file = 'default.jpg';
-        }
+        else $nama_file = 'default.jpg';
         $date = date('Y-m-d H:i:s');
         $slug = Str::slug($request->judul, '-');
         Informasi::create([
@@ -96,8 +93,8 @@ class AdminInfo extends Controller
             'slug' => $slug,
             'status' => 'Draf'
         ]);
-        return redirect()->back()->with('success', 'Pengumuman berhasil disimpan ke draf!');
-        return redirect()->back();
+        return back()->with('success', 'Pengumuman berhasil disimpan ke draf!');
+        return back();
     }
     public function proses_edit (Request $request) {
         $kd = $request->kd_info;
@@ -140,17 +137,16 @@ class AdminInfo extends Controller
         $info->slug = $slug;
         $info->status = $request->status;
         $info->save();
-        return redirect()->back()->with('success', 'Mengubah pengumuman berhasil!')
+        return back()->with('success', 'Mengubah pengumuman berhasil!')
         ->with('info', $info);
-        return redirect()->back()->withInput();
+        return back()->withInput();
     }
     public function hapusFoto($kd) {
         $info = Informasi::find($kd);
         if ($info != null) {
             $info->foto = 'default.jpg';
-            return view('admin.editInformasi', ['info' => $info]);
-        }  
-        return redirect()->back();
+            return view('admin.editInformasi', ['info' => $info, 'user' => $this->repository->getData()]);
+        }  return back();
     }
     public function hapusInfo($kd) {
         $info = Informasi::firstWhere('kd_info', $kd);
@@ -158,9 +154,8 @@ class AdminInfo extends Controller
             $image_path = public_path().'/data_file/'.$info->foto;
             File::delete($image_path);
             DB::table('informasi')->where('kd_info',$kd)->delete();
-            return redirect()->back()->with('success', '1 Data berhasil dihapus.');   
-        }
-        return redirect()->action([AdminInfo::class, 'index']);
+            return back()->with('success', '1 Data berhasil dihapus.');   
+        } return redirect()->action([AdminInfo::class, 'index']);
     }
     public function truncate_info(Request $request) {
         $input = $request->hapus;
@@ -170,10 +165,8 @@ class AdminInfo extends Controller
                 $info = Informasi::find($i);
                 $info->delete();
                 $count++;
-            }
-            return redirect()->back()->with('success', $count.' Data berhasil dihapus.'); 
-        }
-        return redirect()->back()->withErrors('Tidak ada yang ditandai.');
+            } return back()->with('success', $count.' Data berhasil dihapus.'); 
+        }  return back()->withErrors('Tidak ada yang ditandai.');
     }
 }
 
