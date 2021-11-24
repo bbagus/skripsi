@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\{Request, Response};
 use Illuminate\Support\Facades\{DB,Validator,File};
 use Illuminate\Support\Str;
 use App\Models\Informasi;
 use App\Repositories\UserRepository; 
-
 
 class AdminInfo extends Controller
 {
@@ -16,12 +15,13 @@ class AdminInfo extends Controller
         $this->repository = $repository;
     }
     public function index(){
-        $user = $this->repository->getData();
+        return view('admin.informasi',['user' => $this->repository->getData()]);
+    }
+    public function loadInfo(){
         $info = DB::table('informasi')
         ->leftjoin('wadah_label', 'informasi.kd_label', '=', 'wadah_label.kd_label')
-        ->select('kd_info','judul', 'penulis', 'tanggal', 'status', 'nama')
-        ->get();
-        return view('admin.informasi',['info' => $info, 'user' => $user]);
+        ->select('kd_info','judul', 'penulis', 'tanggal', 'status', 'nama')->get();
+        return response()->json($info);
     }
     public function tambahInfo(){
         return view('admin.tambahInformasi')->with('user', $this->repository->getData());
@@ -47,42 +47,19 @@ class AdminInfo extends Controller
             $tujuan_upload = 'data_file';
             $file->move($tujuan_upload,$nama_file);
         }
-        else {
-            $nama_file = 'default.jpg';
-        }
-        $date = date('Y-m-d H:i:s');
-        $slug = Str::slug($request->judul, '-');
-        Informasi::create([
-            'judul' => $request->judul,
-            'deskripsi' => $request->isi,
-            'kd_label' => $request->kd_label,
-            'penulis' => $request->penulis,
-            'foto' => $nama_file,
-            'tanggal' => $date,
-            'slug' => $slug,
-            'status' => 'Diumumkan'
-        ]);
-        return back()->with('success', 'Pengumuman berhasil ditambahkan!');
-        return back();
-    }
-    public function proses_simpan(Request $request){
-        $this->validate($request, [
-            'judul' => 'required',
-            'isi' => 'required',
-        ]);
-        if ($request->file('foto') != null) {
-            $this->validate($request, [
-                'foto' => 'file|image|mimes:jpeg,png,jpg|max:700',
-            ]);
-            $file = $request->file('foto');
-            $extension = $request->foto->getClientOriginalExtension();
-            $nama_file = 'Info'.'-'.$request->judul.'.'.$extension;
-            $tujuan_upload = 'data_file';
-            $file->move($tujuan_upload,$nama_file);
-        }
         else $nama_file = 'default.jpg';
         $date = date('Y-m-d H:i:s');
         $slug = Str::slug($request->judul, '-');
+        $status = null;
+        $msg = null;
+        if($request->submit == '1') {
+            $status = 'Diumumkan';
+            $msg = 'Berhasil menambah pengumuman!';
+        }
+        else {
+            $status = 'Draf';
+            $msg = 'Berhasil menyimpan ke draf!';
+        }
         Informasi::create([
             'judul' => $request->judul,
             'deskripsi' => $request->isi,
@@ -91,10 +68,9 @@ class AdminInfo extends Controller
             'foto' => $nama_file,
             'tanggal' => $date,
             'slug' => $slug,
-            'status' => 'Draf'
+            'status' => $status
         ]);
-        return back()->with('success', 'Pengumuman berhasil disimpan ke draf!');
-        return back();
+        return response()->json(array('msg'=> $msg), 200);
     }
     public function proses_edit (Request $request) {
         $kd = $request->kd_info;
@@ -137,25 +113,19 @@ class AdminInfo extends Controller
         $info->slug = $slug;
         $info->status = $request->status;
         $info->save();
-        return back()->with('success', 'Mengubah pengumuman berhasil!')
-        ->with('info', $info);
-        return back()->withInput();
+        $pindah = null;
+        if($request->file('foto') != null) $pindah = $kd;
+        return response()->json(array('msg'=> 'Berhasil mengubah pengumuman!', 'pindah'=> $pindah), 200);
     }
-    public function hapusFoto($kd) {
+     public function hapusInfo($kd) {
         $info = Informasi::find($kd);
-        if ($info != null) {
-            $info->foto = 'default.jpg';
-            return view('admin.editInformasi', ['info' => $info, 'user' => $this->repository->getData()]);
-        }  return back();
-    }
-    public function hapusInfo($kd) {
-        $info = Informasi::firstWhere('kd_info', $kd);
         if ($info != null) {
             $image_path = public_path().'/data_file/'.$info->foto;
             File::delete($image_path);
-            DB::table('informasi')->where('kd_info',$kd)->delete();
-            return back()->with('success', '1 Data berhasil dihapus.');   
-        } return redirect()->action([AdminInfo::class, 'index']);
+            $info->delete();
+            return response()->json(array('msg'=> 'Berhasil menghapus pengumuman!'), 200);
+        } 
+        return response()->json(array('msg'=> 'Data tidak ditemukan.'), 200);
     }
     public function truncate_info(Request $request) {
         $input = $request->hapus;
@@ -165,8 +135,8 @@ class AdminInfo extends Controller
                 $info = Informasi::find($i);
                 $info->delete();
                 $count++;
-            } return back()->with('success', $count.' Data berhasil dihapus.'); 
-        }  return back()->withErrors('Tidak ada yang ditandai.');
+            } return response()->json(array('msg'=> $count.' Pengumuman berhasil dihapus!'), 200);
+        }  return response()->json(array('msg'=> 'Tidak ada yang ditandai'), 200);
     }
 }
 

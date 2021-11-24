@@ -17,30 +17,18 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
-        @if(count($errors) > 0)
-        <div class="alert alert-danger alert-dismissible shadow">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <i class="icon fas fa-exclamation-triangle"></i>
-          @foreach ($errors->all() as $error)
-          {{ $error }} <br/>
-          @endforeach
+         <!-- alert error-->
+        <div id="sukses" class="alert alert-dismissible shadow" style="display:none;">
+          <button type="button" class="close" onclick="fadeOut()">×</button>
+          <div id="pesan">
+          </div>
         </div>
-        @endif
-        @if (\Session::has('success'))
-        <div class="alert alert-success alert-dismissible shadow">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <i class="icon fas fa-exclamation-triangle"></i>
-          {!! \Session::get('success') !!}
-        </div>
-        @endif
       </div>
       <div class="col-md-3">
         <a href="/admin/kelola-informasi/tambah" class="btn btn-success btn-block mb-3"><i class="fa fa-edit"></i> Buat Pengumuman</a>
-
         <div class="card card-info">
           <div class="card-header">
             <h3 class="card-title">Status</h3>
-
             <div class="card-tools">
               <button type="button" class="btn btn-tool" data-card-widget="collapse">
                 <i class="fas fa-minus"></i>
@@ -58,7 +46,7 @@
               <li class="nav-item">
                 <a href="#" class="nav-link"><i class="far fa-file-alt"></i> Draf</a>
               </li>
-              <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-save"></i> Disimpan</a>
+              <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-save"></i> Arsip</a>
               </li>
             </ul>
           </div>
@@ -101,7 +89,7 @@
       <!-- /.col -->
       <div class="col-md-9">
         <div class="card card-primary card-outline">
-          <form onSubmit="return confirm('Apakah Anda yakin ingin menghapus seluruh data yang ditandai?')" action="{{route('hapus_info')}}" method="POST">
+          <form id="truncate" action="{{route('hapus_info')}}" method="POST">
             {{ csrf_field() }}
             <div class="card-header">
               <h3 class="card-title">List Pengumuman</h3>
@@ -122,30 +110,7 @@
                       <th>Aksi</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    @foreach ($info as $info)
-                    <tr>
-                      <td style="vertical-align: middle;max-width: 30px;">
-                        <div class="icheck-primary">
-                          <input type="checkbox" name="hapus[]" value="{{$info->kd_info}}" id="{{$info->kd_info}}">
-                          <label for="{{$info->kd_info}}"></label>
-                        </div>
-                      </td>
-                      <td class="mailbox-name" style="vertical-align: middle;max-width:400px;">
-                        <a href="#">{{$info->judul}}</a>
-                      </td>
-                      <td style="vertical-align: middle;" class="mailbox-subject" style="vertical-align: middle;">{{$info->penulis}}
-                      </td>
-                      <td style="vertical-align: middle;" class="mailbox-date">{{$info->tanggal}}</td>
-                      <td style="vertical-align: middle;" class="">{{$info->status}}</td>
-                      <td style="vertical-align: middle;" class="">{{$info->nama}}</td>
-                      <td style="vertical-align: middle;" width="100px" >
-                        <a href="{{url('/')}}/admin/kelola-informasi/{{$info->kd_info}}" class="btn btn-small btn-success" title="edit" ><i class="fas fa-edit"></i></a>&nbsp;&nbsp;
-                        <a onclick="deleteConfirm('{{url('/')}}/admin/kelola-informasi/hapus/{{$info->kd_info}}')" href="#!" class="btn btn-small btn-danger" title="hapus" ><i class="fas fa-trash"></i></a>
-                      </td>
-                    </tr>
-                    @endforeach
-                  </tbody>
+                  
                 </table>
                 <!-- /.table -->
               </div>
@@ -159,9 +124,9 @@
                   <i class="far fa-square"></i>
                 </button>
                 <div class="btn-group">
-                  <button type="submit" class="btn btn-default btn-sm" title="hapus">
+                  <a onclick="truncateConfirm()" ref="javascript:void(0)" class="btn btn-default btn-sm" title="hapus">
                     <i class="far fa-trash-alt text-danger"></i>
-                  </button>
+                  </a>
                 </div>
                 <!-- /.float-right -->
               </div>
@@ -189,14 +154,33 @@
       </div>
       <div class="modal-body">Data yang dihapus tidak bisa dikembalikan.</div>
       <div class="modal-footer justify-content-between">
-        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-        <a id="btn-delete" class="btn btn-danger" href="#">Delete</a>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+        <a id="btn-delete" class="btn btn-danger" href="javascript:void(0)" onclick="">Hapus</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="truncateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top:150px;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel">Apakah Anda yakin?</h4>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">Seluruh data yang ditandai akan dihapus.</div>
+      <div class="modal-footer justify-content-between">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+        <input type="submit" value="Hapus" class="btn btn-danger" form="truncate"/>
       </div>
     </div>
   </div>
 </div>
 @endsection
 @section('javascript')
+<!-- jquery form -->
+<script src="{{url('/')}}/AdminLTE-master/plugins/jquery-form/jquery.form.min.js"></script>
 <!-- DataTables  & Plugins -->
 <script defer src="{{url('/')}}/AdminLTE-master/plugins/datatables/jquery.dataTables.min.js">
 </script>
@@ -209,17 +193,6 @@
 <script defer src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/dataTables.buttons.min.js">
 </script>
 <script defer src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/buttons.bootstrap4.min.js">
-</script>
-<script defer src="{{url('/')}}/AdminLTE-master/plugins/jszip/jszip.min.js"></script>
-<script defer src="{{url('/')}}/AdminLTE-master/plugins/pdfmake/pdfmake.min.js">
-</script>
-<script defer src="{{url('/')}}/AdminLTE-master/plugins/pdfmake/vfs_fonts.js">
-</script>
-<script defer src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/buttons.html5.min.js">
-</script>
-<script defer src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/buttons.print.min.js">
-</script>
-<script defer src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/buttons.colVis.min.js">
 </script>
 <script defer>
   $(function () {
@@ -244,7 +217,6 @@
       var $this = $(this).find('a > i')
       var far   = $this.hasClass('far')
       var fas   = $this.hasClass('fas')
-
       //Switch states
       if (far) {
         $this.toggleClass('far fa-star')
@@ -255,19 +227,32 @@
       }
     })
   })
+  var table;
   $(document).ready(function () {
-    var table = $("#example1").DataTable({
+    table = $("#example1").DataTable({
       "processing": true,
+       "ajax": {
+        "url": "{{url('/')}}/admin/get-informasi",
+        "dataSrc": ""
+      },
       "columns": [
-      { "data": "checkbox"},
+      { "data": null,
+      render: function ( data, type, row ) {
+        return  '<div class="icheck-primary"><input type="checkbox" name="hapus[]" value="'+data.kd_info+'" id="'+data.kd_info+'"><label for="'+data.kd_info+'"></label></div>';
+      }
+      },
       { "data": "judul" },
       { "data": "penulis" },
       { "data": "tanggal" },
       { "data": "status" },
-      { "data": "label" },
-      { "data": "aksi"}
+      { "data": "nama" },
+      { "data": null,
+      render: function ( data, type, row ) {
+        return '<a href="{{url('/')}}/admin/kelola-informasi/'+data.kd_info+'" class="btn btn-sm btn-success" title="edit" ><i class="fas fa-edit"></i></a>&nbsp;&nbsp;<a onclick="deleteConfirm(\'{{url('/')}}/admin/kelola-informasi/hapus/'+data.kd_info+'\')" href="javascript:void(0)" class="btn btn-sm btn-danger" title="hapus" ><i class="fas fa-trash"></i></a>'
+      }
+      }
       ],
-      "ordering": false, "responsive": true, "lengthChange": true, "autoWidth": false,
+      "ordering": true, "responsive": true, "lengthChange": true, "autoWidth": false,
       "language": {"searchPlaceholder":"Cari Pengumuman" }
     });
     var label =  $('#label ul');
@@ -310,13 +295,42 @@
       .search('')
       .draw();
     });
-
+     /*ajaxform*/
+    $('#truncate').submit(function(){
+      $(this).ajaxSubmit({
+        success: function(data){
+          $('#truncateModal').modal('hide');
+          $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
+          if(data.msg != 'Tidak ada yang ditandai'){
+           $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
+          } else {
+             $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(2000).fadeOut('slow');
+          }
+         $(window).scrollTop(0);
+         table.ajax.reload(null, false);
+        }
+      });
+      return false;
+    });
   });
-</script>
-<script defer>
-  function deleteConfirm(url){
-    $('#btn-delete').attr('href', url);
-    $('#deleteModal').modal();
+function truncateConfirm(){
+    $('#truncateModal').modal();
+}
+function deleteConfirm(url){
+  $('#btn-delete').attr('onclick', 'hapusInfo("'+url+'")');
+  $('#deleteModal').modal();
+}
+ function hapusInfo(url){
+    $.ajax({
+      method: "GET",
+      url: url
+    }).done(function(data){
+       $('#deleteModal').modal('hide');
+       $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
+       $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
+       $(window).scrollTop(0);
+       table.ajax.reload(null, false);
+    });
   }
 </script>
 @endsection

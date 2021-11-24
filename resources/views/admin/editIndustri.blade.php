@@ -16,27 +16,16 @@ SI-PKL : Ubah Data Industri - {{$industri->nama}}
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
-        <!-- general form elements -->
-        @if(count($errors) > 0)
-        <div class="alert alert-danger alert-dismissible shadow">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <i class="icon fas fa-exclamation-triangle"></i>
-          @foreach ($errors->all() as $error)
-          {{ $error }} <br/>
-          @endforeach
+        <!-- alert error-->
+        <div id="sukses" class="alert alert-dismissible shadow" style="display:none;">
+          <button type="button" class="close" onclick="fadeOut()">×</button>
+          <div id="pesan">
+          </div>
         </div>
-        @endif
-        @if (\Session::has('success'))
-        <div class="alert alert-success alert-dismissible shadow">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <i class="icon fas fa-exclamation-triangle"></i>
-          {!! \Session::get('success') !!}
-        </div>
-        @endif
         <div class="card card-info" >
           <div class="card-header">
             <h3 class="card-title">
-              <a href="/admin/kelola-industri"><i class="fas fa-arrow-left"></i>&nbsp; Kembali</a>
+              <a href="#" onclick="goBack()"><i class="fas fa-arrow-left"></i>&nbsp; Kembali</a>
             </h3>
           </div>
           <!-- /.card-header -->
@@ -44,7 +33,6 @@ SI-PKL : Ubah Data Industri - {{$industri->nama}}
           <form class="form-horizontal" id="formindustri" action="{{route('edit_industri')}}" method="POST" enctype="multipart/form-data">
             {{ csrf_field() }}
             <input type="hidden" name="kd_industri" value="{{$industri->kd_industri}}" />
-
             <div class="card-body" style="padding: 1.75rem 5rem;">
               <div class="form-group row">
                 <label for="nama" class="col-sm-2 col-form-label">Nama<strong class="text-danger">*</strong></label>
@@ -119,11 +107,12 @@ SI-PKL : Ubah Data Industri - {{$industri->nama}}
               </div>
               <div class="form-group row">
                 <label for="foto" class="col-sm-2 col-form-label">Logo industri</label>
-                <div class="col-sm-9">
+                <div id="foto" class="col-sm-9">
                   @if($industri->foto != 'default.jpg')
                   <img class="img-fluid mb-3" style="width: 150px;float:left;" src="{{url('/')}}/data_file/{{$industri->foto}}" alt="">
-                  <a class="close" title="hapus foto(jangan lupa klik simpan)" style="float: left;
-                  margin-left: 5px;" href="{{url('/')}}/admin/kelola-industri/hapus-foto/{{$industri->kd_industri}}">x</a>
+                  <a class="close" title="hapus foto (jangan lupa klik simpan). 
+reload halaman untuk batal." style="float: left;
+                  margin-left: 5px;" href="javascript:void(0)" onclick="hapusFoto('{{url('/')}}/admin/kelola-industri/hapus-foto/{{$industri->kd_industri}}')">x</a>
                   @else
                   <input type="hidden" name="hapus" value="hapus" />
                   @endif
@@ -154,6 +143,8 @@ SI-PKL : Ubah Data Industri - {{$industri->nama}}
 </section>
 @endsection
 @section('javascript')
+<!-- jquery form -->
+<script src="{{url('/')}}/AdminLTE-master/plugins/jquery-form/jquery.form.min.js"></script>
 <!-- jquery-validation -->
 <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/jquery.validate.min.js"></script>
 <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/additional-methods.min.js"></script>
@@ -222,11 +213,57 @@ SI-PKL : Ubah Data Industri - {{$industri->nama}}
         },
         unhighlight: function (element, errorClass, validClass) {
           $(element).removeClass('is-invalid');
+        },
+        submitHandler: function(form) {
+          $(form).ajaxSubmit({
+            success: function(data){
+              var pesan = $('#sukses'); 
+              $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
+              if(data.msg == 'Berhasil mengubah data industri!'){
+                if(data.pindah != null){
+                  pesan.removeClass('alert-danger').addClass('alert-success').fadeIn().delay(1000).fadeOut(400,function()
+                  {
+                    window.location.replace("{{url('/')}}/admin/kelola-industri/"+ data.pindah);
+                  });
+                } else {
+                pesan.removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
+                }
+              } else {
+                pesan.removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+              }
+              $(window).scrollTop(0);
+            },
+            error: function (xhr) {
+               if (xhr.status == 422) {
+                var pesan = $('#pesan');
+                pesan.html('<i class="icon fas fa-exclamation-triangle"></i>');
+                  $.each(xhr.responseJSON.errors, function (i, error) {
+                pesan.append(error);
+                });
+                  $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+               }
+               $(window).scrollTop(0);
+           }
+          });
         }
       });
-      });
+    });
+function hapusFoto(){
+      $('#foto img').remove();
+      $('#foto a').remove();
+      $('#foto').append('<input type="hidden" name="hapus" value="hapus" />');
+}
+  function fadeOut(){
+    $('#sukses').hide();
+  }
   function myFunction() {
     document.getElementById("formindustri").reset();
   }
+function goBack() {
+    window.history.back();
+     if(history.length < 2){
+    window.close();
+  }
+  };
 </script>
 @endsection

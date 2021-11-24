@@ -17,26 +17,16 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
-        @if(count($errors) > 0)
-        <div class="alert alert-danger alert-dismissible shadow">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <i class="icon fas fa-exclamation-triangle"></i>
-          @foreach ($errors->all() as $error)
-          {{ $error }} <br/>
-          @endforeach
+         <!-- alert error-->
+        <div id="sukses" class="alert alert-dismissible shadow" style="display:none;">
+          <button type="button" class="close" onclick="fadeOut()">×</button>
+          <div id="pesan">
+          </div>
         </div>
-        @endif
-        @if (\Session::has('success'))
-        <div class="alert alert-success alert-dismissible shadow">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <i class="icon fas fa-exclamation-triangle"></i>
-          {!! \Session::get('success') !!}
-        </div>
-        @endif
         <!-- /.card -->
         <div class="card card-primary card-outline">
           <!-- form start -->
-          <form onSubmit="return confirm('Apakah Anda yakin ingin menghapus seluruh data yang ditandai?')" action="{{route('hapus_industri')}}" method="POST">
+          <form id="truncate" action="{{route('hapus_industri')}}" method="POST">
             {{ csrf_field() }}
             <div class="card-header">
               <h3 class="card-title">
@@ -81,36 +71,7 @@
                       <th></th>
                     </tr>
                   </thead>
-                  <tbody>
-                    @foreach ($industri as $s)
-                    <tr>
-                      <td style="vertical-align: middle;" width="30px">
-                        <div class="icheck-primary">
-                          <input type="checkbox" name="hapus[]" value="{{$s->kd_industri}}" id="{{$s->kd_industri}}">
-                          <label for="{{$s->kd_industri}}"></label>
-                        </div>
-                      </td>
-                      <td style="vertical-align: middle;">{{ $s->nama }}</td>
-                      <td style="vertical-align: middle;">{{ $s->jurusan}}</td>
-                      <td style="vertical-align: middle;">{{ $s->bidang_kerja}}</td>
-                      <td style="vertical-align: middle;max-width: 350px;">{{ $s->alamat}}</td>
-                      <td style="vertical-align: middle;">{{ $s->wilayah}}</td>
-                      <td style="vertical-align: middle;">{{ $s->nama_kontak}}</td>
-                      <td style="vertical-align: middle;">{{ $s->telp}}</td>
-                      <td style="vertical-align: middle;padding:0.2rem;" width="100px">
-                        @if($s->foto != 'default.jpg')
-                        <img class="img-fluid" src="{{url('/')}}/data_file/{{$s->foto}}" alt="">
-                        @else
-                        <img class="img-fluid" src="{{url('/')}}/data_file/industri-default.png" alt="">
-                        @endif
-                      </td>
-                      <td style="vertical-align: middle;" width="160px" >
-                        <a href="{{url('/')}}/admin/kelola-industri/{{$s->kd_industri}}" class="btn btn-small btn-success"><i class="fas fa-edit"></i>Edit</a>
-                        <a onclick="deleteConfirm('{{url('/')}}/admin/kelola-industri/hapus/{{$s->kd_industri}}')" href="#!" class="btn btn-small btn-danger"><i class="fas fa-trash"></i> Hapus</a>
-                      </td>
-                    </tr>
-                    @endforeach
-                  </tbody>
+                  
                 </table>
               </div>
               <!-- /.card-body -->
@@ -120,7 +81,7 @@
                   <button type="button" class="btn btn-outline-dark btn-small checkbox-toggle"><i class="far fa-square"></i> Tandai Semua
                   </button>
                   <div class="btn-group">
-                    <input type="submit" class="btn btn-danger" value="Hapus">
+                   <a onclick="truncateConfirm()" href="javascript:void(0)" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Hapus</a>
                   </div>
                   <!-- /.btn-group -->
                 </div>
@@ -149,44 +110,63 @@
         </div>
         <div class="modal-body">Data yang dihapus tidak bisa dikembalikan.</div>
         <div class="modal-footer justify-content-between">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a id="btn-delete" class="btn btn-danger" href="#">Delete</a>
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+          <a id="btn-delete" class="btn btn-danger"  href="javascript:void(0)" onclick="">Hapus</a>
         </div>
       </div>
     </div>
   </div>
-  @endsection
-    @section('javascript')
-    <!-- DataTables  & Plugins -->
-    <script src="{{url('/')}}/AdminLTE-master/plugins/datatables/jquery.dataTables.min.js">
-    </script>
-    <script src="{{url('/')}}/AdminLTE-master/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js">
-    </script>
-    <script src="{{url('/')}}/AdminLTE-master/plugins/datatables-responsive/js/dataTables.responsive.min.js">
-    </script>
-    <script src="{{url('/')}}/AdminLTE-master/plugins/datatables-responsive/js/responsive.bootstrap4.min.js">
-    </script>
-    <script src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/dataTables.buttons.min.js">
-    </script>
-    <script src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/buttons.bootstrap4.min.js">
-    </script>
-    <script src="{{url('/')}}/AdminLTE-master/plugins/jszip/jszip.min.js"></script>
-    <script src="{{url('/')}}/AdminLTE-master/plugins/pdfmake/pdfmake.min.js">
-    </script>
-    <script src="{{url('/')}}/AdminLTE-master/plugins/pdfmake/vfs_fonts.js">
-    </script>
-    <script src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/buttons.html5.min.js">
-    </script>
-    <script src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/buttons.print.min.js">
-    </script>
-    <script src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/buttons.colVis.min.js">
-    </script>
-    <script>
-      $(function () {
+  <div class="modal fade" id="truncateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top:150px;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel">Apakah Anda yakin?</h4>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">Seluruh data yang ditandai akan dihapus.</div>
+      <div class="modal-footer justify-content-between">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+        <input type="submit" value="Hapus" class="btn btn-danger" form="truncate"/>
+      </div>
+    </div>
+  </div>
+</div>
+@endsection
+@section('javascript')
+<!-- jquery form -->
+<script src="{{url('/')}}/AdminLTE-master/plugins/jquery-form/jquery.form.min.js"></script>
+<!-- DataTables  & Plugins -->
+<script src="{{url('/')}}/AdminLTE-master/plugins/datatables/jquery.dataTables.min.js">
+</script>
+<script src="{{url('/')}}/AdminLTE-master/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js">
+</script>
+<script src="{{url('/')}}/AdminLTE-master/plugins/datatables-responsive/js/dataTables.responsive.min.js">
+</script>
+<script src="{{url('/')}}/AdminLTE-master/plugins/datatables-responsive/js/responsive.bootstrap4.min.js">
+</script>
+<script src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/dataTables.buttons.min.js">
+</script>
+<script src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/buttons.bootstrap4.min.js">
+</script>
+<script src="{{url('/')}}/AdminLTE-master/plugins/jszip/jszip.min.js"></script>
+<script src="{{url('/')}}/AdminLTE-master/plugins/pdfmake/pdfmake.min.js">
+</script>
+<script src="{{url('/')}}/AdminLTE-master/plugins/pdfmake/vfs_fonts.js">
+</script>
+<script src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/buttons.html5.min.js">
+</script>
+<script src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/buttons.print.min.js">
+</script>
+<script src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/buttons.colVis.min.js">
+</script>
+<script defer>
+  $(function () {
    //Enable check and uncheck all functionality
-    $('.checkbox-toggle').click(function () {
-      var clicks = $(this).data('clicks')
-      if (clicks) {
+   $('.checkbox-toggle').click(function () {
+    var clicks = $(this).data('clicks')
+    if (clicks) {
         //Uncheck all checkboxes
         $('#example1 input[type=\'checkbox\']').prop('checked', false)
         $('.checkbox-toggle .far.fa-check-square').removeClass('fa-check-square').addClass('fa-square')
@@ -197,83 +177,142 @@
       }
       $(this).data('clicks', !clicks)
     })
-  })
-     $(document).ready(function () {
-      var table = $("#example1").DataTable({
-        "processing": true,
-        "orderCellsTop": true,
-        "columns": [
-        { "data": "checkbox"},
-        { "data": "nama" },
-        { "data": "jurusan" },
-        { "data": "bidang_kerja" },
-        { "data": "alamat" },
-        { "data": "wilayah" },
-        { "data": "nama_kontak"},
-        { "data": "telp" },
-        { "data": "foto" },
-        { "data": "aksi"}
-        ],
-        "responsive": true, "lengthChange": true, "autoWidth": false,
-        "buttons": [{
+ })
+  var table;
+  $(document).ready(function () {
+    table = $("#example1").DataTable({
+      "processing": true,
+      "orderCellsTop": true,
+      "ajax": {
+        "url": "{{url('/')}}/admin/get-industri",
+        "dataSrc": ""
+      },
+      "columnDefs": [
+       {"targets": 8, "sWidth": "80px"},
+       {"targets": 9, "sWidth": "120px"},
+       ],
+      "fixedColumns": true,
+      "columns": [
+      { "data": null,
+      render: function ( data, type, row ) {
+        return  '<div class="icheck-primary"><input type="checkbox" name="hapus[]" value="'+data.kd_industri+'" id="'+data.kd_industri+'"><label for="'+data.kd_industri+'"></label></div>'
+        }
+      },
+      { "data": "nama" },
+      { "data": "jurusan" },
+      { "data": "bidang_kerja" },
+      { "data": "alamat" },
+      { "data": "wilayah" },
+      { "data": "nama_kontak"},
+      { "data": "telp" },
+      { "data": null,
+      render: function ( data, type, row ) {
+          if(data.foto != 'default.jpg'){
+            return '<img class="img-fluid" src="{{url('/')}}/data_file/'+data.foto+'" alt="logo industri">'
+          }  else {
+            return '<img class="img-fluid" src="{{url('/')}}/data_file/industri-default.webp" alt="logo industri default">'
+          } 
+        }
+      },
+      { "data": null,
+       render: function ( data, type, row ) {
+      return '<a href="{{url('/')}}/admin/kelola-industri/'+data.kd_industri+'" class="btn btn-sm btn-success"><i class="fas fa-edit"></i>Edit</a> <a onclick="deleteConfirm(\'{{url('/')}}/admin/kelola-industri/hapus/'+data.kd_industri+'\')" href="javascript:void(0)" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Hapus</a>';
+      }
+      }
+      ],
+      "responsive": true, "lengthChange": true, "autoWidth": false,
+      "buttons": [{
         extend: "colvis", className: "btn-info"
-    },{
+      },{
         extend: "print", className: "btn-info"
-    }, {
+      }, {
         extend: "pdf", className: "btn-info"
-    }, {
+      }, {
         extend: "excel", className: "btn-info"
-    }]
+      }],
+      initComplete: function () {
+        table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+      }
     })
-      table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-     $('#filter th').on( 'keyup', 'input.nama', function () {
-          table
-          .columns(1)
-          .search($(this).val(), true, false)
-          .draw();
-        });
-     $('#filter th').on( 'change', 'select', function () {
-          table
-          .columns(2)
-          .search($(this).val(), true, false)
-          .draw();
-        });
-     $('#filter th').on( 'keyup', 'input.bidang', function () {
-          table
-          .columns(3)
-          .search($(this).val(), true, false)
-          .draw();
-        });
-     $('#filter th').on( 'keyup', 'input.alamat', function () {
-          table
-          .columns(4)
-          .search($(this).val(), true, false)
-          .draw();
-        });
-     $('#filter th').on( 'keyup', 'input.wilayah', function () {
-          table
-          .columns(5)
-          .search($(this).val(), true, false)
-          .draw();
-        });
-     $('#filter th').on( 'keyup', 'input.kontak', function () {
-          table
-          .columns(6)
-          .search($(this).val(), true, false)
-          .draw();
-        });
-     $('#filter th').on( 'keyup', 'input.telp', function () {
-          table
-          .columns(7)
-          .search($(this).val(), true, false)
-          .draw();
-        });
+    var filter = $('#filter th');
+    filter.on( 'keyup', 'input.nama', function () {
+      table
+      .columns(1)
+      .search($(this).val(), true, false)
+      .draw();
+    });
+    filter.on( 'change', 'select', function () {
+      table
+      .columns(2)
+      .search($(this).val(), true, false)
+      .draw();
+    });
+    filter.on( 'keyup', 'input.bidang', function () {
+      table
+      .columns(3)
+      .search($(this).val(), true, false)
+      .draw();
+    });
+    filter.on( 'keyup', 'input.alamat', function () {
+      table
+      .columns(4)
+      .search($(this).val(), true, false)
+      .draw();
+    });
+    filter.on( 'keyup', 'input.wilayah', function () {
+      table
+      .columns(5)
+      .search($(this).val(), true, false)
+      .draw();
+    });
+    filter.on( 'keyup', 'input.kontak', function () {
+      table
+      .columns(6)
+      .search($(this).val(), true, false)
+      .draw();
+    });
+    filter.on( 'keyup', 'input.telp', function () {
+      table
+      .columns(7)
+      .search($(this).val(), true, false)
+      .draw();
+    });
+    /*ajaxform*/
+    $('#truncate').submit(function(){
+      $(this).ajaxSubmit({
+        success: function(data){
+          $('#truncateModal').modal('hide');
+          $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
+          if(data.msg != 'Tidak ada yang ditandai'){
+           $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
+          } else {
+             $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(2000).fadeOut('slow');
+          }
+         $(window).scrollTop(0);
+         table.ajax.reload(null, false);
+        }
       });
-  </script>
-  <script defer>
-    function deleteConfirm(url){
-      $('#btn-delete').attr('href', url);
-      $('#deleteModal').modal();
-    }
-  </script>
-  @endsection
+      return false;
+    });
+  });
+ function deleteConfirm(url){
+  $('#btn-delete').attr('onclick', 'hapusIndustri("'+url+'")');
+  $('#deleteModal').modal();
+}
+function truncateConfirm(){
+    $('#truncateModal').modal();
+}
+function hapusIndustri(url){
+    $.ajax({
+      method: "GET",
+      url: url
+    }).done(function(data){
+       $('#deleteModal').modal('hide');
+       $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
+       $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
+       $(window).scrollTop(0);
+       table.ajax.reload(null, false);
+    });
+  }
+</script>
+@endsection

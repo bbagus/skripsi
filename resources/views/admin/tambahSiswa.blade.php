@@ -14,29 +14,19 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
-       @if(count($errors) > 0)
-       <div class="alert alert-danger alert-dismissible shadow">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <i class="icon fas fa-exclamation-triangle"></i>
-        @foreach ($errors->all() as $error)
-        {{ $error }} <br/>
-        @endforeach
+        <!-- alert error-->
+       <div id="sukses" class="alert alert-dismissible shadow" style="display:none;">
+        <button type="button" class="close" onclick="fadeOut()">×</button>
+        <div id="pesan">
+        </div>
       </div>
-      @endif
-      @if (\Session::has('success'))
-      <div class="alert alert-success alert-dismissible shadow">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <i class="icon fas fa-exclamation-triangle"></i>
-        {!! \Session::get('success') !!}
-      </div>
-      @endif
     </div>
     <div class="col-md-9">
       <!-- general form elements -->
       <div class="card card-info" >
         <div class="card-header">
           <h3 class="card-title">
-            <a href="/admin/kelola-siswa"><i class="fas fa-arrow-left"></i>&nbsp; Kembali</a>
+            <a href="#" onclick="goBack()"><i class="fas fa-arrow-left"></i>&nbsp; Kembali</a>
           </h3>
         </div>
         <!-- /.card-header -->
@@ -59,13 +49,13 @@
             <div class="form-group row">
               <label for="tgl_lahir" class="col-sm-2 col-form-label">Tanggal Lahir<strong class="text-danger">*</strong></label>
               <div class="col-sm-10 input-group date">
-                <input type="date" class="form-control" name="tgl_lahir">
+                <input type="date" class="form-control" id="tgl_lahir" name="tgl_lahir">
               </div>
             </div>
             <div class="form-group row">
               <label for="kd_kelas" class="col-sm-2 col-form-label" class="col-sm-2 col-form-label">Kelas<strong class="text-danger">*</strong></label>
               <div class="col-sm-10">
-                <select class="form-control select2bs4" name="kd_kelas" style="width: 100%;">
+                <select class="form-control select2bs4" name="kd_kelas" id="kd_kelas" style="width: 100%;">
                   <option disabled="" selected="" hidden="">Pilih kelas</option>
                   <option value="1">XI MM 1</option>
                   <option value="2">XI MM 2</option>
@@ -90,7 +80,7 @@
             <div class="form-group row">
               <label for="alamat" class="col-sm-2 col-form-label">Alamat</label>
               <div class="col-sm-10">
-                <textarea type="text" name="alamat" class="form-control" id="telp" placeholder="Tulis alamat lengkap.." maxlength="255"></textarea>
+                <textarea type="text" name="alamat" class="form-control" id="alamat" placeholder="Tulis alamat lengkap.." maxlength="255"></textarea>
               </div>
             </div>
             <div class="form-group row">
@@ -178,6 +168,8 @@
 </section>
 @endsection
 @section('javascript')
+<!-- jquery form -->
+<script src="{{url('/')}}/AdminLTE-master/plugins/jquery-form/jquery.form.min.js"></script>
 <!-- jquery-validation -->
 <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/jquery.validate.min.js"></script>
 <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/additional-methods.min.js"></script>
@@ -188,68 +180,101 @@
 <script defer>
   $(function () {
     bsCustomFileInput.init();
-         //Initialize Select2 Elements
-         $('.select2').select2()
-        //Initialize Select2 Elements
-        $('.select2bs4').select2({
-          theme: 'bootstrap4'
-        })
-
-        $.validator.setDefaults({});
-        $('#formsiswa').validate({
-          rules: {
-            nis: {
-              required: true,
-              number: true,
-            },
-            nama: {
-              required: true,
-            },
-            tgl_lahir: {
-              required: true,
-              date: true,
-            },
-            kd_kelas: {
-              required: true,
-            },
-            telp: {
-              maxlength: 20,
-            }
+      //Initialize Select2 Elements
+      $('.select2').select2()
+      //Initialize Select2 Elements
+      $('.select2bs4').select2({
+        theme: 'bootstrap4'
+      })
+      $.validator.setDefaults({});
+      $('#formsiswa').validate({
+        rules: {
+          nis: {
+            required: true,
+            number: true,
           },
-          messages: {
-            nis: {
-              required: "NIS harus diisi",
-              number: "Mohon isi NIS dengan benar",
-            },
-            nama: {
-              required: "Nama lengkap harus diisi",
-            },
-            tgl_lahir: {
-              required: "Tanggal lahir harus diisi",
-              date: "Mohon isi tanggal dengan benar",
-            },
-            kd_kelas: {
-              required: "Kelas harus diisi",
-            },
-            telp: {
-              maxlength: "Nomor telepon terlalu panjang!",
-            }
+          nama: {
+            required: true,
           },
-          errorElement: 'span',
-          errorPlacement: function (error, element) {
-            error.addClass('invalid-feedback');
-            element.closest('.form-group').append(error);
+          tgl_lahir: {
+            required: true,
+            date: true,
           },
-          highlight: function (element, errorClass, validClass) {
-            $(element).addClass('is-invalid');
+          kd_kelas: {
+            required: true,
           },
-          unhighlight: function (element, errorClass, validClass) {
-            $(element).removeClass('is-invalid');
+          telp: {
+            maxlength: 20,
           }
-        });
-      });
+        },
+        messages: {
+          nis: {
+            required: "NIS harus diisi",
+            number: "Mohon isi NIS dengan benar",
+          },
+          nama: {
+            required: "Nama lengkap harus diisi",
+          },
+          tgl_lahir: {
+            required: "Tanggal lahir harus diisi",
+            date: "Mohon isi tanggal dengan benar",
+          },
+          kd_kelas: {
+            required: "Kelas harus diisi",
+          },
+          telp: {
+            maxlength: "Nomor telepon terlalu panjang!",
+          }
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+        },
+        submitHandler: function(form) {
+          $(form).ajaxSubmit({
+            clearForm: true,
+            success: function(data){
+              var pesan = $('#sukses'); 
+              $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
+              if(data.msg == 'Berhasil input data siswa!'){
+                pesan.removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
+              } else{
+                pesan.removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+              }
+            },
+            error: function (xhr) {
+               if (xhr.status == 422) {
+                var pesan = $('#pesan');
+                pesan.html('<i class="icon fas fa-exclamation-triangle"></i>');
+                  $.each(xhr.responseJSON.errors, function (i, error) {
+                pesan.append(error);
+                });
+                  $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+               }
+           }
+          });
+        }
+    });
+  });
+function fadeOut(){
+  $('#sukses').hide();
+}
   function myFunction() {
     document.getElementById("formsiswa").reset();
   }
+  function goBack() {
+    window.history.back();
+     if(history.length < 2){
+    window.close();
+  }
+  };
 </script>
+
 @endsection

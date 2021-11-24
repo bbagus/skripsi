@@ -16,28 +16,18 @@ SI-PKL : Ubah Data Guru - {{$guru->nama}}
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
-       @if(count($errors) > 0)
-       <div class="alert alert-danger alert-dismissible shadow">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <i class="icon fas fa-exclamation-triangle"></i>
-        @foreach ($errors->all() as $error)
-        {{ $error }} <br/>
-        @endforeach
-      </div>
-      @endif
-      @if (\Session::has('success'))
-      <div class="alert alert-success alert-dismissible shadow">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <i class="icon fas fa-exclamation-triangle"></i>
-        {!! \Session::get('success') !!}
-      </div>
-      @endif
+        <!-- alert error-->
+        <div id="sukses" class="alert alert-dismissible shadow" style="display:none;">
+          <button type="button" class="close" onclick="fadeOut()">×</button>
+          <div id="pesan">
+          </div>
+        </div>
     </div>
     <div class="col-md-9">
       <div class="card card-info" >
         <div class="card-header">
           <h3 class="card-title">
-            <a href="/admin/kelola-guru"><i class="fas fa-arrow-left"></i>&nbsp; Kembali</a>
+            <a href="#" onclick="goBack()"><i class="fas fa-arrow-left"></i>&nbsp; Kembali</a>
           </h3>
         </div>
         <!-- /.card-header -->
@@ -45,7 +35,6 @@ SI-PKL : Ubah Data Guru - {{$guru->nama}}
         <form class="form-horizontal" id="formguru" action="{{route('edit_guru')}}" method="POST" enctype="multipart/form-data">
           {{ csrf_field() }}
           <input type="hidden" name="kd_pembimbing" value="{{$guru->kd_pembimbing}}" />
-
           <div class="card-body" style="padding: 1.75rem 3rem;">
             <div class="form-group row">
               <label for="nama" class="col-sm-2 col-form-label">Nama Lengkap<strong class="text-danger">*</strong></label>
@@ -87,11 +76,12 @@ SI-PKL : Ubah Data Guru - {{$guru->nama}}
             </div>
             <div class="form-group row">
               <label for="foto" class="col-sm-2 col-form-label">Foto Profil</label>
-              <div class="col-sm-10">
+              <div id="foto" class="col-sm-10">
                 @if($guru->foto != 'default.jpg')
                 <img class="img-fluid mb-3" style="width: 150px;float:left;" src="{{url('/')}}/data_file/{{$guru->foto}}" alt="">
-                <a class="close" title="hapus foto(jangan lupa klik simpan)" style="float: left;
-                margin-left: 5px;" href="{{url('/')}}/admin/kelola-guru/hapus-foto/{{$guru->kd_pembimbing}}">x</a>
+                <a class="close" title="hapus foto (jangan lupa klik simpan). 
+reload halaman untuk batal." style="float: left;
+                margin-left: 5px;" href="javascript:void(0)" onclick="hapusFoto()">x</a>
                 @else
                 <input type="hidden" name="hapus" value="hapus" />
                 @endif
@@ -142,7 +132,7 @@ SI-PKL : Ubah Data Guru - {{$guru->nama}}
               <div class="col-4">Password</div>
               <div class="col-1">:</div>
               <div class="col-6">
-                <a onclick="resetConfirm()" href="#">Reset password</a></div>
+                <a onclick="resetConfirm()" href="javascript:void(0)">Reset password</a></div>
               </p>
             </div>
           </div>
@@ -151,7 +141,7 @@ SI-PKL : Ubah Data Guru - {{$guru->nama}}
     </div>
   </section>
 @endsection
-    @section('modal')
+@section('modal')
 <div class="modal fade" id="resetModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top:150px;">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -163,14 +153,16 @@ SI-PKL : Ubah Data Guru - {{$guru->nama}}
       </div>
       <div class="modal-body">Password akan kembali ke setelan awal (gurukeren).</div>
       <div class="modal-footer justify-content-between">
-        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-        <a id="btn-delete" class="btn btn-danger" href="{{url('/')}}/admin/kelola-guru/reset-password/{{$guru->username}}">Reset</a>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+        <a id="btn-delete" class="btn btn-danger" href="javascript:void(0)" onclick="resetPassword('{{url('/')}}/admin/kelola-guru/reset-password/{{$guru->username}}')">Reset</a>
       </div>
     </div>
   </div>
 </div>
 @endsection
 @section('javascript')
+<!-- jquery form -->
+<script src="{{url('/')}}/AdminLTE-master/plugins/jquery-form/jquery.form.min.js"></script>
 <!-- jquery-validation -->
 <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/jquery.validate.min.js"></script>
 <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/additional-methods.min.js"></script>
@@ -227,14 +219,72 @@ SI-PKL : Ubah Data Guru - {{$guru->nama}}
         },
         unhighlight: function (element, errorClass, validClass) {
           $(element).removeClass('is-invalid');
+        },
+        submitHandler: function(form) {
+          $(form).ajaxSubmit({
+            success: function(data){
+              var pesan = $('#sukses'); 
+              $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
+              if(data.msg == 'Berhasil mengubah data guru!'){
+                if(data.pindah != null){
+                  pesan.removeClass('alert-danger').addClass('alert-success').fadeIn().delay(1000).fadeOut(400,function()
+                  {
+                    window.location.replace("{{url('/')}}/admin/kelola-guru/"+ data.pindah);
+                  });
+                } else {
+                pesan.removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
+                }
+              } else {
+                pesan.removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+              }
+            },
+            error: function (xhr) {
+               if (xhr.status == 422) {
+                var pesan = $('#pesan');
+                pesan.html('<i class="icon fas fa-exclamation-triangle"></i>');
+                  $.each(xhr.responseJSON.errors, function (i, error) {
+                pesan.append(error);
+                });
+                  $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+               }
+           }
+          });
         }
       });
-      });
+    });
+  function resetPassword(url){
+    $.ajax({
+      method: "GET",
+      url: url
+    }).done(function(data){
+      $('#resetModal').modal('hide');
+      $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
+      $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
+    }).fail(function(data){
+      $('#resetModal').modal('hide');
+      $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+"Password gagal direset.");
+      $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+    });
+  }
+  function hapusFoto(){
+      $('#foto img').remove();
+      $('#foto a').remove();
+      $('#foto').append('<input type="hidden" name="hapus" value="hapus" />');
+  }
+  function fadeOut(){
+    $('#sukses').hide();
+  }
   function myFunction() {
     document.getElementById("formguru").reset();
   }
   function resetConfirm(){
     $('#resetModal').modal();
   }
+function goBack() {
+    window.history.back();
+     if(history.length < 2){
+    window.close();
+  }
+  };
 </script>
 @endsection

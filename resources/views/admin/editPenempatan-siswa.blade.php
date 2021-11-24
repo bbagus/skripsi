@@ -14,29 +14,19 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
-           @if(count($errors) > 0)
-           <div class="alert alert-danger alert-dismissible shadow">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <i class="icon fas fa-exclamation-triangle"></i>
-            @foreach ($errors->all() as $error)
-            {{ $error }} <br/>
-            @endforeach
+          <!-- alert error-->
+        <div id="sukses" class="alert alert-dismissible shadow" style="display:none;">
+          <button type="button" class="close" onclick="fadeOut()">×</button>
+          <div id="pesan">
           </div>
-          @endif
-          @if (\Session::has('success'))
-                  <div class="alert alert-success alert-dismissible shadow">
-                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <i class="icon fas fa-exclamation-triangle"></i>
-                 {!! \Session::get('success') !!}
-                 </div>
-            @endif
+        </div>
         </div>
         <!-- /.col -->
         <div class="col-md-9">
           <div class="card card-info">
             <div class="card-header">
              <h3 class="card-title">
-                <a href="/admin/kelola-penempatan"><i class="fas fa-arrow-left"></i>&nbsp; Kembali</a>
+                <a href="javascript:void(0)" onclick="goBack()"><i class="fas fa-arrow-left"></i>&nbsp; Kembali</a>
               </h3>
             </div><!-- /.card-header -->
             <!-- form start -->
@@ -95,7 +85,7 @@
                 <div class="form-group row">
                     <label for="tgl_mulai" class="col-sm-2 col-form-label">Tanggal Mulai</label>
                     <div class="col-sm-10 input-group date">
-                      <input type="date" class="form-control" name="tgl_mulai" value="{{$penempatan->tgl_mulai}}">
+                      <input type="date" class="form-control datetimepicker-input" name="tgl_mulai" value="{{$penempatan->tgl_mulai}}"/>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -129,7 +119,6 @@
               </div>
               <div class="card-body" style="padding: 1.75rem 1.75rem;">
                 <p class="text-justify">
-                
               </p>
               </div>
             </div>
@@ -141,6 +130,8 @@
 <!-- /.content -->
 @endsection
 @section('javascript')
+<!-- jquery form -->
+<script src="{{url('/')}}/AdminLTE-master/plugins/jquery-form/jquery.form.min.js"></script>
 <!-- Select2 -->
 <script src="{{url('/')}}/AdminLTE-master/plugins/select2/js/select2.full.min.js"></script>
 <script src="{{url('/')}}/AdminLTE-master/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
@@ -192,24 +183,26 @@ $('.searchguru').select2({
       cache: true
     }
  });
-</script>
-<script>
 $(function () {
  $.validator.setDefaults({});
  $('#formedit').validate({
   rules: {
     tgl_mulai: {
+      required: true,
       date: true,
     },
     tgl_selesai: {
+      required: true,
       date: true,
     },
   },
   messages: {
     tgl_mulai: {
+      required: "Mohon isi tanggal dengan benar!",
       date: "Mohon isi tanggal dengan benar!",
     },
     tgl_selesai: {
+      required: "Mohon isi tanggal dengan benar!",
       date: "Mohon isi tanggal dengan benar!",
     },
   },
@@ -223,8 +216,44 @@ $(function () {
   },
   unhighlight: function (element, errorClass, validClass) {
     $(element).removeClass('is-invalid');
+  },
+  submitHandler: function(form) {
+    $(form).ajaxSubmit({
+      success: function(data){
+        var pesan = $('#sukses'); 
+        $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
+        if(data.msg == 'Berhasil mengubah penempatan!'){
+          pesan.removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');     
+        } else {
+          pesan.removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+        }
+      },
+      error: function (xhr) {
+       if (xhr.status == 422) {
+        var pesan = $('#pesan');
+        pesan.html('<i class="icon fas fa-exclamation-triangle"></i>');
+        $.each(xhr.responseJSON.errors, function (i, error) {
+          pesan.append(error);
+        });
+        $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+      } else {
+        var pesan = $('#pesan');
+        pesan.html('<i class="icon fas fa-exclamation-triangle"></i>'+ 'Terdapat kendala di server');
+         $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+      }
+    }
+  });
   }
 });
 });
+function goBack() {
+  window.history.back();
+  if(history.length < 2){
+    window.close();
+  }
+};
+function fadeOut(){
+    $('#sukses').hide();
+}
 </script>
 @endsection

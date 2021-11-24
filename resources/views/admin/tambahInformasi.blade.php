@@ -16,33 +16,22 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
-        <!-- general form elements -->
-        @if(count($errors) > 0)
-        <div class="alert alert-danger alert-dismissible shadow">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <i class="icon fas fa-exclamation-triangle"></i>
-          @foreach ($errors->all() as $error)
-          {{ $error }} <br/>
-          @endforeach
+       <!-- alert error-->
+        <div id="sukses" class="alert alert-dismissible shadow" style="display:none;">
+          <button type="button" class="close" onclick="fadeOut()">×</button>
+          <div id="pesan">
+          </div>
         </div>
-        @endif
-        @if (\Session::has('success'))
-        <div class="alert alert-success alert-dismissible shadow">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <i class="icon fas fa-exclamation-triangle"></i>
-          {!! \Session::get('success') !!}
-        </div>
-        @endif
         <!-- /.card -->
         <div class="card card-info">
           <div class="card-header">
             <h3 class="card-title">
-             <a href="/admin/kelola-informasi"><i class="fas fa-arrow-left"></i>&nbsp; Kembali</a>
+             <a href="#" onclick="goBack()"><i class="fas fa-arrow-left"></i>&nbsp; Kembali</a>
            </h3>
          </div>
          <!-- /.card-header -->
          <!-- form start -->
-         <form id="forminfo" method="POST" enctype="multipart/form-data">
+         <form id="forminfo" method="POST" action="{{route('upload_info')}}" enctype="multipart/form-data">
           {{ csrf_field() }}
           <div class="card-body" style="padding: 1.75rem 2rem;">
             <div class="form-group mb-3">
@@ -71,7 +60,6 @@
                 <input type="text" class="form-control" name="penulis" value="Admin" placeholder="Tulis nama penulis..">
               </div>
             </div>
-
             <div class="form-group mb-3 col-sm-5">
               <label for="foto">Thumbnail</label>
               <div class="custom-file">
@@ -85,8 +73,8 @@
             </div>
             <!-- /.card-body -->
             <div class="card-footer">
-              <button type="submit" class="btn btn-success" formaction="{{route('upload_info')}}"> Umumkan</button>&nbsp;
-              <button type="submit" class="btn btn-primary"formaction="{{route('simpan_info')}}">Simpan ke draft</button>&nbsp;
+              <button name="submit" value="1" type="submit" class="btn btn-success" > Umumkan</button>&nbsp;
+              <button name="submit" value="2" type="submit" class="btn btn-primary" >Simpan ke draft</button>&nbsp;
               <input type="button" onclick="myFunction()" class="btn btn-default" value="Reset">
             </div>
             <!-- /.card-footer -->
@@ -99,6 +87,8 @@
 </section>
 @endsection
 @section('javascript')
+<!-- jquery form -->
+<script src="{{url('/')}}/AdminLTE-master/plugins/jquery-form/jquery.form.min.js"></script>
 <!-- jquery-validation -->
 <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/jquery.validate.min.js"></script>
 <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/additional-methods.min.js"></script>
@@ -150,11 +140,49 @@
       },
       unhighlight: function (element, errorClass, validClass) {
         $(element).removeClass('is-invalid');
-      }
+      },
+      submitHandler: function(form) {
+          $(form).ajaxSubmit({
+            clearForm: true,
+            success: function(data){
+              var pesan = $('#sukses'); 
+              $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
+              if(data.msg == 'Berhasil menambah pengumuman!'){
+                pesan.removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
+                  $('#compose-textarea').summernote('code', '');
+              } else{
+                pesan.removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
+                  $('#compose-textarea').summernote('code', '');
+              }
+              $(window).scrollTop(0);
+            },
+            error: function (xhr) {
+               if (xhr.status == 422) {
+                var pesan = $('#pesan');
+                pesan.html('<i class="icon fas fa-exclamation-triangle"></i>');
+                  $.each(xhr.responseJSON.errors, function (i, error) {
+                pesan.append(error);
+                });
+                  $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+               }
+               $(window).scrollTop(0);
+           }
+          });
+        }
     });
   });
   function myFunction() {
     document.getElementById("forminfo").reset();
+    $('#compose-textarea').summernote('code', '');
   }
+function fadeOut(){
+  $('#sukses').hide();
+}
+ function goBack() {
+    window.history.back();
+     if(history.length < 2){
+    window.close();
+  }
+  };
 </script>
 @endsection

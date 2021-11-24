@@ -30,10 +30,9 @@ class AdminProfil extends Controller
             $user = User::find($data->username);
             $user->password = $passbaru;
             $user->save();
-            return back()->with('success','Password berhasil diubah!');
+            return response()->json(array('msg'=> 'Berhasil mengubah password!'), 200); 
         }
-        return back()->withErrors('Password lama salah!');
-        
+        return response()->json(array('msg'=> 'Password lama salah!'), 200); 
     }
     public function editData(UserRepository $repository){
         return view('admin.editprofil')
@@ -42,7 +41,8 @@ class AdminProfil extends Controller
     public function edit_akun(Request $request){
         $data = $this->repository->getData();        
         $cekuser = User::find($request->username);
-        if ( User::firstWhere('email',$request->email) == null || $cekuser->email == $request->email)
+        $cekemail = User::firstWhere('email',$request->email);
+        if ( $cekemail == null || $request->email == null || $cekuser->email == $request->email)
         {
             if($cekuser == null || $data->username == $request->username){
                 $ceknama = Admin::firstWhere('nama', $request->nama);
@@ -62,19 +62,15 @@ class AdminProfil extends Controller
                             'foto' => 'file|image|mimes:jpeg,png,jpg|max:700',
                         ]);
                         if($admin->foto != 'default.jpg'){
-                  //mau ganti foto, 
                            $image_path = public_path().'/data_file/'.$admin->foto;
                            File::delete($image_path);
                        } 
-             //upload foto
                        $file = $request->file('foto');
                        $extension = $request->foto->getClientOriginalExtension();
                        $nama_file = 'Admin'.'-'.$request->nama.'.'.$extension;
-                        // isi dengan nama folder tempat kemana file diupload
                        $tujuan_upload = 'data_file';
                        $file->move($tujuan_upload,$nama_file);
                    } else if ($request->hapus == 'hapus'){
-            //ngilangi foto 
                     $nama_file = 'default.jpg';
                     $image_path = public_path().'/data_file/'.$admin->foto;
                     File::delete($image_path);
@@ -89,24 +85,25 @@ class AdminProfil extends Controller
                 $admin->foto = $nama_file;
                 $admin->save();
                 Auth::login($user);
-                return back()->with('success', 'Mengubah detail profil berhasil!');
-                return back()->withInput();
+                $pindah = null;
+                if($request->file('foto') != null) $pindah = 'reload';
+                return response()->json(array('msg'=> 'Berhasil mengubah detail profil!', 'pindah'=> $pindah), 200);
             } 
-            return back()->withErrors('Nama yang sama sudah ada!');
+            return response()->json(array('msg'=> 'Nama yang sama sudah ada!'), 200);
         } 
-        return back()->withErrors('Username yang sama sudah ada!');
+        return response()->json(array('msg'=> 'Username yang sama sudah ada!'), 200);
     }
-    return back()->withErrors('Email yang sama sudah ada!');
-}
+    return response()->json(array('msg'=> 'Email yang sama sudah ada!'), 200);
+    }
 
-public function hapusFoto(){
- $data = $this->repository->getData();
- $image_path = public_path().'/data_file/'.$data->foto;
- File::delete($image_path);
- $admin = Admin::find($data->username);
- $admin->foto = 'default.jpg';
- $admin->save();
- return back()->with('success', 'Foto berhasil dihapus.');  
-}
+    public function hapusFoto(){
+     $data = $this->repository->getData();
+     $image_path = public_path().'/data_file/'.$data->foto;
+     File::delete($image_path);
+     $admin = Admin::   find($data->username);
+     $admin->foto = 'default.jpg';
+     $admin->save();
+     return response()->json(array('msg'=> 'Berhasil menghapus foto!'), 200); 
+    }
 }
 

@@ -11,22 +11,12 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
-           @if(count($errors) > 0)
-           <div class="alert alert-danger alert-dismissible shadow">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <i class="icon fas fa-exclamation-triangle"></i>
-            @foreach ($errors->all() as $error)
-            {{ $error }} <br/>
-            @endforeach
-          </div>
-          @endif
-          @if (\Session::has('success'))
-                  <div class="alert alert-success alert-dismissible shadow">
-                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <i class="icon fas fa-exclamation-triangle"></i>
-                 {!! \Session::get('success') !!}
-                 </div>
-            @endif
+         <!-- alert error-->
+         <div id="sukses" class="alert alert-dismissible shadow" style="display:none;">
+           <button type="button" class="close" onclick="fadeOut()">×</button>
+            <div id="pesan">
+            </div>
+        </div>
         </div>
         <div class="col-md-3">
           <!-- Profile Image -->
@@ -58,13 +48,13 @@
           <div class="card">
             <div class="card-header p-2">
               <ul class="nav nav-pills">
-                <li class="nav-item"><a class="nav-link <?php echo count($errors) > 0 ? '': 'active' ?>" href="#activity" data-toggle="tab">Profil</a></li>
-                <li class="nav-item"><a class="nav-link <?php echo count($errors) > 0 ? 'active': '' ?>" href="#settings" data-toggle="tab">Pengaturan akun</a></li>
+                <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Profil</a></li>
+                <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Pengaturan akun</a></li>
               </ul>
             </div><!-- /.card-header -->
             <div class="card-body">
               <div class="tab-content mb-3">
-                <div class=" <?php echo count($errors) > 0 ? '': 'active' ?> tab-pane" id="activity">
+                <div class="active tab-pane" id="activity">
                   <div class="table-responsive mailbox-messages">
                     <table class="table table-hover table-striped">
                       <tbody>
@@ -88,7 +78,7 @@
                   </div>
                 </div>
                 <!-- /.tab-pane -->
-                <div class="<?php echo count($errors) > 0 ? 'active': '' ?> tab-pane" id="settings">
+                <div class="tab-pane" id="settings">
                  <div class="table-responsive mailbox-messages">
                   <table class="table table-hover table-striped">
                     <tbody>
@@ -105,7 +95,7 @@
                       <tr>
                         <td>Password</td>
                         <td>:</td>
-                        <td><a onclick="ubahPassword()" href="#">Ubah Password</a>
+                        <td><a onclick="ubahPassword()" href="javascript:void(0)">Ubah Password</a>
                         </td>
                       </tr>
                     </tbody>
@@ -156,7 +146,7 @@
         </div>
       </div>
       <div class="modal-footer justify-content-between">
-        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
         <input class="btn btn-success" type="submit" value="Simpan" >
       </div>
     </form>
@@ -165,10 +155,12 @@
 </div>
 @endsection
 @section('javascript')
+<!-- jquery form -->
+<script src="{{url('/')}}/AdminLTE-master/plugins/jquery-form/jquery.form.min.js"></script>
 <!-- jquery-validation -->
 <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/jquery.validate.min.js"></script>
 <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/additional-methods.min.js"></script>
-<script>
+<script defer>
  $.validator.setDefaults({});
  $('#formpassword').validate({
   rules: {
@@ -207,7 +199,34 @@
   },
   unhighlight: function (element, errorClass, validClass) {
     $(element).removeClass('is-invalid');
+  },
+  submitHandler: function(form) {
+    $(form).ajaxSubmit({
+      clearForm: true,
+      success: function(data){
+        $('#passwordModal').modal('hide');
+        var pesan = $('#sukses'); 
+        $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
+        if(data.msg == 'Berhasil mengubah password!'){
+          pesan.removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
+        } else {
+          pesan.removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+        }
+      },
+      error: function (xhr) {
+       $('#passwordModal').modal('hide');
+       if (xhr.status == 422) {
+        var pesan = $('#pesan');
+        pesan.html('<i class="icon fas fa-exclamation-triangle"></i>');
+        $.each(xhr.responseJSON.errors, function (i, error) {
+          pesan.append(error);
+        });
+        $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+      }
+    }
+  });
   }
+
 });
  function ubahPassword(){
   $('#passwordModal').modal();

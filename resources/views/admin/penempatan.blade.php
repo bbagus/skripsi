@@ -15,22 +15,12 @@
     <div class="container-fluid">
       <div class="row">
        <div class="col-12">
-         @if(count($errors) > 0)
-           <div class="alert alert-danger alert-dismissible shadow">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <i class="icon fas fa-exclamation-triangle"></i>
-            @foreach ($errors->all() as $error)
-            {{ $error }} <br/>
-            @endforeach
+         <!-- alert error-->
+        <div id="sukses" class="alert alert-dismissible shadow" style="display:none;">
+          <button type="button" class="close" onclick="fadeOut()">×</button>
+          <div id="pesan">
           </div>
-          @endif
-          @if (\Session::has('success'))
-          <div class="alert alert-success alert-dismissible shadow">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <i class="icon fas fa-exclamation-triangle"></i>
-            {!! \Session::get('success') !!}
-          </div>
-          @endif
+        </div>
            <div class="card card-primary card-outline">
             <div class="card-header">
               <div class="card-tools">
@@ -47,19 +37,21 @@
             <div class="card-body">
               <div class="tab-content mb-3">
                 <div class="tab-pane active" id="siswa">
-                  <div class="form-group row">
+                <div class="form-group row">
                   <div class="col-sm-1" style="vertical-align:bottom;"> Tahun Ajaran</div>
                   <div class="col-sm-2">
                     <select id="tahunajar" class="">
-                      <option >2020/2021</option>
-                      <option selected="">2021/2022</option>
-                      <option >2022/2023</option>
+                      <option selected value="">Semua</option>
+                      <option value="2020/2021">2020/2021</option>
+                      <option value="2021/2022">2021/2022</option>
+                      <option value="2022/2023" >2022/2023</option>
                     </select>
                   </div>
                 </div>
               <table id="example1" class="table table-bordered table-striped table-hover">
                 <thead>
                   <tr>
+                    <th>Tahun Ajaran</th>
                     <th>NIS</th>
                     <th>Nama Siswa</th>
                     <th>Kelas</th>
@@ -70,6 +62,7 @@
                     <th>Aksi</th>
                   </tr>
                   <tr id="filter">
+                  <th></th>
                     <th><input class="nis form-control" type="text" placeholder="NIS" /></th>
                     <th><input class="nama form-control" type="text" placeholder="Nama Siswa" /></th>
                     <th><select class="kelas form-control">
@@ -97,6 +90,17 @@
               </table>
             </div>
             <div class="tab-pane" id="guru">
+              <div class="form-group row">
+                  <div class="col-sm-1" style="vertical-align:bottom;"> Tahun Ajaran</div>
+                  <div class="col-sm-2">
+                    <select id="tahunajar2" class="">
+                      <option selected value="">Semua</option>
+                      <option value="2020/2021">2020/2021</option>
+                      <option value="2021/2022">2021/2022</option>
+                      <option value="2022/2023" >2022/2023</option>
+                    </select>
+                  </div>
+              </div>
               <table id="example2" class="table table-bordered table-striped table-hover">
                 <thead>
                   <tr>
@@ -108,6 +112,7 @@
                     <th>Alamat Instansi</th>
                     <th>Waktu PKL</th>
                     <th>Aksi</th>
+                    <th>Tahun Ajaran</th>
                   </tr>
                   <tr id="filter2">
                     <th><input class="nis form-control" type="text" placeholder="NIS" /></th>
@@ -132,11 +137,23 @@
                     <th><input class="alamat form-control" type="text" placeholder="Alamat" /></th>
                     <th><input class="waktu form-control" type="text" placeholder="Waktu PKL" /></th>
                     <th></th>
+                    <th></th>
                   </tr>
                 </thead>       
               </table>
             </div>
             <div class="tab-pane" id="industri">
+              <div class="form-group row">
+                  <div class="col-sm-1" style="vertical-align:bottom;"> Tahun Ajaran</div>
+                  <div class="col-sm-2">
+                    <select id="tahunajar3" class="">
+                      <option selected value="">Semua</option>
+                      <option value="2020/2021">2020/2021</option>
+                      <option value="2021/2022">2021/2022</option>
+                      <option value="2022/2023" >2022/2023</option>
+                    </select>
+                  </div>
+              </div>
               <table id="example3" class="table table-bordered table-striped table-hover">
                 <thead>
                   <tr>
@@ -148,6 +165,7 @@
                     <th>Alamat Instansi</th>
                     <th>Tahun Ajaran</th>
                     <th>Aksi</th>
+                    <th>Tahun Ajaran</th>
                   </tr>
                   <tr id="filter3">
                     <th><input class="nis form-control" type="text" placeholder="NIS" /></th>
@@ -172,9 +190,9 @@
                     <th><input class="alamat form-control" type="text" placeholder="Alamat" /></th>
                     <th><input class="waktu form-control" type="text" placeholder="Waktu PKL" /></th>
                     <th></th>
+                    <th></th>
                   </tr>
                 </thead>
-                
               </table>
             </div>
           </div>
@@ -182,12 +200,12 @@
      </div>
    </div>
  </section>
-
  @endsection
  @section('modal')
- 
 @endsection
 @section('javascript')
+<!-- jquery form -->
+<script src="{{url('/')}}/AdminLTE-master/plugins/jquery-form/jquery.form.min.js"></script>
 <!-- DataTables  & Plugins -->
 <script defer src="{{url('/')}}/AdminLTE-master/plugins/datatables/jquery.dataTables.min.js" >
 </script>
@@ -226,9 +244,11 @@ $(document).ready(function () {
       "dataSrc": ""
   },
   "columnDefs": [
-    {"targets": 7, "sWidth": "50px"}
+    {"targets": 8, "sWidth": "50px"},
+    {"targets": 0, "visible": false}
   ],
     "columns": [
+    { "data": "tahun_ajaran"},
     { "data": "nis"},
     { "data": "nama"},
     { "data": "kelas"},
@@ -257,54 +277,58 @@ $(document).ready(function () {
             extend: "pdf", className: "btn-info"
           }, {
             extend: "excel", className: "btn-info"
-          }],
-          initComplete: function () {
+          }
+    ],
+    initComplete: function () {
         table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
       }
   });
-   $('#tahunajar').on('change', 'select', function(){
-    table.clear()
-    .draw();
-   });
-   $('#filter th').on( 'keyup', 'input.nis', function () {
+   $('#tahunajar').on('change', function(){
     table
     .columns(0)
     .search($(this).val(), true, false)
     .draw();
-  });
-   $('#filter th').on( 'keyup', 'input.nama', function () {
+   });
+   var filter = $('#filter th');
+  filter.on( 'keyup', 'input.nis', function () {
     table
     .columns(1)
     .search($(this).val(), true, false)
     .draw();
   });
-   $('#filter th').on( 'change', 'select', function () {
+  filter.on( 'keyup', 'input.nama', function () {
     table
     .columns(2)
     .search($(this).val(), true, false)
     .draw();
   });
-   $('#filter th').on( 'keyup', 'input.guru', function () {
+  filter.on( 'change', 'select', function () {
     table
     .columns(3)
     .search($(this).val(), true, false)
     .draw();
   });
-   $('#filter th').on( 'keyup', 'input.instansi', function () {
+   filter.on( 'keyup', 'input.guru', function () {
     table
     .columns(4)
     .search($(this).val(), true, false)
     .draw();
   });
-   $('#filter th').on( 'keyup', 'input.alamat', function () {
+   filter.on( 'keyup', 'input.instansi', function () {
     table
     .columns(5)
     .search($(this).val(), true, false)
     .draw();
   });
-   $('#filter th').on( 'keyup', 'input.waktu', function () {
+   filter.on( 'keyup', 'input.alamat', function () {
     table
     .columns(6)
+    .search($(this).val(), true, false)
+    .draw();
+  });
+   filter.on( 'keyup', 'input.waktu', function () {
+    table
+    .columns(7)
     .search($(this).val(), true, false)
     .draw();
   });
@@ -318,10 +342,12 @@ $(document).ready(function () {
     "columnDefs": [{
       "targets": '_all',
       "defaultContent": "" },
-      {"targets": 5, "sWidth": "140px"},
+      {"targets": 5, "sWidth": "120px"},
       {"targets": 7, "sWidth": "30px"},
-      {"targets": 3, "visible": false}
+      {"targets": 3, "visible": false},
+      {"targets": 8, "visible": false}
     ],
+    "order": [[ 3, 'asc' ]],
     "drawCallback": function ( settings ) {
       var api = this.api();
       var rows = api.rows( {page:'current'} ).nodes();
@@ -349,7 +375,8 @@ $(document).ready(function () {
       }
       } 
     },
-    { "data": "Action" }],
+    { "data": null},
+    { "data": "tahun_ajaran"}],
     "responsive": true, "lengthChange": true, "searching": true, "autoWidth": false,  
     "buttons": [{
             extend: "colvis", className: "btn-info"
@@ -377,48 +404,55 @@ $(document).ready(function () {
       hitung++;
     }
   });
-  $('#filter2 th').on( 'keyup', 'input.nis', function () {
+  var filter2 = $('#filter2 th');
+ filter2.on( 'keyup', 'input.nis', function () {
     table2
     .columns(0)
     .search($(this).val(), true, false)
     .draw();
   });
-   $('#filter2 th').on( 'keyup', 'input.nama', function () {
+   filter2.on( 'keyup', 'input.nama', function () {
     table2
     .columns(1)
     .search($(this).val(), true, false)
     .draw();
   });
-   $('#filter2 th').on( 'change', 'select', function () {
+  filter2.on( 'change', 'select', function () {
     table2
     .columns(2)
     .search($(this).val(), true, false)
     .draw();
   });
-   $('#filter2 th').on( 'keyup', 'input.guru', function () {
+  filter2.on( 'keyup', 'input.guru', function () {
     table2
     .columns(3)
     .search($(this).val(), true, false)
     .draw();
   });
-   $('#filter2 th').on( 'keyup', 'input.instansi', function () {
+  filter2.on( 'keyup', 'input.instansi', function () {
     table2
     .columns(4)
     .search($(this).val(), true, false)
     .draw();
   });
-   $('#filter2 th').on( 'keyup', 'input.alamat', function () {
+  filter2.on( 'keyup', 'input.alamat', function () {
     table2
     .columns(5)
     .search($(this).val(), true, false)
     .draw();
   });
-   $('#filter2 th').on( 'keyup', 'input.waktu', function () {
+   filter2.on( 'keyup', 'input.waktu', function () {
     table2
     .columns(6)
     .search($(this).val(), true, false)
     .draw();
   });
+   $('#tahunajar2').on('change', function(){
+    table2
+    .columns(8)
+    .search($(this).val(), true, false)
+    .draw();
+   });
 var table3 = $('#example3').DataTable();
    tableConfig3 = {
     "processing": true,
@@ -431,8 +465,10 @@ var table3 = $('#example3').DataTable();
       "defaultContent": "" },
       {"targets": 5, "sWidth": "140px"},
       {"targets": 7, "sWidth": "30px"},
-      {"targets": 4, "visible": false}
+      {"targets": 4, "visible": false},
+      {"targets": 8, "visible": false}
     ],
+    "order": [[ 4, 'asc' ]],
     "drawCallback": function ( settings ) {
       var api = this.api();
       var rows = api.rows( {page:'current'} ).nodes();
@@ -451,7 +487,7 @@ var table3 = $('#example3').DataTable();
     { "data": "nama"},
     { "data": "kelas"},
     { "data": "guru"},
-    { "data": "industri" },
+    { "data": "industri"},
     { "data": "alamat" },
     { "data": null,
     render: function ( data, type, row ) {
@@ -460,7 +496,8 @@ var table3 = $('#example3').DataTable();
       }
       } 
     },
-    { "data": "Action" }],
+    { "data": null },
+    { "data": "tahun_ajaran"}],
     "responsive": true, "lengthChange": true, "searching": true, "autoWidth": false,  
     "buttons": [{
             extend: "colvis", className: "btn-info"
@@ -488,48 +525,55 @@ var table3 = $('#example3').DataTable();
       hitung2++;
     }
   });
-  $('#filter3 th').on( 'keyup', 'input.nis', function () {
+  var filter3 = $('#filter3 th');
+  filter3.on( 'keyup', 'input.nis', function () {
     table3
     .columns(0)
     .search($(this).val(), true, false)
     .draw();
   });
-   $('#filter3 th').on( 'keyup', 'input.nama', function () {
+   filter3.on( 'keyup', 'input.nama', function () {
     table3
     .columns(1)
     .search($(this).val(), true, false)
     .draw();
   });
-   $('#filter3 th').on( 'change', 'select', function () {
+   filter3.on( 'change', 'select', function () {
     table3
     .columns(2)
     .search($(this).val(), true, false)
     .draw();
   });
-   $('#filter3 th').on( 'keyup', 'input.guru', function () {
+  filter3.on( 'keyup', 'input.guru', function () {
     table3
     .columns(3)
     .search($(this).val(), true, false)
     .draw();
   });
-   $('#filter3 th').on( 'keyup', 'input.instansi', function () {
+  filter3.on( 'keyup', 'input.instansi', function () {
     table3
     .columns(4)
     .search($(this).val(), true, false)
     .draw();
   });
-   $('#filter3 th').on( 'keyup', 'input.alamat', function () {
+   filter3.on( 'keyup', 'input.alamat', function () {
     table3
     .columns(5)
     .search($(this).val(), true, false)
     .draw();
   });
-   $('#filter3 th').on( 'keyup', 'input.waktu', function () {
+   filter3.on( 'keyup', 'input.waktu', function () {
     table3
     .columns(6)
     .search($(this).val(), true, false)
     .draw();
   });
+   $('#tahunajar3').on('change', function(){
+    table3
+    .columns(8)
+    .search($(this).val(), true, false)
+    .draw();
+   });
 });
 </script>
 @endsection

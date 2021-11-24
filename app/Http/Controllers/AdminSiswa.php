@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{DB,Validator,File,Hash};
+use Illuminate\Support\Facades\{DB,Validator,File};
 use App\Models\{Siswa,User};
 use App\Repositories\UserRepository;
-
 
 class AdminSiswa extends Controller
 {
@@ -15,11 +14,14 @@ class AdminSiswa extends Controller
         $this->repository = $repository;
     }
 	public function index(){
+		return view('admin.siswa', ['user' => $this->repository->getData()]);
+	}
+	public function loadSiswa(){
 		$siswa = DB::table('siswa')
 		->join('kelas','siswa.kd_kelas', '=', 'kelas.kd_kelas')
 		->select('siswa.nis', 'siswa.nama', 'siswa.tgl_lahir', 'kelas.nama as kelas', 'siswa.telp','siswa.alamat', 'siswa.foto')
 		->get();
-		return view('admin.siswa', ['siswa' => $siswa, 'user' => $this->repository->getData()]);
+		return response()->json($siswa);
 	}
 	public function tambahSiswa(){
 		$user = $this->repository->getData();
@@ -73,9 +75,8 @@ class AdminSiswa extends Controller
 				'kd_kelas' => $request->kd_kelas,
 				'foto' => $nama_file,
 			]);
-			return back()->with('success', 'Input data siswa berhasil!');
-			return back();
-		} return back()->withErrors('NIS yang sama sudah ada!');
+			return response()->json(array('msg'=> 'Berhasil input data siswa!'), 200);
+		} return response()->json(array('msg'=> 'NIS yang sama sudah ada!'), 200);
 	}
 	public function proses_edit (Request $request) {
 		$ceknis = Siswa::find($request->nis);
@@ -95,9 +96,8 @@ class AdminSiswa extends Controller
 				$this->validate($request, [
 					'foto' => 'file|image|mimes:jpeg,png,jpg|max:700',
 				]);
-
 				if($siswa->foto != 'default.jpg'){
-				//mau ada foto
+				//hapus foto sebelumnya
 					$image_path = public_path().'/data_file/'.$siswa->foto;
 					File::delete($image_path);
 				} 
@@ -124,29 +124,20 @@ class AdminSiswa extends Controller
 			$siswa->kd_kelas = $request->kd_kelas;
 			$siswa->foto = $nama_file;
 			$siswa->save();
-			return back()->with('success','Mengubah data siswa berhasil!')
-			->with('siswa', $siswa);
-			return back()->withInput();
-		} return back()->withErrors('NIS yang sama sudah ada!');
-	}
-	public function hapusFoto($nis) {
-		$siswa = DB::table('siswa')
-		->join('users', 'siswa.nis', '=', 'users.username')
-		->where('nis',$nis)->first();
-		if ($siswa != null){
-			$siswa->foto = 'default.jpg';
-			return view('admin.editSiswa',['siswa' => $siswa, 'user' => $this->repository->getData()]);
-		} return back();
+			$pindah = null;
+			if($request->nis != $nis || $request->file('foto') != null) $pindah = $request->nis;
+			return response()->json(array('msg'=> 'Berhasil mengubah data siswa!', 'pindah'=> $pindah), 200);
+		} return response()->json(array('msg'=> 'NIS yang sama sudah ada!'), 200);
 	}
 	public function hapusSiswa($nis) {
 		$siswa = Siswa::find($nis);
 		if ($siswa != null) {
+			$user = User::find($nis);
 			$image_path = public_path().'/data_file/'.$siswa->foto;
 			File::delete($image_path);
-			$user = User::find($nis);
 			$user->delete();
-			return back()->with('success', '1 Data berhasil dihapus.');   
-		} return redirect()->route('kelola_siswa');
+			return response()->json(array('msg'=> 'Berhasil menghapus data siswa!'), 200);
+		} return response()->json(array('msg'=> 'Data tidak ditemukan.'), 200);
 	}
 	public function truncate_siswa(Request $request) {
 		$input = $request->hapus;
@@ -156,9 +147,9 @@ class AdminSiswa extends Controller
 				$user = User::find($i);
 				$user->delete();
 				$count++;
-			}
-			return back()->with('success', $count.' Data berhasil dihapus.'); 
-		} return back()->withErrors('Tidak ada yang ditandai.');
+			} 
+			return response()->json(array('msg'=> $count.' Data berhasil dihapus!'), 200);
+		} return response()->json(array('msg'=> 'Tidak ada yang ditandai'), 200);
 	}
 	public function resetPassword ($nis) {
 		$user = User::find($nis);
@@ -168,7 +159,7 @@ class AdminSiswa extends Controller
 			$psw = bcrypt(date('dmY',$ambil));
 			$user->password = $psw;
 			$user->save();
-			return back()->with('success', 'Password berhasil direset.'); 
-		} return back();
+			return response()->json(array('msg'=> 'Berhasil reset password'), 200);
+		} return response()->json(array('msg'=> 'Akun tidak ditemukan.'), 200);
 	}
 }

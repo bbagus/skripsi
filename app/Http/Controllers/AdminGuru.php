@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{DB,Validator,File};
 use App\Models\{Guru,User};
-
 use App\Repositories\UserRepository;
 
 class AdminGuru extends Controller
@@ -15,9 +14,11 @@ class AdminGuru extends Controller
         $this->repository = $repository;
     }
 	public function index(){
-		$user = $this->repository->getData();
+		return view('admin.guru', ['user' => $this->repository->getData()]);
+	}
+	public function loadGuru(){
 		$guru = DB::table('guru_pembimbing')->get();
-		return view('admin.guru', ['guru' => $guru, 'user' => $user]);
+		return response()->json($guru);
 	}
 	public function tambahGuru(){
 		return view('admin.tambahGuru')->with('user', $this->repository->getData());
@@ -65,12 +66,10 @@ class AdminGuru extends Controller
 				'wilayah' => $request->wilayah,
 				'foto' => $nama_file,
 			]);
-			return back()->with('success', 'Input data guru pembimbing berhasil!');
-			return back();
-		}
-		return back()->withErrors('Nama yang sama sudah ada!');
+			return response()->json(array('msg'=> 'Berhasil input data guru!'), 200);
+		} return response()->json(array('msg'=> 'Nama yang sama sudah ada!'), 200);
 	}
-	public function proses_edit (Request $request) {
+	public function proses_edit (Request $request){
 		$kd = $request->kd_pembimbing;
 		$cekkd = Guru::find($kd);
 		$ceknama = Guru::firstWhere('nama', $request->nama);
@@ -111,21 +110,10 @@ class AdminGuru extends Controller
 			$guru->wilayah = $request->wilayah;
 			$guru->foto = $nama_file;
 			$guru->save();
-			return back()->with('success', 'Mengubah data guru pembimbing berhasil!')
-			->with('guru', $guru);
-			return back()->withInput();
-		}
-		return back()->withErrors('Nama yang sama sudah ada!');
-	}
-	public function hapusFoto($kd) {
-		$guru = DB::table('guru_pembimbing')
-		->join('users', 'guru_pembimbing.username', '=', 'users.username')
-		->where('kd_pembimbing',$kd)->first();
-		if ($guru != null) {
-			$guru->foto = 'default.jpg';
-			return view('admin.editGuru', ['guru' => $guru, 'user' => $this->repository->getData()]);
-		} 
-		return back(); 
+			$pindah = null;
+			if($request->file('foto') != null) $pindah = $request->kd_pembimbing;
+			return response()->json(array('msg'=> 'Berhasil mengubah data guru!', 'pindah'=> $pindah), 200);
+		} return response()->json(array('msg'=> 'Nama yang sama sudah ada!'), 200);
 	}
 	public function hapusGuru($kd) {
 		$guru = Guru::firstWhere('username', $kd);
@@ -134,10 +122,9 @@ class AdminGuru extends Controller
 			File::delete($image_path);
 			$user = User::find($kd);
 			$user->delete();
-			//hurung hapus file
-			return back()->with('success', '1 Data berhasil dihapus.');   
+			return response()->json(array('msg'=> 'Berhasil menghapus data guru!'), 200); 
 		}
-		return redirect()->route('kelola_guru');
+		return response()->json(array('msg'=> 'Data tidak ditemukan.'), 200);
 	}
 	public function truncate_guru(Request $request) {
 		$input = $request->hapus;
@@ -148,9 +135,8 @@ class AdminGuru extends Controller
 				$user->delete();
 				$count++;
 			}
-			return back()->with('success', $count.' Data berhasil dihapus.'); 
-		}
-		return back()->withErrors('Tidak ada yang ditandai.');
+			return response()->json(array('msg'=> $count.' Data berhasil dihapus!'), 200);
+		} return response()->json(array('msg'=> 'Tidak ada yang ditandai'), 200);
 	}
 	public function resetPassword ($kd) {
 		$user = User::find($kd);
@@ -159,8 +145,7 @@ class AdminGuru extends Controller
 			$psw = bcrypt("gurukeren");
 			$user->password = $psw;
 			$user->save();
-			return back()->with('success', 'Password berhasil direset.'); 
-		}
-		return back();
+			return response()->json(array('msg'=> 'Berhasil reset password'), 200);
+		} return response()->json(array('msg'=> 'Akun tidak ditemukan.'), 200);
 	}
 }

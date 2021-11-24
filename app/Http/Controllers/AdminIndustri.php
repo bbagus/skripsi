@@ -14,8 +14,11 @@ class AdminIndustri extends Controller
         $this->repository = $repository;
     }
 	public function index() {
+		return view('admin.industri', ['user' => $this->repository->getData()]);
+	}
+	public function loadIndustri(){
 		$industri = DB::table('industri')->get();
-		return view('admin.industri', ['industri' => $industri, 'user' => $this->repository->getData()]);
+		return response()->json($industri);
 	}
 	public function tambahIndustri(){
 		return view('admin.tambahIndustri')->with('user', $this->repository->getData());
@@ -46,9 +49,8 @@ class AdminIndustri extends Controller
 				$nama_file = 'Industri'.'-'.$request->nama.'.'.$extension;
 				$tujuan_upload = 'data_file';
 				$file->move($tujuan_upload,$nama_file);
-			} else {
-				$nama_file = 'default.jpg';
-			}
+			} 
+			else $nama_file = 'default.jpg';
 			Industri::create([
 				'nama' => $request->nama,
 				'jurusan' => $request->jurusan,
@@ -62,9 +64,8 @@ class AdminIndustri extends Controller
 				'kuota' => $request->kuota,
 				'foto' => $nama_file,
 			]);
-			return back()->with('success', 'Input data industri berhasil!');
-			return back();
-		} return back()->withErrors('Nama yang sama sudah ada!');
+			return response()->json(array('msg'=> 'Berhasil input data industri!'), 200);
+		} return response()->json(array('msg'=> 'Nama yang sama sudah ada!'), 200);
 	}
 	public function proses_edit (Request $request) {
 		$kd = $request->kd_industri;
@@ -85,7 +86,6 @@ class AdminIndustri extends Controller
 				$this->validate($request, [
 					'foto' => 'file|image|mimes:jpeg,png,jpg|max:700',
 				]);
-
 				if($industri->foto != 'default.jpg'){
 				//mau ganti foto, 
 					$image_path = public_path().'/data_file/'.$industri->foto;
@@ -114,26 +114,19 @@ class AdminIndustri extends Controller
 			$industri->kuota = $request->kuota;
 			$industri->foto = $nama_file;
 			$industri->save();
-			return back()->with('success', 'Mengubah data industri berhasil!')
-			->with('industri', $industri);
-			return back()->withInput();
-		} return back()->withErrors('Nama yang sama sudah ada!');
-	}
-	public function hapusFoto($kd) {
-		$industri = Industri::find($kd);
-		if ($industri != null) {
-			$industri->foto = 'default.jpg';
-			return view('admin.editIndustri', ['industri' => $industri, 'user' => $this->repository->getData()]);
-		}  return back();
+			$pindah = null;
+			if($request->file('foto') != null) $pindah = $request->kd_industri;
+			return response()->json(array('msg'=> 'Berhasil mengubah data industri!', 'pindah'=> $pindah), 200);
+		} return response()->json(array('msg'=> 'Nama yang sama sudah ada!'), 200);
 	}
 	public function hapusIndustri($kd) {
 		$industri = Industri::find($kd);
 		if ($industri != null) {
 			$image_path = public_path().'/data_file/'.$industri->foto;
 			File::delete($image_path);
-			DB::table('industri')->where('kd_industri',$kd)->delete();
-			return back()->with('success', '1 Data berhasil dihapus.');   
-		} return redirect()->action([AdminIndustri::class, 'index']);
+			$industri->delete();
+			return response()->json(array('msg'=> 'Berhasil menghapus data industri!'), 200);   
+		} return response()->json(array('msg'=> 'Data tidak ditemukan.'), 200);
 	}
 	public function truncate_industri(Request $request) {
 		$input = $request->hapus;
@@ -143,7 +136,7 @@ class AdminIndustri extends Controller
 				$industri = Industri::find($i);
 				$industri->delete();
 				$count++;
-			} return back()->with('success', $count.' Data berhasil dihapus.'); 
-		} return back()->withErrors('Tidak ada yang ditandai.');
+			} return response()->json(array('msg'=> $count.' Data berhasil dihapus!'), 200);
+		} return response()->json(array('msg'=> 'Tidak ada yang ditandai'), 200);
 	}
 }

@@ -3,7 +3,6 @@
 SI-PKL : Admin - Detail pengajuan 
 @endsection
 @section('head')
-
 @endsection
 @section('sidebar')
   @include('layout.sidebaradmin')
@@ -14,29 +13,19 @@ SI-PKL : Admin - Detail pengajuan
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12">
-       @if(count($errors) > 0)
-       <div class="alert alert-danger alert-dismissible shadow">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <i class="icon fas fa-exclamation-triangle"></i>
-        @foreach ($errors->all() as $error)
-        {{ $error }} <br/>
-        @endforeach
-      </div>
-      @endif
-      @if (\Session::has('success'))
-      <div class="alert alert-success alert-dismissible shadow">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <i class="icon fas fa-exclamation-triangle"></i>
-        {!! \Session::get('success') !!}
-      </div>
-      @endif
+       <!-- alert error-->
+        <div id="sukses" class="alert alert-dismissible shadow" style="display:none;">
+          <button type="button" class="close" onclick="fadeOut()">×</button>
+          <div id="pesan">
+          </div>
+        </div>
     </div>
     <div class="col-md-3">
       <!-- Profile Image -->
       <div class="card card-primary card-outline">
         <div class="card-header">
           <h3 class="card-title">
-            <a href="/admin/kelola-pengajuan"><i class="fas fa-arrow-left"></i>&nbsp; Kembali</a>
+            <a href="javascript:void(0)" onclick="goBack()"><i class="fas fa-arrow-left"></i>&nbsp; Kembali</a>
           </h3>
         </div>
         <div class="card-body box-profile">
@@ -81,18 +70,18 @@ SI-PKL : Admin - Detail pengajuan
             </tbody>
           </table>
           <ul class="list-group list-group-unbordered mb-3">
-            <li class="list-group-item text-center mr-4">
+            <li id="ganti" class="list-group-item text-center mr-4">
               @if($pengajuan->status == 'Menunggu')
-              <form method="POST">
+              <form id="pengajuan" action="{{route('terima')}}" method="POST">
                 {{ csrf_field() }}
                 <input type="hidden" value="{{$pengajuan->kd_pengajuan}}" name="kd">
-                <button type="submit" formaction="{{route('terima')}}" class="btn btn-small btn-success mr-4"><i class="fas fa-check"></i> Terima</button>
-                <button type="submit"  formaction="{{route('tolak')}}" class="btn btn-small btn-danger ml-4"><i class="fas fa-times"></i> Tolak</button>
+                <button type="submit" class="btn btn-small btn-success mr-4" name="submit" value="1"><i class="fas fa-check"></i> Terima</button>
+                <button type="submit" class="btn btn-small btn-danger ml-4" name="submit" value="2"><i class="fas fa-times"></i> Tolak</button>
               </form>
               @elseif($pengajuan->status == 'Diterima')
-              <button class="btn btn-small btn-success mr-4"><i class="fas fa-check"></i> Diterima</button>
+              <button class="btn btn-small btn-success mr-4"><i class="fas fa-check"></i> Status Diterima</button>
               @else
-              <button class="btn btn-small btn-danger mr-4"><i class="fas fa-times"></i> Ditolak</button>
+              <button class="btn btn-small btn-danger mr-4"><i class="fas fa-times"></i> Status Ditolak</button>
               @endif
             </li>
           </ul>
@@ -112,7 +101,7 @@ SI-PKL : Admin - Detail pengajuan
         </div><!-- /.card-header -->
         <div class="card-body">
           <div class="tab-content mb-3">
-            <div class=" <?php echo count($errors) > 0 ? '': 'active' ?> tab-pane" id="activity">
+            <div class="active tab-pane" id="activity">
               <div class="table-responsive mailbox-messages">
                 <table class="table table-hover table-striped">
                  <tbody>
@@ -156,7 +145,7 @@ SI-PKL : Admin - Detail pengajuan
             </div>
           </div>
           <!-- /.tab-pane -->
-          <div class="<?php echo count($errors) > 0 ? 'active': '' ?> tab-pane" id="settings">
+          <div class="tab-pane" id="settings">
            <div class="table-responsive mailbox-messages">
             <table class="table table-hover table-striped">
              <tbody>
@@ -256,4 +245,36 @@ SI-PKL : Admin - Detail pengajuan
 
 @endsection
 @section('javascript')
+<!-- jquery form -->
+<script src="{{url('/')}}/AdminLTE-master/plugins/jquery-form/jquery.form.min.js"></script>
+<script defer>
+ $(document).ready(function () {
+    $('#pengajuan').ajaxForm({
+      success: function(data){
+         $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
+         if(data.msg == 'Pengajuan berhasil diterima!'){
+            $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
+            $('#pengajuan').remove();
+            $('#ganti').append('<button class="btn btn-small btn-success mr-4"><i class="fas fa-check"></i> Status Diterima</button>');
+          } else {
+            $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(2000).fadeOut('slow');
+            if(data.msg == 'Pengajuan berhasil ditolak!'){
+               $('#pengajuan').remove();
+              $('#ganti').append('<button class="btn btn-small btn-danger mr-4"><i class="fas fa-times"></i> Status Ditolak</button>');
+            }
+          } 
+          $(window).scrollTop(0);
+      }
+    });
+ });
+function fadeOut(){
+  $('#sukses').hide();
+}
+function goBack() {
+  window.history.back();
+  if(history.length < 2){
+    window.close();
+  }
+};
+</script>
 @endsection

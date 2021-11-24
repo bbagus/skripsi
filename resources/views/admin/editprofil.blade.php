@@ -11,41 +11,31 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
-           @if(count($errors) > 0)
-           <div class="alert alert-danger alert-dismissible shadow">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <i class="icon fas fa-exclamation-triangle"></i>
-            @foreach ($errors->all() as $error)
-            {{ $error }} <br/>
-            @endforeach
+           <!-- alert error-->
+          <div id="sukses" class="alert alert-dismissible shadow" style="display:none;">
+          <button type="button" class="close" onclick="fadeOut()">×</button>
+          <div id="pesan">
           </div>
-          @endif
-          @if (\Session::has('success'))
-                  <div class="alert alert-success alert-dismissible shadow">
-                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <i class="icon fas fa-exclamation-triangle"></i>
-                 {!! \Session::get('success') !!}
-                 </div>
-            @endif
+        </div>
         </div>
         <div class="col-md-3">
           <!-- Profile Image -->
           <div class="card card-primary card-outline">
              <div class="card-header">
               <h3 class="card-title">
-                <a href="/admin/profil/"><i class="fas fa-arrow-left"></i>&nbsp; Kembali</a>
+                <a href="{{url('/')}}/admin/profil"><i class="fas fa-arrow-left"></i>&nbsp; Kembali</a>
               </h3>
             </div>
-            <div class="card-body box-profile">
+            <div id="fotoprofil" class="card-body box-profile">
              @if ($user->foto != 'default.jpg')
               <div class="text-center">
                 <img class="img-fluid"
                 src="{{url('/')}}/data_file/{{$user->foto}}"
                 alt="User profile picture" style="min-height:150px;">
               </div>
-              <ul class="list-group list-group-unbordered mb-3" style="text-align: center;">
+              <ul id="hapus" class="list-group list-group-unbordered mb-3" style="text-align: center;">
                 <li class="list-group-item"> 
-                  <a href="/admin/profil/hapus-foto" class="btn btn-dark"><i class="fa fa-trash-alt"></i> Hapus Foto</a>
+                  <a href="javascript:void(0)" onclick="hapusFoto('/admin/profil/hapus-foto')" class="btn btn-dark"><i class="fa fa-trash-alt"></i> Hapus Foto</a>
                 </li>
               </ul>
               @else
@@ -140,4 +130,112 @@
 <!-- /.content -->
 @endsection
 @section('javascript')
+<!-- jquery form -->
+<script src="{{url('/')}}/AdminLTE-master/plugins/jquery-form/jquery.form.min.js"></script>
+<!-- jquery-validation -->
+<script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/jquery.validate.min.js"></script>
+<script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/additional-methods.min.js"></script>
+<script src="{{url('/')}}/AdminLTE-master/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+<script defer>
+$(function (){
+  bsCustomFileInput.init();
+  $.validator.setDefaults({});
+   $('#formedit').validate({
+    rules: {
+        username: {
+          required: true,
+        },
+        nama: {
+          required: true,
+        },
+        nip: {
+          number: true,
+        },
+        telp: {
+          maxlength: 20,
+        },
+        email: {
+          email: true,
+        }
+      },
+    messages: {
+        username: {
+          required: "Username harus diisi",
+        },
+        nama: {
+           required: "Nama harus diisi",
+        },
+        nip: {
+          number: "Mohon isi NIP dengan angka",
+        },
+        telp: {
+          maxlength: "nomor telp maksimal 20 karakter",
+        },
+        email: {
+          email: "Mohon isi email dengan benar",
+        }
+      },
+      errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+        },
+        submitHandler: function(form) {
+          $(form).ajaxSubmit({
+            success: function(data){
+              var pesan = $('#sukses'); 
+              $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
+              if(data.msg == 'Berhasil mengubah detail profil!'){
+                if(data.pindah != null){
+                  pesan.removeClass('alert-danger').addClass('alert-success').fadeIn().delay(1000).fadeOut(400,function()
+                  {
+                    window.location.reload();
+                  });
+                } else {
+                pesan.removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
+                }
+              } else {
+                pesan.removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+              }
+            },
+            error: function (xhr) {
+               if (xhr.status == 422) {
+                var pesan = $('#pesan');
+                pesan.html('<i class="icon fas fa-exclamation-triangle"></i>');
+                  $.each(xhr.responseJSON.errors, function (i, error) {
+                pesan.append(error);
+                });
+                  $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+               }
+           }
+          });
+        }
+  }); 
+});
+function myFunction() {
+    document.getElementById("formedit").reset();
+ }
+function fadeOut(){
+    $('#sukses').hide();
+ }
+function hapusFoto(url){
+  $.ajax({
+    method: "GET",
+    url: url
+  }).done(function(data){
+    $('#fotoprofil div').remove();
+     $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
+      $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut(400,
+        function(){
+          window.location.reload();
+        });
+  });
+}
+</script>
 @endsection

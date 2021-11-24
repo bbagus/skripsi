@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\Repositories\UserRepository;
-
-use Illuminate\Http\Request;
+use Illuminate\Http\{Request, Response};
 use Illuminate\Support\Facades\DB;
 use App\Models\{Pengajuan,Penempatan,Industri,Siswa};
-use Response;
 
 class AdminPengajuan extends Controller
 {
@@ -15,18 +13,19 @@ class AdminPengajuan extends Controller
         $this->repository = $repository;
     }
     public function index(){
-         $user = $this->repository->getData();
-          $pengajuan = DB::table('pengajuan')
+         $user = $this->repository->getData(); 
+		return view('admin.pengajuan')->with('user', $user);
+	}
+    public function loadMenunggu(){
+        $pengajuan = DB::table('pengajuan')
           ->join('industri', 'pengajuan.kd_industri', '=', 'industri.kd_industri')
           ->join('siswa', 'pengajuan.nis', '=', 'siswa.nis')
           ->join('kelas', 'siswa.kd_kelas', '=', 'kelas.kd_kelas')
           ->select('kd_pengajuan','industri.nama as industri', 'siswa.nama as nama', 'kelas.nama as kelas' , 'industri.alamat as alamat' , 'pengajuan.nis as nis', 'tgl_pengajuan', 'tahun_ajaran','status')
           ->where('status', 'menunggu')
           ->get();
-		return view('admin.pengajuan')
-        ->with('user', $user)
-        ->with('pengajuan', $pengajuan);
-	}
+          return response()->json($pengajuan);
+    }
     public function loadDiterima(){
         $pengajuan2 = DB::table('pengajuan')
           ->leftjoin('industri', 'pengajuan.kd_industri', '=', 'industri.kd_industri')
@@ -41,6 +40,7 @@ class AdminPengajuan extends Controller
     public function terima(Request $request){
         $pengajuan = Pengajuan::find($request->kd);
         if(isset($pengajuan)){
+        if($request->submit == 1){
             $industri = Industri::find($pengajuan->kd_industri);
             $count = Pengajuan::where('kd_industri', $pengajuan->kd_industri)->where('status', 'Diterima')->count();
             if($count < $industri->kuota){
@@ -53,26 +53,22 @@ class AdminPengajuan extends Controller
                     'tgl_mulai' => $tanggal->mulai,
                     'tgl_selesai' => $tanggal->selesai,
                 ]);
-                 return back()->with('success', 'Pengajuan berhasil diterima.');
-            } return back()->withErrors('Pengajuan gagal diterima karena kuota Instansi sudah penuh!');
-        } return back()->withErrors('Pengajuan gagal diterima!');
-    }
-    public function tolak(Request $request){
-        $pengajuan = Pengajuan::find($request->kd);
-        if(isset($pengajuan)){
+                 return response()->json(array('msg'=> 'Pengajuan berhasil diterima!'), 200);
+            } return response()->json(array('msg'=> 'Pengajuan gagal diterima karena kuota instansi sudah penuh!'), 200);
+        } else {
              $pengajuan->status = 'Ditolak';
              $pengajuan->tgl_diproses = date('Y-m-d H:i:s');
              $pengajuan->save();
-        return back()->with('success', 'Pengajuan berhasil ditolak.');
-        }
-       return back()->withErrors('Pengajuan gagal ditolak!');
+             return response()->json(array('msg'=> 'Pengajuan berhasil ditolak!'), 200);
+             }
+        } return response()->json(array('msg'=> 'Pengajuan tidak ditemukan!'), 200);
     }
     public function hapusPengajuan($kd_pengajuan){
         $pengajuan = Pengajuan::find($kd_pengajuan);
         if($pengajuan != null){
             $pengajuan->delete();
-            return back()->with('success', 'Pengajuan berhasil dihapus.');   
-        } return back()->withErrors('Pengajuan tidak ditemukan!');
+            return response()->json(array('msg'=> 'Berhasil menghapus pengajuan!'), 200); 
+        } return response()->json(array('msg'=> 'Pengajuan tidak ditemukan!'), 200);
     }
     public function truncate_pengajuan(Request $request) {
         $input = $request->hapus;
@@ -83,8 +79,8 @@ class AdminPengajuan extends Controller
                 //yg diterima harus delete penempatan dulu
                 $pengajuan->delete();
                 $count++;
-            } return back()->with('success', $count.' Data berhasil dihapus.'); 
-        } return back()->withErrors('Tidak ada yang ditandai.');
+            } return response()->json(array('msg'=> $count.' Pengajuan berhasil dihapus!'), 200);
+        } return response()->json(array('msg'=> 'Tidak ada yang ditandai'), 200);
     }
     public function detailPengajuan($kd_pengajuan){
         $user = $this->repository->getData();
@@ -147,7 +143,7 @@ class AdminPengajuan extends Controller
             ]);
             $count++;
             }
-        }  return back()->with('success', $count.' Pengajuan berhasil ditambahkan!');
+        }  return response()->json(array('msg'=> $count.' Pengajuan berhasil ditambahkan!'), 200);
     }
 }
 

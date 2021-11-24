@@ -17,22 +17,12 @@
   <div class="container-fluid">
     <div class="row">
      <div class="col-12">
-       @if(count($errors) > 0)
-       <div class="alert alert-danger alert-dismissible shadow">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <i class="icon fas fa-exclamation-triangle"></i>
-        @foreach ($errors->all() as $error)
-        {{ $error }} <br/>
-        @endforeach
-      </div>
-      @endif
-      @if (\Session::has('success'))
-      <div class="alert alert-success alert-dismissible shadow">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <i class="icon fas fa-exclamation-triangle"></i>
-        {!! \Session::get('success') !!}
-      </div>
-      @endif
+      <!-- alert error-->
+        <div id="sukses" class="alert alert-dismissible shadow" style="display:none;">
+          <button type="button" class="close" onclick="fadeOut()">×</button>
+          <div id="pesan">
+          </div>
+        </div>
       <div class="card card-primary card-outline">
         <div class="card-header">
           <div class="card-tools">
@@ -48,6 +38,8 @@
         <div class="card-body">
           <div class="tab-content">
             <div class="tab-pane active" id="menunggu">
+              <form id="pengajuan" action="{{route('terima')}}" method="POST">
+              {{ csrf_field() }}
               <table id="example1" class="table table-bordered table-striped table-hover">
                 <thead>
                   <tr>
@@ -84,33 +76,11 @@
                     <th></th>
                   </tr>
                 </thead>
-                <tbody>
-                  @foreach ($pengajuan as $s)
-                  <tr>
-                    <td style="vertical-align: middle;">{{$s->nis}}</td>
-                    <td style="vertical-align: middle;">{{$s->nama}}</td>
-                    <td style="vertical-align: middle;">{{$s->kelas}}</td>
-                    <td style="vertical-align: middle;">{{ $s->industri}}</td>
-                    <td style="vertical-align: middle;">{{ $s->alamat}}</td>
-                    <td style="vertical-align: middle;">{{ $s->tgl_pengajuan}}</td>
-                    <td style="vertical-align: middle;">{{ $s->tahun_ajaran}}</td>
-                    <td style="vertical-align: middle;"width="220px">
-                      <form method="POST">
-                        {{ csrf_field() }}
-                        <a class="btn btn-sm btn-primary" href="{{url('/')}}/admin/kelola-pengajuan/{{$s->kd_pengajuan}}"><i class="fas fa-eye"></i> Detail</a> 
-                        <input type="hidden" value="{{$s->kd_pengajuan}}" name="kd">
-                        <button type="submit" formaction="{{route('terima')}}" class="btn btn-sm btn-success"><i class="fas fa-check"></i> Terima</button>
-                        <button type="submit"  formaction="{{route('tolak')}}" class="btn btn-sm btn-danger"><i class="fas fa-times"></i> Tolak</button>
-                      </form>
-                    </td>
-                  </tr>
-                  @endforeach
-                </tbody>
               </table>
+            </form>
             </div>
-
             <div class="tab-pane" id="sudah">
-              <form onSubmit="return confirm('Apakah Anda yakin ingin menghapus seluruh data yang ditandai? data penempatan juga akan ikut terhapus')" action="{{route('hapus_pengajuan')}}" method="POST">
+              <form id="truncate" action="{{route('hapus_pengajuan')}}" method="POST">
                 {{ csrf_field() }}
                 <table id="example2" class="table table-bordered table-striped table-hover">
                   <thead>
@@ -162,7 +132,7 @@
                     <button type="button" class="btn btn-outline-dark btn-small checkbox-toggle"><i class="far fa-square"></i> Tandai Semua
                     </button>
                     <div class="btn-group">
-                      <input type="submit" class="btn btn-danger" value="Hapus">
+                      <a onclick="truncateConfirm()" href="javascript:void(0)" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Hapus</a>
                     </div>
                     <!-- /.btn-group -->
                   </div>
@@ -188,7 +158,7 @@
          <div class="card-body" style="padding: 1.75rem 1.75rem;">
           <p class="text-justify">
             Otomatis membuat pengajuan yang sudah disetujui untuk siswa yang belum mengisi form pengajuan (bagian industri kosong).  &nbsp;
-            <a class="btn btn-outline-primary" href="{{url('/')}}/admin/kelola-pengajuan/otomatis"><i class="fas fa-pen"></i> Buat Pengajuan</a>
+            <a class="btn btn-outline-primary" href="javascript:void(0)" onclick="buatPengajuan('{{url('/')}}/admin/kelola-pengajuan/otomatis')"><i class="fas fa-pen"></i> Buat Pengajuan</a>
           </p>
         </div>
       </div>
@@ -214,8 +184,27 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="truncateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top:150px;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel">Apakah Anda yakin?</h4>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">Seluruh data yang ditandai akan dihapus.</div>
+      <div class="modal-footer justify-content-between">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+        <input type="submit" value="Hapus" class="btn btn-danger" form="truncate"/>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection
 @section('javascript')
+<!-- jquery form -->
+<script src="{{url('/')}}/AdminLTE-master/plugins/jquery-form/jquery.form.min.js"></script>
 <!-- DataTables  & Plugins -->
 <script src="{{url('/')}}/AdminLTE-master/plugins/datatables/jquery.dataTables.min.js"defer>
 </script>
@@ -228,15 +217,6 @@
 <script src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/dataTables.buttons.min.js" defer>
 </script>
 <script src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/buttons.bootstrap4.min.js" defer>
-</script>
-<script src="{{url('/')}}/AdminLTE-master/plugins/jszip/jszip.min.js" defer></script>
-<script src="{{url('/')}}/AdminLTE-master/plugins/pdfmake/pdfmake.min.js" defer>
-</script>
-<script src="{{url('/')}}/AdminLTE-master/plugins/pdfmake/vfs_fonts.js" defer>
-</script>
-<script src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/buttons.html5.min.js" defer>
-</script>
-<script src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/buttons.print.min.js" defer>
 </script>
 <script src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/buttons.colVis.min.js" defer>
 </script>
@@ -257,76 +237,88 @@
       $(this).data('clicks', !clicks)
     })
   })
+  var table;
+  var table2;
   $(document).ready(function () {
-    var table = $("#example1").DataTable({
+    table = $("#example1").DataTable({
       "processing": true,
       "orderCellsTop": true,
+      "ajax": {
+        "url": "{{url('/')}}/admin/get-pengajuan",
+        "dataSrc": ""
+      },
+      "columnDefs": [
+       {"targets": 3, "sWidth": "150px"},
+       {"targets": 4, "sWidth": "150px"},
+       {"targets": 7, "sWidth": "200px"},
+       ],
       "columns": [
-      { "data": "NIS"},
-      { "data": "Nama"},
-      { "data": "Kelas"},
-      { "data": "Instansi" },
-      { "data": "Alamat" },
-      { "data": "Tanggal Pengajuan" },
-      { "data": "Tahun Ajaran" },
-      { "data": "Action" }
+      { "data": "nis"},
+      { "data": "nama"},
+      { "data": "kelas"},
+      { "data": "industri" },
+      { "data": "alamat" },
+      { "data": "tgl_pengajuan" },
+      { "data": "tahun_ajaran" },
+      { "data": null,
+      render: function ( data, type, row ) {
+          return '<a class="btn btn-sm btn-primary" href="{{url('/')}}/admin/kelola-pengajuan/'+data.kd_pengajuan+'"><i class="fas fa-eye"></i> Detail</a> <input type="hidden" value="'+data.kd_pengajuan+'" name="kd"> <button type="submit" class="btn btn-sm btn-success" name="submit" value="1"><i class="fas fa-check"></i> Terima</button> <button type="submit" class="btn btn-sm btn-danger" name="submit" value="2" ><i class="fas fa-times"></i> Tolak</button></form>'
+        }
+       }
       ],
       "order": [[ 5, "desc" ]],
       "responsive": true, "lengthChange": true, "searching": true, "autoWidth": false,
       "buttons": [{
         extend: "colvis", className: "btn-info"
-      },{
-        extend: "print", className: "btn-info"
-      }, {
-        extend: "pdf", className: "btn-info"
-      }, {
-        extend: "excel", className: "btn-info"
-      }]
+      }],
+      initComplete: function () {
+        table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+      }
     });
-    table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#filter th').on( 'keyup', 'input.nis', function () {
+    var filter = $('#filter th');
+    filter.on( 'keyup', 'input.nis', function () {
       table
       .columns(0)
       .search($(this).val(), true, false)
       .draw();
     });
-    $('#filter th').on( 'keyup', 'input.nama', function () {
+    filter.on( 'keyup', 'input.nama', function () {
       table
       .columns(1)
       .search($(this).val(), true, false)
       .draw();
     });
-    $('#filter th').on( 'change', 'select', function () {
+    filter.on( 'change', 'select', function () {
       table
       .columns(2)
       .search($(this).val(), true, false)
       .draw();
     });
-    $('#filter th').on( 'keyup', 'input.instansi', function () {
+    filter.on( 'keyup', 'input.instansi', function () {
       table
       .columns(3)
       .search($(this).val(), true, false)
       .draw();
     });
-    $('#filter th').on( 'keyup', 'input.alamat', function () {
+    filter.on( 'keyup', 'input.alamat', function () {
       table
       .columns(4)
       .search($(this).val(), true, false)
       .draw();
     });
-    $('#filter th').on( 'keyup', 'input.tanggal', function () {
+    filter.on( 'keyup', 'input.tanggal', function () {
       table
       .columns(5)
       .search($(this).val(), true, false)
       .draw();
     });
-    $('#filter th').on( 'keyup', 'input.tahun', function () {
+    filter.on( 'keyup', 'input.tahun', function () {
       table
       .columns(6)
       .search($(this).val(), true, false)
       .draw();
     });
-    var table2 = $('#example2').DataTable();      
+    table2 = $('#example2').DataTable();      
     tableConfig = {
       "processing": true,
       "orderCellsTop": true,
@@ -367,12 +359,6 @@
 "responsive": true, "lengthChange": true, "searching": true, "autoWidth": false,
 "buttons": [{
   extend: "colvis", className: "btn-info"
-},{
-  extend: "print", className: "btn-info"
-}, {
-  extend: "pdf", className: "btn-info"
-}, {
-  extend: "excel", className: "btn-info"
 }],
 initComplete: function () {
   table2.buttons().container()
@@ -388,63 +374,119 @@ $('#p2').click(function() {
     };
     table2.destroy();
     table2 = $('#example2').DataTable(tableConfig);
-    hitung++;
+    hitung = 1;
+  } else{
+     table2.ajax.reload(null, false);
   }
 })
-      //Buat Filter
-      $('#filter2 th').on( 'keyup', 'input.nis', function () {
-        table2
-        .columns(1)
-        .search($(this).val(), true, false)
-        .draw();
+var filter2 = $('#filter2 th');
+  filter2.on( 'keyup', 'input.nis', function () {
+    table2
+    .columns(1)
+    .search($(this).val(), true, false)
+    .draw();
+  });
+  filter2.on( 'keyup', 'input.nama', function () {
+    table2
+    .columns(2)
+    .search($(this).val(), true, false)
+    .draw();
+  });
+  filter2.on( 'change', 'select.kelas', function () {
+    table2
+    .columns(3)
+    .search($(this).val(), true, false)
+    .draw();
+  });
+  filter2.on( 'keyup', 'input.instansi', function () {
+    table2
+    .columns(4)
+    .search($(this).val(), true, false)
+    .draw();
+  });
+  filter2.on( 'keyup', 'input.alamat', function () {
+    table2
+    .columns(5)
+    .search($(this).val(), true, false)
+    .draw();
+  });
+  filter2.on( 'keyup', 'input.tanggal', function () {
+    table2
+    .columns(6)
+    .search($(this).val(), true, false)
+    .draw();
+  });
+  filter2.on( 'keyup', 'input.tahun', function () {
+    table2
+    .columns(7)
+    .search($(this).val(), true, false)
+    .draw();
+  });
+  filter2.on( 'change', 'select.status', function () {
+    table2
+    .columns(8)
+    .search($(this).val(), true, false)
+    .draw();
+  });
+  /*ajaxform*/
+    $('#truncate').submit(function(){
+      $(this).ajaxSubmit({
+        success: function(data){
+          $('#truncateModal').modal('hide');
+          $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
+          if(data.msg != 'Tidak ada yang ditandai'){
+           $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
+          } else {
+             $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(2000).fadeOut('slow');
+          }
+         $(window).scrollTop(0);
+         table2.ajax.reload(null, false);
+        }
       });
-      $('#filter2 th').on( 'keyup', 'input.nama', function () {
-        table2
-        .columns(2)
-        .search($(this).val(), true, false)
-        .draw();
-      });
-      $('#filter2 th').on( 'change', 'select.kelas', function () {
-        table2
-        .columns(3)
-        .search($(this).val(), true, false)
-        .draw();
-      });
-      $('#filter2 th').on( 'keyup', 'input.instansi', function () {
-        table2
-        .columns(4)
-        .search($(this).val(), true, false)
-        .draw();
-      });
-      $('#filter2 th').on( 'keyup', 'input.alamat', function () {
-        table2
-        .columns(5)
-        .search($(this).val(), true, false)
-        .draw();
-      });
-      $('#filter2 th').on( 'keyup', 'input.tanggal', function () {
-        table2
-        .columns(6)
-        .search($(this).val(), true, false)
-        .draw();
-      });
-      $('#filter2 th').on( 'keyup', 'input.tahun', function () {
-        table2
-        .columns(7)
-        .search($(this).val(), true, false)
-        .draw();
-      });
-      $('#filter2 th').on( 'change', 'select.status', function () {
-        table2
-        .columns(8)
-        .search($(this).val(), true, false)
-        .draw();
-      });
-
+      return false;
     });
-function deleteConfirm(url){
-  $('#btn-delete').attr('href', url);
+    $('#pengajuan').ajaxForm({
+      success: function(data){
+         $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
+         if(data.msg == 'Pengajuan berhasil diterima!'){
+            $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
+          } else {
+            $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(2000).fadeOut('slow');
+          }
+          $(window).scrollTop(0);
+         table.ajax.reload(null, false);
+      }
+    }); 
+});
+ function deleteConfirm(url){
+  $('#btn-delete').attr('onclick', 'hapusPengajuan("'+url+'")');
   $('#deleteModal').modal();
+}
+function truncateConfirm(){
+    $('#truncateModal').modal();
+}
+function buatPengajuan(url){
+  $.ajax({
+      method: "GET",
+      url: url
+    }).done(function(data){
+       $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
+       $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
+       $(window).scrollTop(0);
+    });
+}
+
+function hapusPengajuan(url){
+    $.ajax({
+      method: "GET",
+      url: url
+    }).done(function(data){
+       $('#deleteModal').modal('hide');
+       $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
+       $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
+       $(window).scrollTop(0);
+       table2.ajax.reload(null, false);
+    });
 }
 </script>
 @endsection

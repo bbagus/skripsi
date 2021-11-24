@@ -22,22 +22,12 @@ thead input {
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12">
-        @if(count($errors) > 0)
-        <div class="alert alert-danger alert-dismissible shadow">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <i class="icon fas fa-exclamation-triangle"></i>
-          @foreach ($errors->all() as $error)
-          {{ $error }} <br/>
-          @endforeach
+       <!-- alert error-->
+       <div id="sukses" class="alert alert-dismissible shadow" style="display:none;">
+        <button type="button" class="close" onclick="fadeOut()">×</button>
+        <div id="pesan">
         </div>
-        @endif
-        @if (\Session::has('success'))
-        <div class="alert alert-success alert-dismissible shadow">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <i class="icon fas fa-exclamation-triangle"></i>
-          {!! \Session::get('success') !!}
-        </div>
-        @endif
+      </div>
         <!-- /.card -->
         <div class="card card-primary card-outline">
           <!-- form start -->
@@ -48,7 +38,7 @@ thead input {
               <a href="/admin/kelola-siswa/tambah" class="btn btn-small btn-success"><i class="fas fa-plus"></i> Tambah siswa</a>
             </h3>
           </div>
-          <form onSubmit="return confirm('Apakah Anda yakin ingin menghapus seluruh data yang ditandai?')" action="{{route('hapus_siswa')}}" method="POST">
+          <form action="{{route('hapus_siswa')}}" method="POST" id="truncate">
             {{ csrf_field() }}
             <!-- /.card-header -->
             <div class="card-body">
@@ -92,31 +82,7 @@ thead input {
                     <th></th>
                   </tr>
                 </thead>
-                <tbody>
-                  @foreach ($siswa as $s)
-                  <tr>
-                    <td style="vertical-align: middle;" width="30px">
-                      <div class="icheck-primary">
-                        <input type="checkbox" name="hapus[]" value="{{$s->nis}}" id="{{$s->nis}}">
-                        <label for="{{$s->nis}}"></label>
-                      </div>
-                    </td>
-                    <td style="vertical-align: middle;">{{ $s->nis }}</td>
-                    <td style="vertical-align: middle;">{{ $s->nama}}</td>
-                    <td style="vertical-align: middle;">{{ $s->tgl_lahir}}</td>
-                    <td style="vertical-align: middle;">{{ $s->kelas}}</td>
-                    <td style="vertical-align: middle;">{{ $s->telp}}</td>
-                    <td style="vertical-align: middle;max-width: 400px;">{{ $s->alamat}}</td>
-                    <td style="vertical-align: middle;padding:0.2rem;" width="100px">
-                      <img class="img-fluid" src="{{url('/')}}/data_file/{{$s->foto}}" alt="foto siswa">
-                    </td>
-                    <td style="vertical-align: middle;" width="160px" >
-                      <a href="{{url('/')}}/admin/kelola-siswa/{{$s->nis}}" class="btn btn-small btn-success"><i class="fas fa-edit"></i>Edit</a>
-                      <a onclick="deleteConfirm('{{url('/')}}/admin/kelola-siswa/hapus/{{$s->nis}}')" href="#!" class="btn btn-small btn-danger"><i class="fas fa-trash"></i> Hapus</a>
-                    </td>
-                  </tr>
-                  @endforeach
-                </tbody>
+               
               </table>
             </div>
             <!-- /.card-body -->
@@ -126,7 +92,7 @@ thead input {
                 <button type="button" class="btn btn-outline-dark btn-small checkbox-toggle"><i class="far fa-square"></i> Tandai Semua
                 </button>
                 <div class="btn-group">
-                  <input type="submit" class="btn btn-danger" value="Hapus">
+                  <a onclick="truncateConfirm()" href="javascript:void(0)" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Hapus</a>
                 </div>
                 <!-- /.btn-group -->
               </div>
@@ -155,14 +121,33 @@ thead input {
       </div>
       <div class="modal-body">Data yang dihapus tidak bisa dikembalikan.</div>
       <div class="modal-footer justify-content-between">
-        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-        <a id="btn-delete" class="btn btn-danger" href="#">Delete</a>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+        <a id="btn-delete" class="btn btn-danger" href="javascript:void(0)" onclick="">Hapus</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="truncateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top:150px;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel">Apakah Anda yakin?</h4>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">Seluruh data yang ditandai akan dihapus.</div>
+      <div class="modal-footer justify-content-between">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+        <input type="submit" value="Hapus" class="btn btn-danger" form="truncate"/>
       </div>
     </div>
   </div>
 </div>
 @endsection
 @section('javascript')
+<!-- jquery form -->
+<script src="{{url('/')}}/AdminLTE-master/plugins/jquery-form/jquery.form.min.js"></script>
 <!-- DataTables  & Plugins -->
 <script src="{{url('/')}}/AdminLTE-master/plugins/datatables/jquery.dataTables.min.js">
 </script>
@@ -204,20 +189,47 @@ thead input {
       $(this).data('clicks', !clicks)
     })
   })
+  var table;
   $(document).ready(function () {
-    var table = $("#example1").DataTable({
+    table = $("#example1").DataTable({
       "processing": true,
       "orderCellsTop": true,
+      "ajax": {
+      "url": "{{url('/')}}/admin/get-siswa",
+      "dataSrc": ""
+      },
+       "columnDefs": [
+       {"targets": 6, "sWidth": "250px"},
+       {"targets": 7, "sWidth": "80px"},
+       {"targets": 8, "sWidth": "120px"},
+       ],
+      "fixedColumns": true,
       "columns": [
-      { "data": "checkbox"},
+      { "data": null,
+       render: function ( data, type, row ) {
+        return  '<div class="icheck-primary"><input type="checkbox" name="hapus[]" value="'+data.nis+'" id="'+data.nis+'"><label for="'+data.nis+'"></label></div>';
+       }
+      },
       { "data": "nis" },
       { "data": "nama" },
       { "data": "tgl_lahir" },
       { "data": "kelas" },
       { "data": "telp" },
       { "data": "alamat" },
-      { "data": "foto" },
-      { "data": "aksi"}
+      { "data": null,
+      render: function ( data, type, row ) {
+      if(data.foto != 'default.jpg'){
+        return '<img class="img-fluid" src="{{url('/')}}/data_file/'+data.foto+'" alt="foto siswa">'
+      }  else {
+        return '<img class="img-fluid" src="{{url('/')}}/data_file/siswa-default.jpg" alt="foto siswa">'
+      } 
+      }
+      },
+      { "data": null,
+      render: function ( data, type, row ) {
+       return '<a href="{{url('/')}}/admin/kelola-siswa/'+data.nis+'" class="btn btn-sm btn-success"><i class="fas fa-edit"></i>Edit</a> <a onclick="deleteConfirm(\'{{url('/')}}/admin/kelola-siswa/hapus/'+data.nis+'\')" href="javascript:void(0)" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Hapus</a>';
+        }
+      }
       ],
       "responsive": true, "lengthChange": true, "autoWidth": false,
       "buttons": [{
@@ -228,52 +240,84 @@ thead input {
         extend: "pdf", className: "btn-info"
       }, {
         extend: "excel", className: "btn-info"
-      }]
+      }],
+      initComplete: function () {
+        table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+      }
     });
-    new $.fn.dataTable.FixedHeader( table );
-    table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#filter th').on( 'keyup', 'input.nis', function () {
+    var filter = $('#filter th');
+    filter.on( 'keyup', 'input.nis', function () {
       table
       .columns(1)
       .search($(this).val(), true, false)
       .draw();
     });
-    $('#filter th').on( 'keyup', 'input.nama', function () {
+    filter.on( 'keyup', 'input.nama', function () {
       table
       .columns(2)
       .search($(this).val(), true, false)
       .draw();
     });
-    $('#filter th').on( 'keyup', 'input.tanggal', function () {
+    filter.on( 'keyup', 'input.tanggal', function () {
       table
       .columns(3)
       .search($(this).val(), true, false)
       .draw();
     });
-    $('#filter th').on( 'change', 'select', function () {
+    filter.on( 'change', 'select', function () {
       table
       .columns(4)
       .search($(this).val(), true, false)
       .draw();
     });
-    $('#filter th').on( 'keyup', 'input.telp', function () {
+    filter.on( 'keyup', 'input.telp', function () {
       table
       .columns(5)
       .search($(this).val(), true, false)
       .draw();
     });
-    $('#filter th').on( 'keyup', 'input.alamat', function () {
+    filter.on( 'keyup', 'input.alamat', function () {
       table
       .columns(6)
       .search($(this).val(), true, false)
       .draw();
     });
+    /*ajaxform*/
+    $('#truncate').submit(function(){
+      $(this).ajaxSubmit({
+        success: function(data){
+          $('#truncateModal').modal('hide');
+          $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
+          if(data.msg != 'Tidak ada yang ditandai'){
+           $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
+          } else {
+             $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(2000).fadeOut('slow');
+          }
+         $(window).scrollTop(0);
+         table.ajax.reload(null, false);
+        }
+      });
+      return false;
+    });
   });
-</script>
-<script defer>
   function deleteConfirm(url){
-    $('#btn-delete').attr('href', url);
+    $('#btn-delete').attr('onclick', 'hapusSiswa("'+url+'")');
     $('#deleteModal').modal();
+  }
+   function truncateConfirm(){
+    $('#truncateModal').modal();
+  }
+  function hapusSiswa(url){
+    $.ajax({
+      method: "GET",
+      url: url
+    }).done(function(data){
+       $('#deleteModal').modal('hide');
+       $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
+       $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
+       $(window).scrollTop(0);
+       table.ajax.reload(null, false);
+    });
   }
 </script>
 @endsection
