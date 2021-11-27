@@ -251,20 +251,35 @@ SI-PKL : Admin - Detail pengajuan
  $(document).ready(function () {
     $('#pengajuan').ajaxForm({
       success: function(data){
-         $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
-         if(data.msg == 'Pengajuan berhasil diterima!'){
-            $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
-            $('#pengajuan').remove();
-            $('#ganti').append('<button class="btn btn-small btn-success mr-4"><i class="fas fa-check"></i> Status Diterima</button>');
-          } else {
-            $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(2000).fadeOut('slow');
-            if(data.msg == 'Pengajuan berhasil ditolak!'){
-               $('#pengajuan').remove();
-              $('#ganti').append('<button class="btn btn-small btn-danger mr-4"><i class="fas fa-times"></i> Status Ditolak</button>');
-            }
-          } 
-          $(window).scrollTop(0);
-      }
+       $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
+       if(data.msg == 'Pengajuan berhasil diterima!'){
+        $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
+        $('#pengajuan').remove();
+        $('#ganti').append('<button class="btn btn-small btn-success mr-4"><i class="fas fa-check"></i> Status Diterima</button>');
+      } else {
+        $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(2000).fadeOut('slow');
+        if(data.msg == 'Pengajuan berhasil ditolak!'){
+         $('#pengajuan').remove();
+         $('#ganti').append('<button class="btn btn-small btn-danger mr-4"><i class="fas fa-times"></i> Status Ditolak</button>');
+       }
+     } 
+     $(window).scrollTop(0);
+   },
+   error: function (xhr) {
+     if (xhr.status == 422) {
+      var pesan = $('#pesan');
+      pesan.html('<i class="icon fas fa-exclamation-triangle"></i>');
+      $.each(xhr.responseJSON.errors, function (i, error) {
+        pesan.append(error);
+      });
+      $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+    } else {
+      var pesan = $('#pesan');
+      pesan.html('<i class="icon fas fa-exclamation-triangle"></i>'+ 'Terdapat kendala di server');
+      $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+    }
+    $(window).scrollTop(0);
+  }
     });
  });
 function fadeOut(){

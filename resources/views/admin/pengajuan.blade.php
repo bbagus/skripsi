@@ -7,6 +7,11 @@
 <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
 <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+<style>
+thead input {
+        width: 100%;
+    }
+</style>
 @endsection
 @section('sidebar')
 @include('layout.sidebaradmin')
@@ -178,8 +183,8 @@
       </div>
       <div class="modal-body">Data yang dihapus tidak bisa dikembalikan.</div>
       <div class="modal-footer justify-content-between">
-        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-        <a id="btn-delete" class="btn btn-danger" href="#">Delete</a>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+        <a id="btn-delete" class="btn btn-danger" href="#">Hapus</a>
       </div>
     </div>
   </div>
@@ -447,16 +452,31 @@ var filter2 = $('#filter2 th');
     });
     $('#pengajuan').ajaxForm({
       success: function(data){
-         $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
-         if(data.msg == 'Pengajuan berhasil diterima!'){
-            $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
-          } else {
-            $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(2000).fadeOut('slow');
-          }
-          $(window).scrollTop(0);
-         table.ajax.reload(null, false);
+       $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
+       if(data.msg == 'Pengajuan berhasil diterima!'){
+        $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
+      } else {
+        $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(2000).fadeOut('slow');
       }
-    }); 
+      $(window).scrollTop(0);
+      table.ajax.reload(null, false);
+    },
+      error: function (xhr) {
+       if (xhr.status == 422) {
+        var pesan = $('#pesan');
+        pesan.html('<i class="icon fas fa-exclamation-triangle"></i>');
+        $.each(xhr.responseJSON.errors, function (i, error) {
+          pesan.append(error);
+        });
+        $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+      } else {
+        var pesan = $('#pesan');
+        pesan.html('<i class="icon fas fa-exclamation-triangle"></i>'+ 'Terdapat kendala di server');
+        $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+      }
+      $(window).scrollTop(0);
+    }
+  }); 
 });
  function deleteConfirm(url){
   $('#btn-delete').attr('onclick', 'hapusPengajuan("'+url+'")');
@@ -475,7 +495,6 @@ function buatPengajuan(url){
        $(window).scrollTop(0);
     });
 }
-
 function hapusPengajuan(url){
     $.ajax({
       method: "GET",
@@ -487,6 +506,9 @@ function hapusPengajuan(url){
        $(window).scrollTop(0);
        table2.ajax.reload(null, false);
     });
+}
+function fadeOut(){
+  $('#sukses').hide();
 }
 </script>
 @endsection

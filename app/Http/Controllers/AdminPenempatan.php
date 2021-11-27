@@ -72,25 +72,25 @@ class AdminPenempatan extends Controller
                 'tgl_mulai' => 'date',
                 'tgl_selesai' => 'date',
             ]);
-        $penempatan = Penempatan::find($request->kd_penempatan);
-        $penempatan->kd_pembimbing = $request->guru;
-        $penempatan->tgl_mulai = $request->tgl_mulai;
-        $penempatan->tgl_selesai = $request->tgl_selesai;
-        $penempatan->save();
         $pengajuan = Pengajuan::find($request->kd_pengajuan);
-        if($request->kd_industri != null && $request->kd_industri != $pengajuan->kd_industri){
+        if($request->industri != null && $pengajuan->kd_industri != $request->industri){
             $industri = Industri::find($request->industri);
             $kuota = $industri->kuota;
             $count = Pengajuan::where('kd_industri', $request->industri)->where('status', 'Diterima')->count();
             if($count < $kuota){
             $pengajuan->kd_industri = $request->industri;
             $pengajuan->save();
-
             } else {
             return response()->json(array('msg'=> 'Kuota instansi sudah penuh!'), 200);
             }
         }
+        $penempatan = Penempatan::find($request->kd_penempatan);
+        $penempatan->kd_pembimbing = $request->guru;
+        $penempatan->tgl_mulai = $request->tgl_mulai;
+        $penempatan->tgl_selesai = $request->tgl_selesai;
+        $penempatan->save();
         return response()->json(array('msg'=> 'Berhasil mengubah penempatan!'), 200); 
+        
     }
     public function detailGuru($nama){
         $str = explode('-',$nama);
@@ -151,7 +151,7 @@ class AdminPenempatan extends Controller
         $penempatan->Save();
         return response()->json(array('msg'=> 'Berhasil menghapus siswa bimbingan!'), 200);
     }
-    public function truncate_guru(Request $request){
+    public function truncateGuru(Request $request){
         $input = $request->hapus;
         $count = 0;
         if ($input != null){
@@ -165,10 +165,59 @@ class AdminPenempatan extends Controller
         } return response()->json(array('msg'=> 'Tidak ada yang ditandai'), 200);
     }
     public function detailIndustri($nama){
-
+        $str = explode('-',$nama);
+        $industri = DB::table('industri')->where('nama','like', $str[0].'%')->where('nama','like', '%'.$str[1].'%')->first();
+        $str2 = explode(' ',$industri->nama);
+        if(count($str) != count($str2)){
+            $industri = DB::table('industri')->where('nama','like', $str[0].'%')->where('nama','like', '%'.$str[1].'%')->where('nama','like', '%'.$str[2].'%')->first();
+        }
+        return view('admin.editpenempatan-industri')->with('industri', $industri)
+            ->with('user', $this->repository->getData());
+    }
+    public function LoadDetailIndustri($kd_industri){
+        $penempatan = DB::table('penempatan')
+        ->join('pengajuan', 'penempatan.kd_pengajuan', '=', 'pengajuan.kd_pengajuan')
+         ->leftjoin('guru_pembimbing', 'penempatan.kd_pembimbing', '=', 'guru_pembimbing.kd_pembimbing')
+         ->join('siswa', 'pengajuan.nis', '=', 'siswa.nis')
+         ->join('kelas', 'siswa.kd_kelas', '=', 'kelas.kd_kelas')
+         ->select('kd_penempatan','siswa.nis','siswa.nama','kelas.nama as kelas','guru_pembimbing.nama as guru','tgl_mulai', 'tgl_selesai','pengajuan.kd_pengajuan')
+         ->where('pengajuan.kd_industri',$kd_industri)->get();
+         return response()->json($penempatan);
     }
     public function editIndustri(Request $request){
-
+        if(isset($request->siswa) || isset($request->siswa2)){
+            $siswa = explode(',',$request->siswa);
+            $siswa2 = explode(',',$request->siswa2);
+            $siswa = array_merge($siswa,$siswa2);
+            $kd = DB::table('pengajuan')
+            ->whereIn('nis',$siswa)
+            ->select('kd_pengajuan')->get();
+            foreach($kd as $p){
+                $pengajuan = Pengajuan::find($p->kd_pengajuan);
+                $pengajuan->kd_industri = $request->industri;
+                $pengajuan->save();
+            }
+            return response()->json(array('msg'=> 'Berhasil menambahkan siswa!'), 200);
+        }   return response()->json(array('msg'=> 'Tidak ada siswa yang ditambahkan.'), 200);
+    }
+    public function truncateIndustri(Request $request){
+        $input = $request->hapus;
+        $count = 0;
+        if ($input != null){
+        foreach ($input as $i) {
+                $pengajuan = Pengajuan::find($i);
+                $pengajuan->kd_industri = null;
+                $pengajuan->Save();
+                $count++;
+            }
+            return response()->json(array('msg'=> $count.' Siswa berhasil dihapus dari daftar!'), 200);
+        } return response()->json(array('msg'=> 'Tidak ada yang ditandai'), 200);
+    }
+    public function hapusSiswaIndustri($kd_pengajuan){
+        $pengajuan = Pengajuan::find($kd_pengajuan);
+        $pengajuan->kd_industri = null;
+        $pengajuan->save();
+        return response()->json(array('msg'=> 'Berhasil menghapus siswa dari daftar!'), 200);
     }
     public function searchIndustri(Request $request){
         $industri = [];
@@ -207,6 +256,32 @@ class AdminPenempatan extends Controller
               ->join('penempatan','pengajuan.kd_pengajuan', '=', 'penempatan.kd_pengajuan')
               ->select('siswa.nis','siswa.nama','kelas.nama as kelas')
               ->where('penempatan.kd_pembimbing', null)
+              ->where('siswa.nama', 'LIKE', '%'. $request->q1 .'%')
+              ->where('kelas.kd_kelas', '=', $request->q2)->get();
+      } return response()->json($siswa);
+    }
+    public function searchSiswa3(Request $request){
+        $siswa = [];
+        if($request->has('q')){
+              $siswa = DB::table('siswa')
+              ->join('pengajuan','siswa.nis','=', 'pengajuan.nis')
+              ->join('kelas','siswa.kd_kelas', '=', 'kelas.kd_kelas')
+              ->join('penempatan','pengajuan.kd_pengajuan', '=', 'penempatan.kd_pengajuan')
+              ->select('siswa.nis','siswa.nama','kelas.nama as kelas')
+              ->where('pengajuan.kd_industri', null)
+              ->where('siswa.nama', 'LIKE', '%'. $request->q .'%')
+              ->orWhere('siswa.nis', 'LIKE', '%'. $request->q .'%')->get();
+      } return response()->json($siswa);
+    }
+    public function searchSiswa4(Request $request){
+        $siswa = [];
+        if($request->has('q2')){
+              $siswa = DB::table('siswa')
+              ->join('pengajuan','siswa.nis','=', 'pengajuan.nis')
+              ->join('kelas','siswa.kd_kelas', '=', 'kelas.kd_kelas')
+              ->join('penempatan','pengajuan.kd_pengajuan', '=', 'penempatan.kd_pengajuan')
+              ->select('siswa.nis','siswa.nama','kelas.nama as kelas')
+              ->where('pengajuan.kd_industri', null)
               ->where('siswa.nama', 'LIKE', '%'. $request->q1 .'%')
               ->where('kelas.kd_kelas', '=', $request->q2)->get();
       } return response()->json($siswa);

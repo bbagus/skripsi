@@ -155,7 +155,7 @@
         </div>
       </div>
       <div class="modal-footer justify-content-between">
-        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
         <input class="btn btn-success" type="submit" value="Simpan" >
       </div>
     </form>
@@ -305,14 +305,29 @@ $(document).ready(function () {
        $('#siswa').val(null).trigger('change');
        $('#tambahModal').modal('hide');
        $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
-        if(data.msg == 'Berhasil menambahkan siswa!'){
-           $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
-          } else {
-             $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(2000).fadeOut('slow');
-          }
-         $(window).scrollTop(0);
-         table.ajax.reload(null, false);
+       if(data.msg == 'Berhasil menambahkan siswa!'){
+         $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
+       } else {
+         $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(2000).fadeOut('slow');
+       }
+       $(window).scrollTop(0);
+       table.ajax.reload(null, false);
+     },
+     error: function (xhr) {
+       if (xhr.status == 422) {
+        var pesan = $('#pesan');
+        pesan.html('<i class="icon fas fa-exclamation-triangle"></i>');
+        $.each(xhr.responseJSON.errors, function (i, error) {
+          pesan.append(error);
+        });
+        $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+      } else {
+        var pesan = $('#pesan');
+        pesan.html('<i class="icon fas fa-exclamation-triangle"></i>'+ 'Terdapat kendala di server');
+        $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
       }
+      $(window).scrollTop(0);
+    } 
     });
     return false;
   });
@@ -325,11 +340,26 @@ $(document).ready(function () {
           $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
           if(data.msg != 'Tidak ada yang ditandai'){
            $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
-          } else {
-             $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(2000).fadeOut('slow');
-          }
+         } else {
+           $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(2000).fadeOut('slow');
+         }
          $(window).scrollTop(0);
+       },
+       error: function (xhr) {
+         if (xhr.status == 422) {
+          var pesan = $('#pesan');
+          pesan.html('<i class="icon fas fa-exclamation-triangle"></i>');
+          $.each(xhr.responseJSON.errors, function (i, error) {
+            pesan.append(error);
+          });
+          $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+        } else {
+          var pesan = $('#pesan');
+          pesan.html('<i class="icon fas fa-exclamation-triangle"></i>'+ 'Terdapat kendala di server');
+          $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
         }
+        $(window).scrollTop(0);
+      }
       });
       return false;
     });

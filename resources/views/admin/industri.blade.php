@@ -285,12 +285,27 @@
           $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
           if(data.msg != 'Tidak ada yang ditandai'){
            $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
-          } else {
-             $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(2000).fadeOut('slow');
-          }
+         } else {
+           $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(2000).fadeOut('slow');
+         }
          $(window).scrollTop(0);
          table.ajax.reload(null, false);
+       },
+       error: function (xhr) {
+         if (xhr.status == 422) {
+          var pesan = $('#pesan');
+          pesan.html('<i class="icon fas fa-exclamation-triangle"></i>');
+          $.each(xhr.responseJSON.errors, function (i, error) {
+            pesan.append(error);
+          });
+          $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+        } else {
+          var pesan = $('#pesan');
+          pesan.html('<i class="icon fas fa-exclamation-triangle"></i>'+ 'Terdapat kendala di server');
+          $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
         }
+        $(window).scrollTop(0);
+      }
       });
       return false;
     });
@@ -314,5 +329,8 @@ function hapusIndustri(url){
        table.ajax.reload(null, false);
     });
   }
+function fadeOut(){
+  $('#sukses').hide();
+}
 </script>
 @endsection

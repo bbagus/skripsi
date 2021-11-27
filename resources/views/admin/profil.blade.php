@@ -222,7 +222,12 @@
           pesan.append(error);
         });
         $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+      } else {
+        var pesan = $('#pesan');
+        pesan.html('<i class="icon fas fa-exclamation-triangle"></i>'+ 'Terdapat kendala di server');
+        $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
       }
+
     }
   });
   }
@@ -230,6 +235,9 @@
 });
  function ubahPassword(){
   $('#passwordModal').modal();
+}
+function fadeOut(){
+  $('#sukses').hide();
 }
 </script>
 @endsection

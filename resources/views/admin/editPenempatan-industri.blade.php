@@ -37,19 +37,19 @@
             </div><!-- /.card-header -->
             <!-- form start -->
             <form class="form-horizontal" id="truncate" action="{{url
-            ('/')}}/admin/kelola-penempatan/guru-hapus" method="POST"
+            ('/')}}/admin/kelola-penempatan/industri-hapus" method="POST"
             enctype="multipart/form-data">
             {{ csrf_field() }}
             <div
             class="card-body" style="padding: 1.75rem 3rem;"> <div  class="form-group row"> 
-              <div class="col-sm-1"><p>Nama</p></div>
+              <div class="col-sm-1"><p>Nama Instansi</p></div>
               <div class="col-sm-1">:</div> 
               <div class="col-sm-10"> <p
-                class="">{{$guru->nama}}</p> </div> 
-              <div class="col-sm-1"><p>NIP</p></div> 
+                class="">{{$industri->nama}}</p> </div> 
+              <div class="col-sm-1"><p>Alamat</p></div> 
               <div class="col-sm-1">:</div>
-              <div class="col-sm-10"> <p class="">{{$guru->nip}}</p> </div>
-              <div><a onclick="tambah()"href="javascript:void(0)" class="btn btn-success"><i class="fas fa-plus"></i>&nbsp; Tambah Siswa Bimbingan</a> </div>
+              <div class="col-sm-10"> <p class="">{{$industri->alamat}}</p> </div>
+              <div><a onclick="tambah()"href="javascript:void(0)" class="btn btn-success"><i class="fas fa-plus"></i>&nbsp; Tambah Siswa</a> </div>
             </div>
               <table id="example1" class="table table-striped table-hover">
                 <thead>
@@ -58,7 +58,7 @@
                     <th>NIS</th>
                     <th>Nama Siswa</th>
                     <th>Kelas</th>
-                    <th>Instansi</th>
+                    <th>Guru Pembimbing</th>
                     <th>Waktu PKL</th>
                     <th>Aksi</th>
                   </tr>
@@ -92,9 +92,9 @@
  <div class="modal fade" id="tambahModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top:100px;">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-      <form id="tambahsiswa" class="form-horizontal" action="{{url('/')}}/admin/kelola-penempatan/guru/edit" method="POST">
+      <form id="tambahsiswa" class="form-horizontal" action="{{url('/')}}/admin/kelola-penempatan/industri/edit" method="POST">
       <div class="modal-header">
-        <h4 class="modal-title" id="exampleModalLabel">Tambah siswa bimbingan</h4>
+        <h4 class="modal-title" id="exampleModalLabel">Tambah siswa</h4>
         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span>
         </button>
@@ -112,7 +112,7 @@
               {{ csrf_field() }}
               <input type="hidden" name="siswa" id="test" value="">
               <input type="hidden" name="siswa2" id="test2" value="">
-              <input type="hidden" name="guru" id="guru" value="{{$guru->kd_pembimbing}}">
+              <input type="hidden" name="industri" id="industri" value="{{$industri->kd_industri}}">
               <div class="tab-pane active" id="nis">
                 <div class="form-group row">
                   <label for="livesearch" class="col-sm-3 col-form-label">Cari NIS atau nama</label>
@@ -171,7 +171,7 @@
           <span aria-hidden="true">×</span>
         </button>
       </div>
-      <div class="modal-body">Siswa akan dihapus dari daftar bimbingan.</div>
+      <div class="modal-body">Siswa akan dihapus dari daftar.</div>
       <div class="modal-footer justify-content-between">
         <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
         <a id="btn-delete" class="btn btn-danger" href="javascript:void(0)" onclick="">Hapus</a>
@@ -188,7 +188,7 @@
           <span aria-hidden="true">×</span>
         </button>
       </div>
-      <div class="modal-body">Seluruh data yang ditandai akan dihapus dari daftar bimbingan.</div>
+      <div class="modal-body">Seluruh data yang ditandai akan dihapus dari daftar.</div>
       <div class="modal-footer justify-content-between">
         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
         <input type="submit" value="hapus" class="btn btn-danger" form="truncate"/>
@@ -225,7 +225,7 @@ $(document).ready(function () {
     $('#listnama').select2({
     placeholder: 'pilih siswa',
     ajax: {
-      url: '/admin/kelola-penempatan-carisiswa2',
+      url: '/admin/kelola-penempatan-carisiswa4',
       dataType: 'json',
       delay: 250,
       data: function (params) {
@@ -252,7 +252,7 @@ $(document).ready(function () {
   $('#siswa').select2({
     placeholder: 'tulis nis/nama',
     ajax: {
-      url: '/admin/kelola-penempatan-carisiswa',
+      url: '/admin/kelola-penempatan-carisiswa3',
       dataType: 'json',
       delay: 250,
       processResults: function (data) {
@@ -271,19 +271,19 @@ $(document).ready(function () {
   table = $("#example1").DataTable({
     "processing": true,
        "ajax": {
-        "url": "{{url('/')}}/admin/kelola-penempatan/detail-guru/{{$guru->kd_pembimbing}}",
+        "url": "{{url('/')}}/admin/kelola-penempatan/detail-instansi/{{$industri->kd_industri}}",
         "dataSrc": ""
       },
       "columns": [
       {"data": null,
       render: function( data, type, row){
-        return  '<div class="icheck-primary"><input type="checkbox" name="hapus[]" value="'+data.kd_penempatan+'" id="'+data.kd_penempatan+'"><label for="'+data.kd_penempatan+'"></label></div>';
+        return  '<div class="icheck-primary"><input type="checkbox" name="hapus[]" value="'+data.kd_pengajuan+'" id="'+data.kd_pengajuan+'"><label for="'+data.kd_pengajuan+'"></label></div>';
       }
       },
       {"data": "nis"},
       {"data": "nama"},
       {"data": "kelas"},
-      {"data": "industri"},
+      {"data": "guru"},
       {"data": null,
       render: function( data, type, row){
         return data.tgl_mulai+' s.d '+data.tgl_selesai;
@@ -291,7 +291,7 @@ $(document).ready(function () {
       },
       {"data": null,
       render: function ( data, type, row ) {
-        return  '<a class="btn btn-sm btn-success" href="{{url('/')}}/admin/kelola-penempatan/'+data.kd_penempatan+'"><i class="fas fa-edit"></i></a>&nbsp;&nbsp;<a class="btn btn-sm btn-danger" onclick="deleteConfirm(\'{{url('/')}}/admin/kelola-penempatan/guru/hapus/'+data.kd_penempatan+'\')" href="javascript:void(0)"><i class="fas fa-trash"></i></a> ';
+        return  '<a class="btn btn-sm btn-success" href="{{url('/')}}/admin/kelola-penempatan/'+data.kd_penempatan+'"><i class="fas fa-edit"></i></a>&nbsp;&nbsp;<a class="btn btn-sm btn-danger" onclick="deleteConfirm(\'{{url('/')}}/admin/kelola-penempatan/instansi/hapus/'+data.kd_pengajuan+'\')" href="javascript:void(0)"><i class="fas fa-trash"></i></a> ';
       }
       }
       ],
@@ -305,14 +305,29 @@ $(document).ready(function () {
        $('#siswa').val(null).trigger('change');
        $('#tambahModal').modal('hide');
        $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
-        if(data.msg == 'Berhasil menambahkan siswa!'){
-           $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
-          } else {
-             $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(2000).fadeOut('slow');
-          }
-         $(window).scrollTop(0);
-         table.ajax.reload(null, false);
+       if(data.msg == 'Berhasil menambahkan siswa!'){
+         $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
+       } else {
+         $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(2000).fadeOut('slow');
+       }
+       $(window).scrollTop(0);
+       table.ajax.reload(null, false);
+     },
+     error: function (xhr) {
+       if (xhr.status == 422) {
+        var pesan = $('#pesan');
+        pesan.html('<i class="icon fas fa-exclamation-triangle"></i>');
+        $.each(xhr.responseJSON.errors, function (i, error) {
+          pesan.append(error);
+        });
+        $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+      } else {
+        var pesan = $('#pesan');
+        pesan.html('<i class="icon fas fa-exclamation-triangle"></i>'+ 'Terdapat kendala di server');
+        $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
       }
+      $(window).scrollTop(0);
+    }
     });
     return false;
   });
@@ -325,10 +340,25 @@ $(document).ready(function () {
           $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
           if(data.msg != 'Tidak ada yang ditandai'){
            $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
-          } else {
-             $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(2000).fadeOut('slow');
-          }
+         } else {
+           $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(2000).fadeOut('slow');
+         }
          $(window).scrollTop(0);
+       },
+       error: function (xhr) {
+         if (xhr.status == 422) {
+          var pesan = $('#pesan');
+          pesan.html('<i class="icon fas fa-exclamation-triangle"></i>');
+          $.each(xhr.responseJSON.errors, function (i, error) {
+            pesan.append(error);
+          });
+          $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+          } else {
+            var pesan = $('#pesan');
+            pesan.html('<i class="icon fas fa-exclamation-triangle"></i>'+ 'Terdapat kendala di server');
+            $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
+          }
+          $(window).scrollTop(0);
         }
       });
       return false;

@@ -5,6 +5,11 @@
 <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
 <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+<style>
+thead input {
+        width: 100%;
+    }
+</style>
 @endsection
 @section('sidebar')
 @include('layout.sidebaradmin')
@@ -29,9 +34,9 @@
                 </button>
               </div>
               <ul class="nav nav-pills">
-                <li class="nav-item"><a id="p1" class="nav-link active" href="#siswa" data-toggle="tab">Lihat berdasarkan Siswa</a></li>
-                <li class="nav-item"><a class="nav-link" id="p2" href="#guru" data-toggle="tab">Lihat berdasarkan Guru Pembimbing</a></li>
-                <li class="nav-item"><a class="nav-link" id="p3" href="#industri" data-toggle="tab">Lihat berdasarkan Industri</a></li>
+                <li class="nav-item"><a id="p1" class="nav-link active" href="#siswa" data-toggle="tab">Kelola berdasarkan Siswa</a></li>
+                <li class="nav-item"><a class="nav-link" id="p2" href="#guru" data-toggle="tab">Kelola berdasarkan Guru Pembimbing</a></li>
+                <li class="nav-item"><a class="nav-link" id="p3" href="#industri" data-toggle="tab">Kelola berdasarkan Industri</a></li>
               </ul>
             </div>
             <div class="card-body">
@@ -575,5 +580,8 @@ var table3 = $('#example3').DataTable();
     .draw();
    });
 });
+function fadeOut(){
+  $('#sukses').hide();
+}
 </script>
 @endsection

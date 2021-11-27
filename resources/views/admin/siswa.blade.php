@@ -319,5 +319,8 @@ thead input {
        table.ajax.reload(null, false);
     });
   }
+function fadeOut(){
+  $('#sukses').hide();
+}
 </script>
 @endsection
