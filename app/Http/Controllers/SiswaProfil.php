@@ -29,28 +29,28 @@ class SiswaProfil extends Controller
         ]);
         if (Hash::check($request->passlama, auth()->user()->password)){
             $data = $this->repository->getData();
-            $passbaru = Hash::make($request->password_baru);
+            $passbaru = bcrypt($request->password_baru);
             $user = User::find($data->nis);
             $user->password = $passbaru;
             $user->save();
-            return back()->with('success','Password berhasil diubah!');
-        } return back()->withErrors('Password lama salah!');
-        
+           return response()->json(array('msg'=> 'Berhasil mengubah password!'), 200); 
+        } return response()->json(array('msg'=> 'Password lama salah!'), 200); 
     }
     public function editData(UserRepository $repository){
         return view('siswa.editprofil')
         ->with('user', $this->repository->getData());
     }
     public function edit_akun(Request $request){
-        $data = $this->repository->getData(); 
-        $cekuser = User::find($data->nis);
-        if ( User::firstWhere('email',$request->email) == null || $cekuser->email == $request->email)
-        {
-            $this->validate($request, [
+        $this->validate($request, [
                 'tgl_lahir' => 'required',
                 'telp' => 'string|max:20|nullable',
-                'email' => 'email',
+                'email' => 'email|nullable',
+                'orang_tua' => 'required',
             ]);
+        $data = $this->repository->getData(); 
+        $cekuser = User::find($data->nis);
+        if ( User::firstWhere('email',$request->email) == null || $cekuser->email == $request->email || $request->email == null)
+        {
             $data = $this->repository->getData();
             $nis = $data->nis;
             $user = User::find($data->nis);
@@ -60,11 +60,10 @@ class SiswaProfil extends Controller
             $siswa->tgl_lahir = $request->tgl_lahir;
             $siswa->telp = $request->telp;
             $siswa->alamat = $request->alamat;
+            $siswa->orang_tua = $request->orang_tua;
             $siswa->save();
-            return back()->with('success','Mengubah detail profil berhasil!')
-            ->with('siswa', $siswa);
-            return back()->withInput();
-        } return back()->withErrors('Email yang sama sudah ada!');
+            return response()->json(array('msg'=> 'Berhasil mengubah detail profil!'), 200);
+        } return response()->json(array('msg'=> 'Email yang sama sudah ada!'), 200);
     }
 }
 

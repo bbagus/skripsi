@@ -49,6 +49,9 @@
               <div class="col-sm-1"><p>NIP</p></div> 
               <div class="col-sm-1">:</div>
               <div class="col-sm-10"> <p class="">{{$guru->nip}}</p> </div>
+              <div class="col-sm-1"><p>Wilayah</p></div> 
+              <div class="col-sm-1">:</div>
+              <div class="col-sm-10"> <p class="">{{$guru->wilayah}}</p> </div>
               <div><a onclick="tambah()"href="javascript:void(0)" class="btn btn-success"><i class="fas fa-plus"></i>&nbsp; Tambah Siswa Bimbingan</a> </div>
             </div>
               <table id="example1" class="table table-striped table-hover">

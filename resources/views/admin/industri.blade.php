@@ -40,7 +40,6 @@
                   <tr>
                     <th></th>
                     <th>Nama</th>
-                    <th>Jurusan</th>
                     <th>Bidang Kerja</th>
                     <th>Alamat</th>
                     <th>Wilayah</th>
@@ -53,15 +52,6 @@
                     <th>
                     </th>
                     <th><input class="nama form-control" type="text" placeholder="Nama" /></th>
-                    <th><select class="jurusan form-control">
-                      <option selected="" value="">Jurusan</option>
-                      <option value="Akuntansi Keuangan dan Lembaga">Akuntansi Keuangan dan Lembaga</option>
-                      <option value="Bisnis Daring dan Pemasaran">Bisnis Daring dan Pemasaran</option>
-                      <option value="Otomatisasi dan Tata Kelola Perkantoran">Otomatisasi dan Tata Kelola Perkantoran</option>
-                      <option value="Perhotelan">Perhotelan</option>
-                      <option value="Multimedia">Multimedia</option>
-                      <option value="Tata Busana">Tata Busana</option>
-                    </select></th>
                     <th><input class="bidang form-control" type="text" placeholder="Bidang Kerja" /></th>
                     <th><input class="alamat form-control" type="text" placeholder="Alamat" /></th>
                     <th><input class="wilayah form-control" type="text" placeholder="Wilayah" /></th>
@@ -188,8 +178,8 @@
         "dataSrc": ""
       },
       "columnDefs": [
-       {"targets": 8, "sWidth": "80px"},
-       {"targets": 9, "sWidth": "120px"},
+       {"targets": 7, "sWidth": "80px"},
+       {"targets": 8, "sWidth": "120px"},
        ],
       "fixedColumns": true,
       "columns": [
@@ -199,7 +189,6 @@
         }
       },
       { "data": "nama" },
-      { "data": "jurusan" },
       { "data": "bidang_kerja" },
       { "data": "alamat" },
       { "data": "wilayah" },
@@ -241,39 +230,33 @@
       .search($(this).val(), true, false)
       .draw();
     });
-    filter.on( 'change', 'select', function () {
+    filter.on( 'keyup', 'input.bidang', function () {
       table
       .columns(2)
       .search($(this).val(), true, false)
       .draw();
     });
-    filter.on( 'keyup', 'input.bidang', function () {
+    filter.on( 'keyup', 'input.alamat', function () {
       table
       .columns(3)
       .search($(this).val(), true, false)
       .draw();
     });
-    filter.on( 'keyup', 'input.alamat', function () {
+    filter.on( 'keyup', 'input.wilayah', function () {
       table
       .columns(4)
       .search($(this).val(), true, false)
       .draw();
     });
-    filter.on( 'keyup', 'input.wilayah', function () {
+    filter.on( 'keyup', 'input.kontak', function () {
       table
       .columns(5)
       .search($(this).val(), true, false)
       .draw();
     });
-    filter.on( 'keyup', 'input.kontak', function () {
-      table
-      .columns(6)
-      .search($(this).val(), true, false)
-      .draw();
-    });
     filter.on( 'keyup', 'input.telp', function () {
       table
-      .columns(7)
+      .columns(6)
       .search($(this).val(), true, false)
       .draw();
     });

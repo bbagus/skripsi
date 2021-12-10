@@ -29,16 +29,15 @@ class AdminIndustri extends Controller
 		return redirect()->action([AdminIndustri::class, 'index']);
 	}
 	public function proses_upload(Request $request){
-		$ceknama = Industri::firstWhere('nama',$request->nama);
-		if ($ceknama == null) {
-			$this->validate($request, [
+		$this->validate($request, [
 				'nama' => 'required',
-				'jurusan' => 'required',
 				'bidang_kerja' => 'required',
 				'alamat' => 'required',
 				'wilayah' => 'required',
 				'telp' => 'string|max:20|nullable',
 			]);
+		$ceknama = Industri::firstWhere('nama',$request->nama);
+		if ($ceknama == null) {
 			if ($request->file('foto') != null) {
 				$this->validate($request, [
 					'foto' => 'file|image|mimes:jpeg,png,jpg|max:700',
@@ -53,7 +52,6 @@ class AdminIndustri extends Controller
 			else $nama_file = 'default.jpg';
 			Industri::create([
 				'nama' => $request->nama,
-				'jurusan' => $request->jurusan,
 				'bidang_kerja' => $request->bidang_kerja,
 				'deskripsi' => $request->deskripsi,
 				'alamat' => $request->alamat,
@@ -68,20 +66,19 @@ class AdminIndustri extends Controller
 		} return response()->json(array('msg'=> 'Nama yang sama sudah ada!'), 200);
 	}
 	public function proses_edit (Request $request) {
+		$this->validate($request, [
+				'nama' => 'required',
+				'bidang_kerja' => 'required',
+				'alamat' => 'required',
+				'wilayah' => 'required',
+				'telp' => 'string|max:20|nullable',
+			]);
 		$kd = $request->kd_industri;
 		$cekkd = Industri::find($kd);
 		$ceknama = Industri::firstWhere('nama', $request->nama);
 		if($ceknama == null || $cekkd->nama == $request->nama){
 			$industri = Industri::find($kd);
 			$nama_file = $industri->foto;
-			$this->validate($request, [
-				'nama' => 'required',
-				'jurusan' => 'required',
-				'bidang_kerja' => 'required',
-				'alamat' => 'required',
-				'wilayah' => 'required',
-				'telp' => 'string|max:20|nullable',
-			]);
 			if ($request->file('foto') != null) {
 				$this->validate($request, [
 					'foto' => 'file|image|mimes:jpeg,png,jpg|max:700',
@@ -103,7 +100,6 @@ class AdminIndustri extends Controller
 				File::delete($image_path);
 			}
 			$industri->nama = $request->nama;
-			$industri->jurusan = $request->jurusan;
 			$industri->bidang_kerja = $request->bidang_kerja;
 			$industri->deskripsi = $request->deskripsi;
 			$industri->alamat = $request->alamat;

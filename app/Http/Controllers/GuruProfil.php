@@ -26,12 +26,12 @@ class GuruProfil extends Controller
         ]);
         if (Hash::check($request->passlama, auth()->user()->password)){
             $data = $this->repository->getData();
-            $passbaru = Hash::make($request->password_baru);
+            $passbaru = bcrypt($request->password_baru);
             $user = User::find($data->username);
             $user->password = $passbaru;
             $user->save();
-            return back()->with('success','Password berhasil diubah!');
-        } return back()->withErrors('Password lama salah!');
+            return response()->json(array('msg'=> 'Berhasil mengubah password!'), 200); 
+        } return response()->json(array('msg'=> 'Password lama salah!'), 200); 
     }
     public function editData(UserRepository $repository){
         return view('guru.editprofil')
@@ -39,8 +39,16 @@ class GuruProfil extends Controller
     }
     public function edit_akun(Request $request){
         $data = $this->repository->getData();
+        $this->validate($request, [
+            'username' => 'required|max:15|alpha_dash',
+            'nama' => 'required',
+            'jurusan' => 'required',
+            'nip' => 'numeric|nullable',
+            'telp' => 'string|max:20|nullable',
+            'email' => 'email|nullable',
+        ]);
         $cekuser = User::find($request->username);
-        if ( User::firstWhere('email',$request->email) == null || $cekuser->email == $request->email)
+        if ( User::firstWhere('email',$request->email) == null || $cekuser->email == $request->email || $request->email == null)
         {
         if($cekuser == null || $data->username == $request->username){
             $ceknama = Guru::firstWhere('nama', $request->nama);
@@ -48,14 +56,6 @@ class GuruProfil extends Controller
             {
                 $guru = Guru::find($data->kd_pembimbing);
                 $nama_file = $guru->foto;
-                $this->validate($request, [
-                    'username' => 'required|max:15',
-                    'nama' => 'required',
-                    'jurusan' => 'required',
-                    'nip' => 'numeric|nullable',
-                    'telp' => 'string|max:20|nullable',
-                    'email' => 'email|nullable',
-                ]);
                 $unik = $guru->username;
                 if ($request->file('foto') != null) {
                     $this->validate($request, [
@@ -92,11 +92,12 @@ class GuruProfil extends Controller
             $guru->foto = $nama_file;
             $guru->save();
             Auth::login($user);
-            return back()->with('success', 'Mengubah detail profil berhasil!');
-            return back()->withInput();
-        } return back()->withErrors('Nama yang sama sudah ada!');
-        } return back()->withErrors('Username yang sama sudah ada!');
-    } return back()->withErrors('Email yang sama sudah ada!');
+            $pindah = null;
+            if($request->file('foto') != null) $pindah = 'reload';
+            return response()->json(array('msg'=> 'Berhasil mengubah detail profil!', 'pindah'=> $pindah), 200);
+        } return response()->json(array('msg'=> 'Nama yang sama sudah ada!'), 200);
+    } return response()->json(array('msg'=> 'Username yang sama sudah ada!'), 200);
+    } return response()->json(array('msg'=> 'Email yang sama sudah ada!'), 200);
     }
     public function hapusFoto(){
        $data = $this->repository->getData();
@@ -105,7 +106,7 @@ class GuruProfil extends Controller
        $guru = Guru::find($data->kd_pembimbing);
        $guru->foto = 'default.jpg';
        $guru->save();
-       return back()->with('success', 'Foto berhasil dihapus.');  
+       return response()->json(array('msg'=> 'Berhasil menghapus foto!'), 200);   
     }
 }
 

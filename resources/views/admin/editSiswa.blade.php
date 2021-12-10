@@ -86,6 +86,12 @@ SI-PKL : Ubah Data Siswa - {{$siswa->nama}}
               </div>
             </div>
             <div class="form-group row">
+              <label for="orang_tua" class="col-sm-2 col-form-label">Nama Orang Tua/ Wali<strong class="text-danger">*</strong></label>
+              <div class="col-sm-10">
+                <input type="text" name="orang_tua" class="form-control" id="orang_tua" placeholder="Tulis nama orang tua/wali.." maxlength="50" value="{{$siswa->orang_tua}}"/>
+              </div>
+            </div>
+            <div class="form-group row">
               <label for="foto" class="col-sm-2 col-form-label">Foto Profil</label>
               <div id="foto" class="col-sm-10">
                 @if($siswa->foto != 'default.jpg')
@@ -205,7 +211,10 @@ reload halaman untuk batal." style="float: left;
         },
         kd_kelas: {
           required: true,
-        }
+        },
+         orang_tua: {
+            required: true,
+          }
       },
       messages: {
         nis: {
@@ -222,7 +231,10 @@ reload halaman untuk batal." style="float: left;
         },
         kd_kelas: {
           required: "Kelas harus diisi",
-        }
+        },
+        orang_tua: {
+            required: "Nama orang tua/wali harus diisi",
+          }
       },
       errorElement: 'span',
       errorPlacement: function (error, element) {

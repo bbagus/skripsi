@@ -121,7 +121,7 @@ SI-PKL : Admin - Detail pengajuan
                     <td>{{$siswa->kelas}}</td>
                   </tr>
                   <tr>
-                    <td>Jurusan</td>
+                    <td>Program Keahlian</td>
                     <td>:</td>
                     <td>{{$siswa->jurusan}}</td>
                   </tr>
@@ -140,6 +140,11 @@ SI-PKL : Admin - Detail pengajuan
                     <td>:</td>
                     <td style="max-width:850px;">{{$siswa->alamat}}</td>
                   </tr>
+                  <tr>
+                    <td>Nama Orang Tua/Wali</td>
+                    <td>:</td>
+                    <td style="max-width:850px;">{{$siswa->orang_tua}}</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -154,11 +159,6 @@ SI-PKL : Admin - Detail pengajuan
                 <td class="col-sm-3">Nama Instansi</td>
                 <td>:</td>
                 <td>{{$industri->nama}} </td>
-              </tr>
-              <tr>
-                <td>Jurusan</td>
-                <td>:</td>
-                <td>{{$industri->jurusan}}</td>
               </tr>
               <tr>
                 <td>Bidang Kerja</td>

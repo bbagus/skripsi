@@ -32,14 +32,14 @@ class AdminGuru extends Controller
 		return redirect()->action([AdminGuru::class, 'index']);
 	}
 	public function proses_upload(Request $request){
-		$cekkd = Guru::firstWhere('nama', $request->nama);
-		if ($cekkd == null) {
-			$this->validate($request, [
+		$this->validate($request, [
 				'nama' => 'required',
 				'nip' => 'numeric|nullable',
 				'jurusan' => 'required',
 				'telp' => 'string|max:20|nullable',
 			]);
+		$cekkd = Guru::firstWhere('nama', $request->nama);
+		if ($cekkd == null) {
 			$unik = substr(uniqid('', true), -5);
 			if ($request->file('foto') != null) {
 				$this->validate($request, [
@@ -70,18 +70,18 @@ class AdminGuru extends Controller
 		} return response()->json(array('msg'=> 'Nama yang sama sudah ada!'), 200);
 	}
 	public function proses_edit (Request $request){
+		$this->validate($request, [
+				'nama' => 'required',
+				'jurusan' => 'required',
+				'nip' => 'numeric|nullable',
+				'telp' => 'string|max:20|nullable',
+			]);
 		$kd = $request->kd_pembimbing;
 		$cekkd = Guru::find($kd);
 		$ceknama = Guru::firstWhere('nama', $request->nama);
 		if ($ceknama == null || $cekkd->nama == $request->nama) {
 			$guru = Guru::find($kd);
 			$nama_file = $guru->foto;
-			$this->validate($request, [
-				'nama' => 'required',
-				'jurusan' => 'required',
-				'nip' => 'numeric|nullable',
-				'telp' => 'string|max:20|nullable',
-			]);
 			$unik = $guru->username;
 			if ($request->file('foto') != null) {
 				$this->validate($request, [

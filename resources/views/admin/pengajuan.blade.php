@@ -453,7 +453,7 @@ var filter2 = $('#filter2 th');
     $('#pengajuan').ajaxForm({
       success: function(data){
        $('#pesan').html('<i class="icon fas fa-exclamation-triangle"></i>'+data.msg);
-       if(data.msg == 'Pengajuan berhasil diterima!'){
+       if(data.msg == 'Pengajuan berhasil diterima!' || data.msg == 'Pengajuan berhasil ditolak!'){
         $('#sukses').removeClass('alert-danger').addClass('alert-success').fadeIn().delay(2000).fadeOut('slow');
       } else {
         $('#sukses').removeClass('alert-success').addClass('alert-danger').fadeIn().delay(2000).fadeOut('slow');

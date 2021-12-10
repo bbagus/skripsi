@@ -55,7 +55,7 @@ SI-PKL : Ubah Data Guru - {{$guru->nama}}
               </div>
             </div>
             <div class="form-group row">
-              <label for="jurusan" class="col-sm-2 col-form-label">Jurusan<strong class="text-danger">*</strong></label>
+              <label for="jurusan" class="col-sm-2 col-form-label">Program Keahlian<strong class="text-danger">*</strong></label>
               <div class="col-sm-10">
                 <select class="form-control select2bs4" name="jurusan" style="width: 100%;">
                   <option selected="" value="{{$guru->jurusan}}">{{$guru->jurusan}}</option>

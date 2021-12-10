@@ -49,8 +49,8 @@ thead input {
                     </th>
                     <th>NIS</th>
                     <th>Nama Lengkap</th>
-                    <th>Tanggal Lahir</th>
                     <th>Kelas</th>
+                    <th>Program Keahlian</th>
                     <th>Nomor Telepon</th>
                     <th>Alamat</th>
                     <th>Foto</th>
@@ -61,7 +61,6 @@ thead input {
                     </th>
                     <th><input class="nis form-control" type="text" placeholder="NIS" /></th>
                     <th><input class="nama form-control" type="text" placeholder="Nama lengkap" /></th>
-                    <th><input class="tanggal form-control" type="text" placeholder="Tanggal Lahir" /></th>
                     <th><select class="kelas form-control">
                       <option selected="" value="">Kelas</option>
                       <option value="XI MM 1">XI MM 1</option>
@@ -76,6 +75,17 @@ thead input {
                       <option value="XI TB">XI TB</option>
                       <option value="XI PH">XI PH</option>
                     </select></th>
+                    <th>
+                      <select class="jurusan form-control">
+                      <option selected="" value="">Program Keahlian</option>
+                      <option value="Akuntansi Keuangan dan Lembaga">Akuntansi Keuangan dan Lembaga</option>
+                      <option value="Bisnis Daring dan Pemasaran">Bisnis Daring dan Pemasaran</option>
+                      <option value="Otomatisasi dan Tata Kelola Perkantoran">Otomatisasi dan Tata Kelola Perkantoran</option>
+                      <option value="Perhotelan">Perhotelan</option>
+                      <option value="Multimedia">Multimedia</option>
+                      <option value="Tata Busana">Tata Busana</option>
+                    </select>
+                    </th>
                     <th><input class="telp form-control" type="text" placeholder="No. Telp" /></th>
                     <th><input class="alamat form-control" type="text" placeholder="Alamat" /></th>
                     <th></th>
@@ -212,8 +222,8 @@ thead input {
       },
       { "data": "nis" },
       { "data": "nama" },
-      { "data": "tgl_lahir" },
       { "data": "kelas" },
+      { "data": "jurusan"},
       { "data": "telp" },
       { "data": "alamat" },
       { "data": null,
@@ -258,13 +268,13 @@ thead input {
       .search($(this).val(), true, false)
       .draw();
     });
-    filter.on( 'keyup', 'input.tanggal', function () {
+    filter.on( 'change', 'select.kelas', function () {
       table
       .columns(3)
       .search($(this).val(), true, false)
       .draw();
     });
-    filter.on( 'change', 'select', function () {
+    filter.on( 'change', 'select.jurusan', function () {
       table
       .columns(4)
       .search($(this).val(), true, false)

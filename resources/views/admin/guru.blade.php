@@ -41,7 +41,7 @@
                     <th>Nama Lengkap</th>
                     <th>NIP</th>
                     <th>Nomor Telepon</th>
-                    <th>Jurusan</th>
+                    <th>Program Keahlian</th>
                     <th>Wilayah</th>
                     <th>Foto</th>
                     <th>Action</th>
@@ -53,7 +53,7 @@
                     <th><input class="nip form-control" type="text" placeholder="NIP" /></th>
                     <th><input class="telp form-control" type="text" placeholder="No. Telepon" /></th>
                     <th><select class="jurusan form-control">
-                      <option selected="" value="">Jurusan</option>
+                      <option selected="" value="">Program Keahlian</option>
                       <option value="Akuntansi Keuangan dan Lembaga">Akuntansi Keuangan dan Lembaga</option>
                       <option value="Bisnis Daring dan Pemasaran">Bisnis Daring dan Pemasaran</option>
                       <option value="Otomatisasi dan Tata Kelola Perkantoran">Otomatisasi dan Tata Kelola Perkantoran</option>

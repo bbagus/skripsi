@@ -35,13 +35,13 @@
 </head>
 <body>
   <div class="bg-image" style="
-  background-image: url('data_file/wp3222138.jpg');
+  background-image: url('data_file/wp3222138.webp');
   background-size: cover;
   height: 100vh;
   ">
   <div class="mask gradient-custom" style="height:100vh;">
     <div class="d-flex justify-content-center align-items-center">
-      <img src="data_file/smk-n-1-pengasih-seeklogo.png" style="height:122px;margin-top:5vh;">
+      <img src="data_file/smk-n-1-pengasih-seeklogo.webp" style="height:122px;margin-top:5vh;">
     </div>
     <div class="d-flex justify-content-center align-items-center">
       <h2 class="text-center text-white" style="margin-top: 2vh;margin-bottom: 4vh;"> Selamat Datang di<br>

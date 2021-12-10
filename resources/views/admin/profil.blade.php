@@ -128,7 +128,7 @@
       </div>
       <form id="formpassword" action="{{route('admin_password')}}" method="POST">
        {{ csrf_field() }}
-       <div class="modal-body">
+       <div class="modal-body ml-3 mr-3">
         <div class="form-group">
           <label for="passlama" class="col-form-label">Password lama<strong class="text-danger">*</strong></label>
           <input type="password" class="form-control" name="passlama" id="passlama">

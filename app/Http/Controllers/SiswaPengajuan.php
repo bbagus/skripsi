@@ -17,16 +17,20 @@ class SiswaPengajuan extends Controller
     public function index(UserRepository $repository){
         $user = $this->repository->getData();
         $tahunajaran = $this->repository->getTahunAjaran();
+        
+        return View('siswa.pengajuan')
+        ->with('user', $user)
+        ->with('tahunajaran', $tahunajaran);
+    }
+    public function loadPengajuan(){
+        $user = $this->repository->getData();
         $pengajuan = DB::table('pengajuan')
         ->leftjoin('industri', 'pengajuan.kd_industri', '=', 'industri.kd_industri')
         ->join('siswa', 'pengajuan.nis', '=', 'siswa.nis')
         ->select('kd_pengajuan','industri.nama as industri', 'siswa.nama as nama' , 'industri.alamat as alamat' , 'pengajuan.nis as nis', 'tgl_pengajuan', 'tgl_diproses' , 'tahun_ajaran','status')
         ->where('pengajuan.nis', $user->nis)
         ->get();
-        return View('siswa.pengajuan')
-        ->with('user', $user)
-        ->with('tahunajaran', $tahunajaran)
-        ->with('pengajuan', $pengajuan);
+        return response()->json($pengajuan);
     }
     public function search(Request $request){
         $industri = [];
@@ -53,10 +57,10 @@ class SiswaPengajuan extends Controller
             'tahun_ajaran' => $tahun,
             'status' => 'Menunggu',
         ]);
-           return back()->with('success', 'Menambah pengajuan berhasil!');
-           return back();
-       } return back()->withErrors('Sudah ada pengajuan yang menunggu proses!');
-   } return back()->withErrors('Pengajuan sudah ada yang diterima!');
-    }
+           return response()->json(array('msg'=> 'Berhasil menambah pengajuan!'), 200); 
+       } return response()->json(array('msg'=> 'Sudah ada pengajuan yang menunggu diproses!'), 200); 
+   } 
+   return response()->json(array('msg'=> 'Pengajuan sudah ada yang diterima!'), 200); 
+}
 }
 

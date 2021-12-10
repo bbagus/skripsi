@@ -5,7 +5,7 @@ use App\Http\Controllers\{Home,Industri,Pedoman,Login};
 //admin
 use App\Http\Controllers\{AdminDashboard,AdminProfil,AdminSiswa,AdminGuru,AdminIndustri,AdminInfo,AdminPengajuan,AdminPenempatan,AdminMonitoring};
 //siswa
-use App\Http\Controllers\{SiswaDashboard,SiswaProfil,SiswaPengajuan,SiswaBimbingan,SiswaNilai};
+use App\Http\Controllers\{SiswaDashboard,SiswaProfil,SiswaPengajuan,SiswaIndustri,SiswaBimbingan,SiswaNilai};
 //guru
 use App\Http\Controllers\{GuruDashboard,GuruProfil,GuruBimbingan,GuruNilai};
 /*
@@ -116,6 +116,7 @@ Route::middleware(['auth','is_admin'])->group(function () {
     Route::post('admin/kelola-penempatan/industri/edit', [AdminPenempatan::class, 'editIndustri']);
 //monitoring
     Route::get('admin/kelola-laporan-kegiatan', [AdminMonitoring::class, 'index']);
+    Route::get('admin/kelola-laporan-kegiatan/{kd_penempatan}', [AdminMonitoring::class, 'LoadKegiatan']);
     Route::get('admin/kelola-laporan-pkl', [AdminMonitoring::class, 'laporanPKL']);
     Route::get('admin/kelola-nilai', [AdminMonitoring::class, 'nilai']);
 });
@@ -125,8 +126,13 @@ Route::middleware(['auth','is_siswa'])->group(function () {
     Route::get('siswa', [SiswaDashboard::class, 'dashboard']);
     Route::get('siswa/profil', [SiswaProfil::class, 'index']);
     Route::get('siswa/profil/edit', [SiswaProfil::class, 'editData']);
+//pengajuan
     Route::get('siswa/pengajuan', [SiswaPengajuan::class, 'index']);
+    Route::get('siswa/get-pengajuan', [SiswaPengajuan::class, 'loadPengajuan']);
+    Route::get('siswa/detail-instansi', [SiswaIndustri::class, 'index']);
+//bimbingan
     Route::get('siswa/laporan-kegiatan', [SiswaBimbingan::class, 'laporanMingguan']);
+    Route::get('siswa/load-kegiatan', [SiswaBimbingan::class, 'loadKegiatan']);
     Route::get('siswa/laporan-pkl', [SiswaBimbingan::class, 'laporanPKL']);
     Route::get('siswa/nilai', [SiswaNilai::class, 'index']);
 //siswa-post
@@ -136,18 +142,28 @@ Route::middleware(['auth','is_siswa'])->group(function () {
     Route::post('siswa/profil/edit-akun', [SiswaProfil::class, 'edit_akun']);
 //siswa-pengajuan
     Route::post('siswa/pengajuan/tambah', [SiswaPengajuan::class, 'tambahPengajuan'])->name('tambah_pengajuan');
-
+//detail-instansi
+    Route::post('siswa/detail-instansi/edit', [SiswaIndustri::class, 'editDetail']);
+    Route::post('siswa/detail-instansi/jadwal', [SiswaIndustri::class, 'editJadwal']);
+//bimbingan
+    Route::post('siswa/laporan-kegiatan/tambah', [SiswaBimbingan::class, 'tambahLaporanKegiatan']);
  });
 
 Route::middleware(['auth','is_guru'])->group(function () {
 //guru
     Route::get('guru', [GuruDashboard::class, 'dashboard']);
+//guruprofil
     Route::get('guru/profil', [GuruProfil::class, 'index']);
     Route::get('guru/profil/edit', [GuruProfil::class, 'editData']);
     Route::get('guru/profil/hapus-foto', [GuruProfil::class, 'hapusFoto']);
+//gurubimbingan
     Route::get('guru/siswa-bimbingan', [GuruBimbingan::class, 'siswaBimbingan']);
+    Route::get('guru/get-siswa', [GuruBimbingan::class, 'LoadsiswaBimbingan']);
+    Route::get('guru/siswa-bimbingan/{kd}', [GuruBimbingan::class, 'DetailsiswaBimbingan']);
     Route::get('guru/laporan-kegiatan', [GuruBimbingan::class, 'LaporanMingguan']);
+    Route::get('guru/laporan-kegiatan/{kd_penempatan}', [GuruBimbingan::class, 'LoadKegiatan']);
     Route::get('guru/laporan-pkl', [GuruBimbingan::class, 'LaporanPKL']);
+//guru nilai
     Route::get('guru/kelola-nilai', [GuruNilai::class, 'index']);
 //guru post
 //guru ganti_password

@@ -84,6 +84,12 @@
               </div>
             </div>
             <div class="form-group row">
+              <label for="orang_tua" class="col-sm-2 col-form-label">Nama Orang Tua/ Wali<strong class="text-danger">*</strong></label>
+              <div class="col-sm-10">
+                <input type="text" name="orang_tua" class="form-control" id="orang_tua" placeholder="Tulis nama orang tua/wali.." maxlength="50"/>
+              </div>
+            </div>
+            <div class="form-group row">
               <label for="foto" class="col-sm-2 col-form-label">Foto Profil</label>
               <div class="col-sm-10">
                 <div class="custom-file">
@@ -129,7 +135,7 @@
               <div class="col-6">Nomor Induk Siswa</div>
               <div class="col-4">Password</div>
               <div class="col-1">:</div>
-              <div class="col-6">Tanggal lahir. Format "ddmmyyyy"</div>
+              <div class="col-6">Tanggal lahir. Format "hhbbtttt"</div>
             </div>
           </p>
         </div>
@@ -205,6 +211,9 @@
           },
           telp: {
             maxlength: 20,
+          },
+          orang_tua: {
+            required: true,
           }
         },
         messages: {
@@ -224,6 +233,9 @@
           },
           telp: {
             maxlength: "Nomor telepon terlalu panjang!",
+          },
+          orang_tua: {
+            required: "Nama orang tua/wali harus diisi",
           }
         },
         errorElement: 'span',

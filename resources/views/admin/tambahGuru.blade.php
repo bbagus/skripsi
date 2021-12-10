@@ -53,10 +53,10 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label for="jurusan" class="col-sm-2 col-form-label">Jurusan<strong class="text-danger">*</strong></label>
+                <label for="jurusan" class="col-sm-2 col-form-label">Program Keahlian<strong class="text-danger">*</strong></label>
                 <div class="col-sm-10">
                   <select class="form-control select2bs4" name="jurusan" style="width: 100%;">
-                    <option disabled="" selected="" hidden="">Pilih Jurusan</option>
+                    <option disabled="" selected="" hidden="">Pilih Program Keahlian</option>
                     <option value="Akuntansi Keuangan dan Lembaga">Akuntansi Keuangan dan Lembaga</option>
                     <option value="Bisnis Daring dan Pemasaran">Bisnis Daring dan Pemasaran</option>
                     <option value="Otomatisasi dan Tata Kelola Perkantoran">Otomatisasi dan Tata Kelola Perkantoran</option>

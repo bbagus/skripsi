@@ -19,7 +19,7 @@ class AdminSiswa extends Controller
 	public function loadSiswa(){
 		$siswa = DB::table('siswa')
 		->join('kelas','siswa.kd_kelas', '=', 'kelas.kd_kelas')
-		->select('siswa.nis', 'siswa.nama', 'siswa.tgl_lahir', 'kelas.nama as kelas', 'siswa.telp','siswa.alamat', 'siswa.foto')
+		->select('siswa.nis', 'siswa.nama', 'siswa.tgl_lahir', 'kelas.nama as kelas','kelas.jurusan', 'siswa.telp','siswa.alamat','siswa.orang_tua', 'siswa.foto')
 		->get();
 		return response()->json($siswa);
 	}
@@ -35,15 +35,16 @@ class AdminSiswa extends Controller
 		return redirect()->action([AdminSiswa::class, 'index']);
 	}
 	public function proses_upload(Request $request){
-		$ceknis = Siswa::find($request->nis);
-		if ($ceknis == null) {
-			$this->validate($request, [
+		$this->validate($request, [
 				'nis' => 'required',
 				'nama' => 'required',
 				'tgl_lahir' => 'required',
 				'kd_kelas' => 'required',
 				'telp' => 'string|max:20|nullable',
+				'orang_tua' => 'required',
 			]);
+		$ceknis = Siswa::find($request->nis);
+		if ($ceknis == null) {
 			$unik = substr(uniqid('', true), -5);
 			if ($request->file('foto') != null) {
 				$this->validate($request, [
@@ -73,22 +74,24 @@ class AdminSiswa extends Controller
 				'telp' => $request->telp,
 				'alamat' => $request->alamat,
 				'kd_kelas' => $request->kd_kelas,
+				'orang_tua' => $request->orang_tua,
 				'foto' => $nama_file,
 			]);
 			return response()->json(array('msg'=> 'Berhasil input data siswa!'), 200);
 		} return response()->json(array('msg'=> 'NIS yang sama sudah ada!'), 200);
 	}
 	public function proses_edit (Request $request) {
-		$ceknis = Siswa::find($request->nis);
-		$nis = $request->nislama;
-		if ($ceknis == null || $nis == $request->nis) {
-			$this->validate($request, [
+		$this->validate($request, [
 				'nis' => 'required',
 				'nama' => 'required',
 				'tgl_lahir' => 'required',
 				'kd_kelas' => 'required',
 				'telp' => 'string|max:20|nullable',
+				'orang_tua' => 'required',
 			]);
+		$ceknis = Siswa::find($request->nis);
+		$nis = $request->nislama;
+		if ($ceknis == null || $nis == $request->nis) {
 			$siswa = DB::table('siswa')->where('nis',$nis)->first();
 			$nama_file = $siswa->foto;
 			$unik = substr(uniqid('', true), -5);
@@ -123,6 +126,7 @@ class AdminSiswa extends Controller
 			$siswa->alamat = $request->alamat;
 			$siswa->kd_kelas = $request->kd_kelas;
 			$siswa->foto = $nama_file;
+			$siswa->orang_tua = $request->orang_tua;
 			$siswa->save();
 			$pindah = null;
 			if($request->nis != $nis || $request->file('foto') != null) $pindah = $request->nis;

@@ -39,7 +39,14 @@ class AdminProfil extends Controller
         ->with('user', $this->repository->getData());
     }
     public function edit_akun(Request $request){
-        $data = $this->repository->getData();        
+        $data = $this->repository->getData();
+        $this->validate($request, [
+            'username' => 'required|max:15|alpha_dash',
+            'nama' => 'required',
+            'nip' => 'numeric|nullable',
+            'telp' => 'string|max:20|nullable',
+            'email' => 'email|nullable',
+        ]);       
         $cekuser = User::find($request->username);
         $cekemail = User::firstWhere('email',$request->email);
         if ( $cekemail == null || $request->email == null || $cekuser->email == $request->email)
@@ -50,13 +57,6 @@ class AdminProfil extends Controller
                 {
                     $admin = Admin::find($data->username);
                     $nama_file = $admin->foto;
-                    $this->validate($request, [
-                        'username' => 'required|max:15',
-                        'nama' => 'required',
-                        'nip' => 'numeric|nullable',
-                        'telp' => 'string|max:20|nullable',
-                        'email' => 'email|nullable',
-                    ]);
                     if ($request->file('foto') != null) {
                         $this->validate($request, [
                             'foto' => 'file|image|mimes:jpeg,png,jpg|max:700',
@@ -100,7 +100,7 @@ class AdminProfil extends Controller
      $data = $this->repository->getData();
      $image_path = public_path().'/data_file/'.$data->foto;
      File::delete($image_path);
-     $admin = Admin::   find($data->username);
+     $admin = Admin::find($data->username);
      $admin->foto = 'default.jpg';
      $admin->save();
      return response()->json(array('msg'=> 'Berhasil menghapus foto!'), 200); 

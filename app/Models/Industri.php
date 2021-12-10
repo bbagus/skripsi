@@ -10,7 +10,7 @@ class Industri extends Model
     use HasFactory;
     protected $table = "industri";
     protected $primaryKey = 'kd_industri';
-    protected $fillable = ['nama','jurusan','bidang_kerja','deskripsi','alamat','wilayah','telp','website','email','kuota','foto'];
+    protected $fillable = ['nama','bidang_kerja','deskripsi','alamat','wilayah','telp','website','email','kuota','foto'];
 
     public $timestamps = false;
 

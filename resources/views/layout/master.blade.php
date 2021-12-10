@@ -269,7 +269,6 @@
 <script src="{{url('/')}}/AdminLTE-master/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="{{url('/')}}/AdminLTE-master/dist/js/adminlte.min.js"></script>
-<!-- AdminLTE for demo purposes -->
 @yield('javascript')
 </body>
 </html>

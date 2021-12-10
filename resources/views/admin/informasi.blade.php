@@ -261,8 +261,10 @@
       var x = header.getElementsByClassName('nav-link');
       for (var i = 0; i < x.length; i++) {
         x[i].classList.remove('text-primary');
+        x[i].classList.remove('mark');
       }
       this.classList.add('text-primary');
+      this.classList.add('mark');
       table
       .columns(5)
       .search( $(this).text() )
@@ -281,8 +283,10 @@
       var x = header.getElementsByClassName('nav-link');
       for (var i = 0; i < x.length; i++) {
         x[i].classList.remove('text-primary');
+        x[i].classList.remove('mark');
       }
       this.classList.add('text-primary');
+      this.classList.add('mark');
       table
       .columns(4)
       .search( $(this).text() )

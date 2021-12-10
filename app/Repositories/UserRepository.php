@@ -36,7 +36,7 @@ class UserRepository
     public function getTanggalPKL(){
         $tanggal = (object)array(); 
         $tanggal->mulai = '2021-04-01';
-        $tanggal->selesai = '2021-09-30';
+        $tanggal->selesai = '2022-04-01';
         return $tanggal;
     }
 }
