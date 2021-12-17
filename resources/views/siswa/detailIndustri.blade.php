@@ -5,7 +5,7 @@
 @section('sidebar')
   @include('layout.sidebarsiswa')
 @endsection
-@section('judul', 'Detail Instansi & Jadwal PKL')
+@section('judul', 'Detail & Jadwal PKL')
 @section('content')
   <section class="content">
     <div class="container-fluid">
@@ -19,6 +19,53 @@
           </div>
         </div>
         <div class="col-md-12">
+          <div class="card card-info card-outline">
+            <div class="card-header">
+             <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+              </button>
+            </div>
+            <h3 class="card-title">
+              Guru Pembimbing
+            </h3>
+          </div>
+          <div class="card-body">
+            <table id="example2" class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>Nama</th>
+                  <th>NIP</th>
+                  <th>No. Telp</th>
+                  <th>Foto</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  @if($penempatan!=null)
+                  <td>{{$penempatan->nama}}</td>
+                  <td>{{$penempatan->nip}}</td>
+                  <td>{{$penempatan->telp}}</td>
+                  <td style="max-width: 80px;">
+                    @if($penempatan->foto!='default.jpg')
+                    <img class="img-fluid" src="{{url('/')}}/data_file/{{$penempatan->foto}}" alt="foto guru">
+                    @else
+                    <img class="img-fluid" src="{{url('/')}}/data_file/guru-default.jpeg" alt="foto guru">
+                    @endif
+                  </td>
+                  @else
+                  <td colspan="4">
+                    <div class="alert alert-danger">
+                    <i class="icon fas fa-exclamation-triangle"></i>
+                 Belum mendapat Guru Pembimbing
+                  </div>
+                  </td>
+                  @endif
+                </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
            <!-- general form elements -->
           <div class="card card-primary" >
             <div class="card-header">
@@ -65,13 +112,13 @@
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="pimpinan" class="col-sm-2 col-form-label">Nama Pimpinan</label>
+                  <label for="pimpinan" class="col-sm-2 col-form-label">Nama Pimpinan Instansi</label>
                   <div class="col-sm-10">
                     <input type="text" class="form-control"  name="pimpinan" placeholder="Tulis nama pimpinan instansi.." maxlength="50" value="{{ $detail == null ? '': $detail->pimpinan }}">
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="pembimbing" class="col-sm-2 col-form-label">Nama Pembimbing</label>
+                  <label for="pembimbing" class="col-sm-2 col-form-label">Nama Pembimbing Instansi</label>
                   <div class="col-sm-10">
                     <input type="text" class="form-control"  name="pembimbing" placeholder="Tulis nama pembimbing instansi.." maxlength="50" value="{{ $detail == null ? '': $detail->pembimbing }}">
                   </div>

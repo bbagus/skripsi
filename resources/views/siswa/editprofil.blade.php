@@ -148,10 +148,8 @@
 <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/additional-methods.min.js"></script>
 <!-- Select2 -->
 <script src="{{url('/')}}/AdminLTE-master/plugins/select2/js/select2.full.min.js"></script>
-<script src="{{url('/')}}/AdminLTE-master/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
 <script defer>
   $(function () {
-   bsCustomFileInput.init();
      //Initialize Select2 Elements
      $('.select2').select2()
      //Initialize Select2 Elements

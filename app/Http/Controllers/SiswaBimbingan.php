@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\{DB,Validator};
+use Illuminate\Support\Facades\{DB,Validator,File};
 use Illuminate\Http\Request;
 use App\Repositories\UserRepository;
-use App\Models\{User,Siswa,Pengajuan,Penempatan,Monitoring};
+use App\Models\{User,Siswa,Pengajuan,Penempatan,Monitoring,Bimbingan};
 
 class SiswaBimbingan extends Controller
 {
@@ -52,8 +52,64 @@ class SiswaBimbingan extends Controller
     }
     public function laporanPKL(UserRepository $repository){
         $user = $this->repository->getData();
+        $penempatan = DB::table('penempatan')
+            ->join('pengajuan', 'penempatan.kd_pengajuan', '=', 'pengajuan.kd_pengajuan')
+            ->where('nis',$user->nis)
+            ->first();
+        $bimbingan = Bimbingan::where('kd_penempatan', $penempatan->kd_penempatan)->orderBy('tanggal')->get();
+        $tgl = null; 
+        foreach($bimbingan as $b){
+            $s = strtotime($b->tanggal);
+            $tgl[] = date('d M Y', $s);
+            $b->tgl = date('d M Y', $s);
+            $b->jam = date('H:i:s', $s);
+        }
+        $tgl[] = date('d M Y');
+        if($tgl!=null) $tgl = array_unique($tgl);
         return View('siswa.laporanPkl')
+        ->with('tgl', $tgl)
+        ->with('penempatan', $penempatan)
+        ->with('bimbingan', $bimbingan)
         ->with('user', $user);
+    }
+    public function tambahLaporanPKL(Request $request){
+        $user = $this->repository->getData();
+        $this->validate($request,[
+            'kd_penempatan' => 'required',
+            'judul' => 'required',
+            'catatan' => 'required',
+        ]);
+        $date = date('Y-m-d H:i:s');
+        $s = strtotime($date);
+        $tgl = date('d-m-Y', $s);
+        $jam = date('H.i.s', $s);
+        if ($request->file('file') != null) {
+                $this->validate($request, [
+                    'file' => 'file|max:5000',
+                ]);
+                // menyimpan data file yang diupload ke variabel $file
+                $file = $request->file('file');
+                $extension = $request->file->getClientOriginalExtension();
+                $name = $request->file('file')->getClientOriginalName();
+                $nama_file = $name.'_'.$tgl.'_'.$jam.'.'.$extension;
+                    // isi dengan nama folder tempat kemana file diupload
+                $tujuan_upload = 'data_file';
+                $file->move($tujuan_upload,$nama_file);
+        } else {
+            $nama_file = null;
+        }
+        $kd = Bimbingan::create([
+            'kd_penempatan' => $request->kd_penempatan,
+            'pengirim' => $user->nama,
+            'judul' => $request->judul,
+            'tanggal' => $date,
+            'catatan' => $request->catatan,
+            'file' => $nama_file
+        ]);
+        $bimbingan = Bimbingan::find($kd->kd_bimbingan);
+        $bimbingan->tgl = date('d M Y', $s);
+        $bimbingan->jam = date('H:i:s', $s);
+        return response()->json(array('msg'=>'Berhasil menambah bimbingan!','bimbingan' => $bimbingan), 200);
     }
 }
 

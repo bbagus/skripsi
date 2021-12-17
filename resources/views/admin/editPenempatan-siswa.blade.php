@@ -134,7 +134,6 @@
 <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-form/jquery.form.min.js"></script>
 <!-- Select2 -->
 <script src="{{url('/')}}/AdminLTE-master/plugins/select2/js/select2.full.min.js"></script>
-<script src="{{url('/')}}/AdminLTE-master/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
 <!-- jquery-validation -->
 <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/jquery.validate.min.js"></script>
 <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-validation/additional-methods.min.js"></script>
@@ -147,6 +146,7 @@ $(document).ready(function () {
 });
 $('.livesearch').select2({
     placeholder: 'Pilih Instansi',
+    allowClear: true,
     ajax: {
       url: '/admin/kelola-penempatan-cariindustri',
       dataType: 'json',
@@ -166,6 +166,7 @@ $('.livesearch').select2({
   });
 $('.searchguru').select2({
     placeholder: 'Pilih Guru pembimbing',
+    allowClear: true,
     ajax: {
       url: '/admin/kelola-penempatan-cariguru',
       dataType: 'json',

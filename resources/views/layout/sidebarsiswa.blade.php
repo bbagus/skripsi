@@ -78,7 +78,7 @@
                 <a href="/siswa/detail-instansi" class="nav-link {{ Request::is('siswa/detail-instansi','siswa/detail-instansi/*') ? 'active bg-primary' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
-                  Detail Instansi
+                  Detail & Jadwal PKL
                   </p>
                 </a>
               </li>

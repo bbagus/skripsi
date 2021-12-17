@@ -24,6 +24,11 @@
           <div class="col-md-3">
             <div class="card card-info">
               <div class="card-header">
+                <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+                </button>
+              </div>
                 <h3 class="card-title">
                 Daftar Siswa
                 </h3>
@@ -43,6 +48,11 @@
           <div class="col-md-9">
             <div class="card card-primary">
               <div class="card-header">
+                <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+                </button>
+              </div>
                  <h3 class="card-title">
                 Kalender
                 </h3>

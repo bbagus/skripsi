@@ -18,10 +18,18 @@ class SiswaIndustri extends Controller
             ->where('pengajuan.status', 'Diterima')
             ->select('kd_pengajuan','industri.kd_industri','industri.nama','industri.alamat','status')->first();
         $detail = null;
-        if(isset($industri)) $detail = DetailIndustri::firstWhere('kd_pengajuan', $industri->kd_pengajuan);
+        $penempatan =null;
+        if(isset($industri)) {
+            $detail = DetailIndustri::firstWhere('kd_pengajuan', $industri->kd_pengajuan);
+            $penempatan = DB::table('penempatan')->join('pengajuan', 'penempatan.kd_pengajuan', '=', 'pengajuan.kd_pengajuan')
+            ->join('guru_pembimbing', 'penempatan.kd_pembimbing', '=', 'guru_pembimbing.kd_pembimbing')
+            ->where('penempatan.kd_pengajuan', $industri->kd_pengajuan)
+            ->select('guru_pembimbing.nama','nip','telp','foto')->first();
+        }
         $jadwal= null;
         if(isset($detail)) $jadwal =  Jadwal::find($detail->kd_jadwal);
 		return View('siswa.detailIndustri')->with('user', $user)
+            ->with('penempatan', $penempatan)
             ->with('jadwal', $jadwal)
             ->with('industri', $industri)
             ->with('detail', $detail);

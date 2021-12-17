@@ -39,7 +39,7 @@
                 alt="Logo Industri" style="min-height:150px;">
                 @else
                 <img class="img-fluid"
-                src="{{url('/')}}/data_file/industri-default.png"
+                src="{{url('/')}}/data_file/industri-default.webp"
                 alt="Logo Industri" style="min-height:150px;">
                 @endif
               </div>

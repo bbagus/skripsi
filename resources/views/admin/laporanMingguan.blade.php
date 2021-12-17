@@ -72,7 +72,6 @@
 <script src="{{url('/')}}/AdminLTE-master/plugins/fullcalendar/locales/id.js"></script>
 <!-- Select2 -->
 <script src="{{url('/')}}/AdminLTE-master/plugins/select2/js/select2.full.min.js"></script>
-<script src="{{url('/')}}/AdminLTE-master/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
 <!-- jQuery UI -->
 <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-ui/jquery-ui.min.js"></script>
 <script defer>
