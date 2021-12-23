@@ -22,7 +22,30 @@
                 </div>
              </div>
            </div>
-           <div class="col-md-3">
+          <div class="col-md-9">
+            <div class="card">
+              <div class="card-header" style="background-color: #094688;">
+                <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+                </button>
+              </div>
+               <h3 class="card-title text-white">
+                Riwayat Bimbingan
+              </h3>
+            </div>
+            <div class="card-body">
+              <form id="bimbingan" action="{{url('/')}}/guru/laporan-pkl/tambah" method="POST" enctype="multipart/form-data">
+                @csrf
+                <!-- The time line -->
+                 <div id="klik">Klik nama siswa</div>
+                <div id="timeline" class="timeline">
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
             <div class="card card-info">
               <div class="card-header">
                 <div class="card-tools">
@@ -45,44 +68,12 @@
             </div>
             </div>
           </div>
-          <div class="col-md-9">
-            <div class="card card-primary">
-              <div class="card-header">
-                <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                <i class="fas fa-minus"></i>
-                </button>
-              </div>
-               <h3 class="card-title">
-                Riwayat Bimbingan
-              </h3>
-            </div>
-            <div class="card-body">
-              <form id="bimbingan" action="{{url('/')}}/guru/laporan-pkl/tambah" method="POST" enctype="multipart/form-data">
-                @csrf
-                <!-- The time line -->
-                 <div id="klik">Klik nama siswa</div>
-                 <div id="loading" class="text-center" style="display:none">
-                  <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading...</span>
-                  </div>
-                </div>
-                <div id="timeline" class="timeline">
-                </div>
-
-              </form>
-              <!-- /.col -->
-            </div>
-          </div>
-        </div>
       </div>
       <!-- /.timeline -->
     </section>
     <!-- /.content -->
 @endsection
 @section('javascript')
-<!-- Select2 -->
-<script src="{{url('/')}}/AdminLTE-master/plugins/select2/js/select2.full.min.js"></script>
 <script src="{{url('/')}}/AdminLTE-master/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
 <!-- jquery form -->
 <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-form/jquery.form.min.js"></script>

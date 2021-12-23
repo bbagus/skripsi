@@ -56,8 +56,10 @@ class SiswaBimbingan extends Controller
             ->join('pengajuan', 'penempatan.kd_pengajuan', '=', 'pengajuan.kd_pengajuan')
             ->where('nis',$user->nis)
             ->first();
-        $bimbingan = Bimbingan::where('kd_penempatan', $penempatan->kd_penempatan)->orderBy('tanggal')->get();
-        $tgl = null; 
+        $bimbingan= null;
+        $tgl = null;
+        if($penempatan!= null){
+             $bimbingan = Bimbingan::where('kd_penempatan', $penempatan->kd_penempatan)->orderBy('tanggal')->get(); 
         foreach($bimbingan as $b){
             $s = strtotime($b->tanggal);
             $tgl[] = date('d M Y', $s);
@@ -66,6 +68,7 @@ class SiswaBimbingan extends Controller
         }
         $tgl[] = date('d M Y');
         if($tgl!=null) $tgl = array_unique($tgl);
+        }
         return View('siswa.laporanPkl')
         ->with('tgl', $tgl)
         ->with('penempatan', $penempatan)

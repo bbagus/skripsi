@@ -20,7 +20,7 @@ class Jadwal extends Model
          'sabtu' => 'array',
          'minggu' => 'array'
     ];
-    protected $fillable = ['senin','selasa','rabu','kamis','jumat','sabtu','minggu'];
+    protected $fillable = ['senin','selasa','rabu','kamis','jumat','sabtu','minggu','kd_detail'];
     public $timestamps = false;
 
 }

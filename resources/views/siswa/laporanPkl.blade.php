@@ -29,11 +29,11 @@
                 <div class="alert alert-danger">
                 Anda belum mendapat Guru Pembimbing
                 </div>
-              @else
-              @foreach($tgl as $t)
-              <div class="time-label">
-                <span class="bg-danger">{{$t}}</span>
-              </div>
+                @else
+                @foreach($tgl as $t)
+                <div class="time-label">
+                  <span class="bg-danger">{{$t}}</span>
+                </div>
               <!-- /.timeline-label -->
               <!-- timeline item -->
                 @foreach($bimbingan as $b)
@@ -132,7 +132,7 @@
                 }
                 var timeline =  $('.timeline');
                 timeline.append('<div><i class="fas fa-user bg-lightblue"></i><div class="timeline-item"><span class="time"><i class="fas fa-clock"></i> '+data.bimbingan.jam+' </span><h3 class="timeline-header bg-lightblue"><a href="javascript:void(0)">'+data.bimbingan.pengirim+'</a></h3><p class="timeline-header px-3" >'+data.bimbingan.judul+'</p><div class="timeline-body px-3">'+data.bimbingan.catatan+'</div>'+htmlfile+'</div></div>');
-                timeline.append('<div id="tambah" class="time-label pt-3"><button onclick="tambahBimbingan(\'{{$penempatan->kd_penempatan}}\')" class="btn btn-small btn-success" style="position:absolute;"><i class="fas fa-plus"></i> tambah bimbingan</button></div>');
+                timeline.append('<div id="tambah" class="time-label pt-3"><button onclick="tambahBimbingan(\'{{$penempatan!=null?$penempatan->kd_penempatan:''}}\')" class="btn btn-small btn-success" style="position:absolute;"><i class="fas fa-plus"></i> tambah bimbingan</button></div>');
             } else{
                 pesan.removeClass('alert-success').addClass('alert-danger').fadeIn().delay(3000).fadeOut('slow');
               }

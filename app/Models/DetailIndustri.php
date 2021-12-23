@@ -10,7 +10,7 @@ class DetailIndustri extends Model
     use HasFactory;
     protected $table = "detail_industri";
     protected $primaryKey = 'kd_detail';
-    protected $fillable = ['kd_pengajuan','bagian','pimpinan','pembimbing','kd_jadwal'];
+    protected $fillable = ['kd_pengajuan','bagian','pimpinan','pembimbing'];
     public $timestamps = false;
 
 }

@@ -118,6 +118,7 @@ Route::middleware(['auth','is_admin'])->group(function () {
     Route::get('admin/kelola-laporan-kegiatan', [AdminMonitoring::class, 'index']);
     Route::get('admin/kelola-laporan-kegiatan/{kd_penempatan}', [AdminMonitoring::class, 'LoadKegiatan']);
     Route::get('admin/kelola-laporan-pkl', [AdminMonitoring::class, 'laporanPKL']);
+     Route::get('admin/kelola-laporan-pkl/{kd_penempatan}', [AdminMonitoring::class, 'loadlaporanPKL']);
     Route::get('admin/kelola-nilai', [AdminMonitoring::class, 'nilai']);
 });
 
@@ -167,6 +168,7 @@ Route::middleware(['auth','is_guru'])->group(function () {
     Route::get('guru/laporan-pkl/{kd_penempatan}', [GuruBimbingan::class, 'LoadLaporanPKL']);
 //guru nilai
     Route::get('guru/kelola-nilai', [GuruNilai::class, 'index']);
+    Route::get('guru/kelola-nilai/{kd_penempatan}', [GuruNilai::class, 'LoadNilai']);
 //guru post
 //guru ganti_password
     Route::post('guru/profil/ubah-password', [GuruProfil::class, 'ganti_password'])->name('guru_password');
@@ -174,6 +176,8 @@ Route::middleware(['auth','is_guru'])->group(function () {
     Route::post('guru/profil/edit-akun', [GuruProfil::class, 'edit_akun']);
 //guru laporan-pkl
     Route::post('guru/laporan-pkl/tambah', [GuruBimbingan::class, 'tambahLaporanPKL']);
+//guru kelola-nilai
+    Route::post('guru/kelola-nilai/tambah', [GuruNilai::class, 'tambahNilai']);
  });
 //login
 Route::get('login', [Login::class, 'index'])->name('login');

@@ -19,6 +19,7 @@ class SiswaIndustri extends Controller
             ->select('kd_pengajuan','industri.kd_industri','industri.nama','industri.alamat','status')->first();
         $detail = null;
         $penempatan =null;
+        $jadwal = null;
         if(isset($industri)) {
             $detail = DetailIndustri::firstWhere('kd_pengajuan', $industri->kd_pengajuan);
             $penempatan = DB::table('penempatan')->join('pengajuan', 'penempatan.kd_pengajuan', '=', 'pengajuan.kd_pengajuan')
@@ -26,8 +27,7 @@ class SiswaIndustri extends Controller
             ->where('penempatan.kd_pengajuan', $industri->kd_pengajuan)
             ->select('guru_pembimbing.nama','nip','telp','foto')->first();
         }
-        $jadwal= null;
-        if(isset($detail)) $jadwal =  Jadwal::find($detail->kd_jadwal);
+        if(isset($detail)) $jadwal =  Jadwal::firstWhere('kd_detail',$detail->kd_detail);
 		return View('siswa.detailIndustri')->with('user', $user)
             ->with('penempatan', $penempatan)
             ->with('jadwal', $jadwal)
@@ -58,6 +58,7 @@ class SiswaIndustri extends Controller
             'jumat' => 'array|nullable',
             'sabtu' => 'array|nullable',
             'minggu' => 'array|nullable',
+            'kd_detail' => 'required',
         ]);
         $jadwal = Jadwal::updateOrCreate(
             ['kd_jadwal' => $request->kd_jadwal],
@@ -67,13 +68,10 @@ class SiswaIndustri extends Controller
                 'kamis' => $request->kamis,
                 'jumat' => $request->jumat,
                 'sabtu' => $request->sabtu,
-                'minggu' => $request->minggu]
+                'minggu' => $request->minggu,
+                'kd_detail' => $request->kd_detail]
         );
-        if($request->kd_jadwal==null){
-           $detail = DetailIndustri::find($request->kd_detail);
-            $detail->kd_jadwal = $jadwal->kd_jadwal;
-            $detail->Save(); 
-        }
-        return response()->json(array('msg'=> 'Berhasil menyimpan jadwal PKL!'), 200);
+        $jadwalkd = $jadwal->kd_jadwal;
+        return response()->json(array('msg'=> 'Berhasil menyimpan jadwal PKL!','kd_jadwal'=>$jadwalkd), 200);
     }
 }

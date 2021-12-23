@@ -44,7 +44,7 @@ class GuruBimbingan extends Controller
             ->where('penempatan.kd_pengajuan', $pengajuan->kd_pengajuan)
             ->select('tgl_mulai','tgl_selesai')->first();
         $jadwal = null;
-        if($detail!=null) $jadwal = Jadwal::firstWhere('kd_jadwal',$detail->kd_jadwal)->first();
+        if($detail!=null) $jadwal = Jadwal::firstWhere('kd_detail',$detail->kd_detail)->first();
          return view('guru.detailSiswa')
           ->with('jadwal', $jadwal)
           ->with('detail', $detail)

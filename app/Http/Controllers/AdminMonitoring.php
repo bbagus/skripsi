@@ -5,7 +5,7 @@ use App\Repositories\UserRepository;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{DB,Validator,File};
-use App\Models\{Monitoring};
+use App\Models\{Monitoring,Bimbingan};
 
 class AdminMonitoring extends Controller
 {
@@ -25,7 +25,23 @@ class AdminMonitoring extends Controller
         return response()->json($kegiatan);
     }
    public function laporanPKL(){
-        return view('admin.laporanPkl')->with('user', $this->repository->getData());
+         $siswa = DB::table('penempatan')->join( 'pengajuan','penempatan.kd_pengajuan','=', 'pengajuan.kd_pengajuan')->join('siswa','pengajuan.nis','=','siswa.nis')->join('kelas','siswa.kd_kelas','=', 'kelas.kd_kelas')->select('kd_penempatan','siswa.nama','kelas.nama as kelas')->get();
+        return view('admin.laporanPkl')
+            ->with('siswa', $siswa)
+            ->with('user', $this->repository->getData());
+    }
+    public function loadLaporanPkl($kd_penempatan){
+        $bimbingan = Bimbingan::where('kd_penempatan', $kd_penempatan)->orderBy('tanggal')->get();
+        $tgl = null; 
+        foreach($bimbingan as $b){
+            $s = strtotime($b->tanggal);
+            $tgl[] = date('d M Y', $s);
+            $b->tgl = date('d M Y', $s);
+            $b->jam = date('H:i:s', $s);
+        }
+        $tgl[] = date('d M Y');
+        $tgl = array_unique($tgl);
+         return response()->json(['tgl'=>$tgl,'bimbingan'=>$bimbingan]);
     }
     public function nilai(){
         return view('admin.nilai')->with('user', $this->repository->getData());

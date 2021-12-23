@@ -16,13 +16,13 @@
             <input type="text" placeholder="Username" id="username" class="form-control" name="username" required
             autofocus style="border-right-color: rgb(206, 212, 218);
             border-right-style: solid;
-            border-right-width: 1px;">
+            border-right-width: 1px;" autocomplete="username">
             @if ($errors->has('username'))
             <span class="text-danger">{{ $errors->first('username') }}</span>
             @endif
         </div>
         <div class="input-group mb-3" id="show_hide_password">
-            <input type="password" placeholder="Password" id="password" class="form-control" name="password" required>
+            <input type="password" placeholder="Password" id="password" class="form-control" name="password" required autocomplete="current-password">
             <div class="input-group-append">
                 <div class="input-group-text">
                     <a href=""><i class="fa fa-eye-slash" aria-hidden="true"></i></a>

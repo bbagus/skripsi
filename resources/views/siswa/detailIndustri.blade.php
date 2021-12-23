@@ -289,12 +289,12 @@
     });
     $('#formjadwal').validate({
       rules: {
-        senin: {
+        'senin[]': {
           time: true,
         },
       },
       messages: {
-        senin: {
+        'senin[]': {
          time: "Mohon isi jam dengan benar!",
         },
       },
@@ -319,6 +319,7 @@
               $('#footerjadwal').append('<button class="btn btn-success" onclick="bukaSimpan()">Edit Jadwal</button>');
               $('#bodyjadwal input').attr("disabled",'disabled');
               $('#bodyjadwal input').css('background','transparent');
+              $('#kd_jadwal').val(data.kd_jadwal);
             } 
             pesan.removeClass('alert-danger').addClass('alert-success').fadeIn().delay(3000).fadeOut('slow');
             $(window).scrollTop(0);
