@@ -5,7 +5,7 @@ use App\Repositories\UserRepository;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{DB,Validator,File};
-use App\Models\{Monitoring,Bimbingan};
+use App\Models\{Monitoring,Bimbingan,Nilai};
 
 class AdminMonitoring extends Controller
 {
@@ -44,7 +44,13 @@ class AdminMonitoring extends Controller
          return response()->json(['tgl'=>$tgl,'bimbingan'=>$bimbingan]);
     }
     public function nilai(){
-        return view('admin.nilai')->with('user', $this->repository->getData());
+         $siswa = DB::table('penempatan')->join( 'pengajuan','penempatan.kd_pengajuan','=', 'pengajuan.kd_pengajuan')->join('siswa','pengajuan.nis','=','siswa.nis')->join('kelas','siswa.kd_kelas','=', 'kelas.kd_kelas')->select('kd_penempatan','siswa.nama','kelas.nama as kelas')->get();
+        return view('admin.nilai')
+        ->with('siswa', $siswa)
+        ->with('user', $this->repository->getData());
+    }
+    public function loadNilai($kd_penempatan){
+        $nilai = Nilai::where('kd_penempatan', $kd_penempatan)->first();
+        return response()->json($nilai);
     }
 }
-

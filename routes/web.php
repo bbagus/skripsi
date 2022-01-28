@@ -120,6 +120,7 @@ Route::middleware(['auth','is_admin'])->group(function () {
     Route::get('admin/kelola-laporan-pkl', [AdminMonitoring::class, 'laporanPKL']);
      Route::get('admin/kelola-laporan-pkl/{kd_penempatan}', [AdminMonitoring::class, 'loadlaporanPKL']);
     Route::get('admin/kelola-nilai', [AdminMonitoring::class, 'nilai']);
+    Route::get('admin/kelola-nilai/{kd_penempatan}', [AdminMonitoring::class, 'loadNilai']);
 });
 
 Route::middleware(['auth','is_siswa'])->group(function () {
@@ -182,7 +183,7 @@ Route::middleware(['auth','is_guru'])->group(function () {
 //login
 Route::get('login', [Login::class, 'index'])->name('login');
 Route::post('custom-login', [Login::class, 'customLogin'])->name('login.custom'); 
-Route::get('registrasi', [Login::class, 'registrasi'])->name('register-user');
+Route::get('registrasi', [Login::class, 'registrasi'])->name('register-user'); 
 Route::post('custom-registrasi', [Login::class, 'customRegistrasi'])->name('register.custom'); 
 Route::get('signout', [Login::class, 'signOut'])->name('signout');
 
