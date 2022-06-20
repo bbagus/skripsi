@@ -4,9 +4,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SI-PKL | Log in</title>
-
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/fontawesome-free/css/all.min.css">
   <!-- icheck bootstrap -->
@@ -41,7 +38,7 @@
   ">
   <div class="mask gradient-custom" style="height:100vh;">
     <div class="d-flex justify-content-center align-items-center">
-      <img src="data_file/smk-n-1-pengasih-seeklogo.webp" style="height:122px;margin-top:5vh;">
+      <img src="data_file/smk-n-1-pengasih-seeklogo.webp" style="height:122px;margin-top:5vh;" alt="logo SMK N 1 Pengasih">
     </div>
     <div class="d-flex justify-content-center align-items-center">
       <h2 class="text-center text-white" style="margin-top: 2vh;margin-bottom: 4vh;"> Selamat Datang di<br>

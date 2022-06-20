@@ -1,7 +1,7 @@
 @extends('masterlogin')
 @section('content')
 <div class="card card-dark">
-    <h4 class="card-header text-center">Login</h4>
+    <h3 class="card-header text-center">Login</h3>
     <div class="card-body login-card-body">
         <p class="login-box-msg">
          @if(session('success'))
@@ -25,7 +25,7 @@
             <input type="password" placeholder="Password" id="password" class="form-control" name="password" required autocomplete="current-password">
             <div class="input-group-append">
                 <div class="input-group-text">
-                    <a href=""><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+                    <i class="fa fa-eye-slash" aria-hidden="true"></i></a>
                 </div>
             </div>
             @if ($errors->has('password'))

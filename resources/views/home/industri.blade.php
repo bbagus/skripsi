@@ -40,7 +40,6 @@
                 <label>Filter Berdasarkan :</label>
                 <select class="form-control select2" name="k"  id="first-choice" data-placeholder="Any" style="width: 100%;">
                   @if(isset($search->kolom))
-                  <option <?php echo $search->kolom == 'jurusan' ? 'selected' : '' ?> value="jurusan">Jurusan</option>
                   <option <?php echo $search->kolom == 'bidang_kerja' ? 'selected' : '' ?> value="bidang_kerja">Bidang kerja</option>
                   <option <?php echo $search->kolom == 'wilayah' ? 'selected' : '' ?> value="wilayah">Wilayah</option>
                   @else

@@ -93,7 +93,7 @@ class AdminIndustri extends Controller
 				$nama_file = 'Industri'.'-'.$request->nama.'.'.$extension;
 				$tujuan_upload = 'data_file';
 				$file->move($tujuan_upload,$nama_file);
-			} else if ($request->hapus == 'alert-danger'){
+			} else if ($request->hapus == 'hapus'){
 			//ngilangi foto 
 				$nama_file = 'default.jpg';
 				$image_path = public_path().'/data_file/'.$industri->foto;
