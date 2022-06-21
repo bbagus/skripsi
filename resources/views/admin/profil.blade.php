@@ -35,7 +35,7 @@
               </div>
               <ul class="list-group list-group-unbordered mb-3">
                 <li class="list-group-item"> 
-                  <a href="/admin/profil/edit" class="btn btn-success btn-block"><i class="fa fa-edit"></i> Perbarui Detail Akun</a>
+                  <a href="/admin/profil/edit" class="btn btn-success btn-block"><i class="fa fa-edit"></i> Perbarui Profil</a>
                 </li>
               </ul>
             </div>

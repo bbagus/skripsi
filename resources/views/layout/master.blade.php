@@ -222,6 +222,8 @@
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
+    @if (\Request::is('/'))  
+    @else
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
@@ -229,10 +231,8 @@
             <h3 class="m-0">@yield('judul')</h3>
           </div>
           <div class="col-sm-6">
-           @if (\Request::is('/'))  
-           @else
            <ol class="breadcrumb float-sm-right">
-             <li class="breadcrumb-item"><a href="/">Home</a></li>         
+             <li class="breadcrumb-item"><a href="/">Home</a></li>
              <?php $link = "" ?>
              @for($i = 1; $i <= count(Request::segments()); $i++)
              @if($i < count(Request::segments()) & $i > 0)
@@ -243,12 +243,11 @@
              @endif
              @endfor
            </ol>
-           @endif
          </div>
-
        </div>
      </div><!-- /.container-fluid -->
    </section>
+   @endif
    @yield('content')
  </div>
  <!-- /.content-wrapper -->
