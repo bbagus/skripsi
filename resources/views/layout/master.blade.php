@@ -161,7 +161,7 @@
   @guest
 <!-- Navbar -->
   <nav class="main-header navbar navbar-expand-md navbar-primary navbar-dark">
-    <div class="container" style="max-width:1550px;">
+    <div class="container" style="max-width:1150px;">
       <ul class="navbar-nav">            
         <li class="nav-item">
       <a href="{{url('/')}}" class="navbar-brand">
@@ -177,7 +177,7 @@
     </div>
   </nav>
   <nav class="main-header navbar navbar-expand-md navbar-navy navbar-dark" style="background-color: #094688;">
-  <div class="container" style="max-width:1550px;">
+  <div class="container" style="max-width:1150px;">
      <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
      </button>

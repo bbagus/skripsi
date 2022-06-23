@@ -16,14 +16,11 @@
   @endif
 @endauth
 @endsection
-  @section('judul', 'Detail Industri')
-  @section('content')
+@section('content')
  <section class="content">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-md-12">
-        </div>
-        <div class="col-md-3">
+        <div class="col-md-2 offset-md-1">
           <!-- Profile Image -->
           <div class="card card-primary card-outline">
             <div class="card-header">
@@ -54,7 +51,7 @@
           <!-- /.card -->
         </div>
         <!-- /.col -->
-        <div class="col-md-9">
+        <div class="col-md-8">
           <div class="card">
             <div class="card-header">
              <h3 class="card-title">

@@ -27,7 +27,7 @@
 <section class="content">
   <div class="container-fluid">
     <h2 class="text-center display-4 mb-3">Daftar Industri</h2>
-    <div class="callout callout-info bg-gradient-info col-md-10 offset-md-1">
+    <div class="callout callout-info bg-gradient-info col-md-8 offset-md-2">
      <h5 class="text-center col-md-10 offset-md-1 p-3">Berikut merupakan daftar industri atau instansi tempat PKL. Anda dapat menemukan informasi seputar tempat industri, bidang kerja, kuota yang disediakan, dan lain lain.</h5>
      <p >
      </p>
