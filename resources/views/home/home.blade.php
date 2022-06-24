@@ -5,7 +5,11 @@
 @section('sidebar')
 @section('head')
 <link href="{{url('/')}}/assets/css/theme.css" rel="stylesheet">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+<style type="text/css">
+div .card-block {
+  padding: 1.25rem;
+}
+</style>
 @endsection
 <!-- Main Sidebar Container -->
 @auth
