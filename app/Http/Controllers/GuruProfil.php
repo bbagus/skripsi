@@ -34,7 +34,11 @@ class GuruProfil extends Controller
         } return response()->json(array('msg'=> 'Password lama salah!'), 200); 
     }
     public function editData(UserRepository $repository){
+         $jurusan = DB::table('kelas')
+        ->select('jurusan')
+        ->distinct()->get();
         return view('guru.editprofil')
+        ->with('jurusan', $jurusan)
         ->with('user', $this->repository->getData());
     }
     public function edit_akun(Request $request){

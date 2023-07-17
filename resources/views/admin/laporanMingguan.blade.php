@@ -30,15 +30,37 @@
                 <h3 class="card-title">
                 Daftar Siswa
                 </h3>
-              </div>
-              <div class="card-body p-2 overflow-auto" style="height:500px;" id="siswa">
-              	<input type="text" id="cari" placeholder="Cari siswa" class="form-control" name="cari"/>
+              </div> 
+              <div class="card-body p-2 overflow-auto"  id="siswa">
+                <div class="form-group p-3 row">
+                 <select id="kelas" class="kelas form-control select2bs4">
+                       <option selected="" value="">Pilih Kelas</option>
+                      @foreach ($kelas as $kls)
+                        <option value="{{$kls->kd_kelas}}">{{$kls->nama}}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                  <div class="form-group pl-3 pr-3 row">
+              	<input type="text" id="cari" placeholder="Cari siswa" class="form-control" name="cari" style="display:none;"/>
+                </div>
+                 <!--<div class="form-group row">
+                  <div class="col-md-5 pl-4" style="vertical-align:bottom;"> Tahun Ajaran</div>
+                  <div class="col-md-7">
+                    <select id="tahunajar" class="">
+                      <option selected value="">Semua</option>
+                      <option value="2020/2021">2020/2021</option>
+                      <option value="2021/2022">2021/2022</option>
+                      <option value="2022/2023" >2022/2023</option>
+                      <option value="2023/2024" >2023/2024</option>
+                    </select>
+                  </div>
+                </div> -->
               	<ul id="list" class="nav nav-pills flex-column">
-              		@foreach($siswa as $s)
+              		<!-- @foreach($siswa as $s)
               		<li class="nav-item">
-              			<a href="javascript:void(0)" class="nav-link {{$s->kd_penempatan}}" > {{$s->nama}} {{$s->kelas}}</a>
+              			<a href="javascript:void(0)" class="nav-link {{$s->kd_penempatan}}" > {{$s->nama}} {{$s->kelas}}</a><span style="display:none;">{{$s->tahun_ajaran}}</span>
               		</li>
-              		@endforeach
+              		@endforeach -->
               	</ul>
               </div>
             </div>
@@ -48,7 +70,7 @@
             <div class="card card-primary">
               <div class="card-header">
                  <h3 class="card-title">
-                Kalender
+                Kalender Kegiatan
                 </h3>
               </div>
               <div class="card-body p-0">
@@ -76,6 +98,29 @@
 <script src="{{url('/')}}/AdminLTE-master/plugins/jquery-ui/jquery-ui.min.js"></script>
 <script defer>
 $(document).ready(function(){
+  $('#tahunajar').on('change', function(){
+    var value = $(this).val().toLowerCase();
+    $("#list li").filter(function() {
+       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+  $('#kelas').on('change', function(){
+     var kelas = $(this).val();
+     $.ajax({
+      method: "GET",
+      url: '{{url('/')}}/admin/kelola-laporan-kegiatan/loadsiswa/'+kelas,
+     }).done(function(data){
+      var siswa = data;
+      $('#list').html('');
+      $('#cari').css('display', 'inline-block');
+      siswa.forEach(function(item,index){
+        $('#list').append('<li class="nav-item"><a href="javascript:void(0)" class="nav-link '+item.kd_penempatan+' ">'+ item.nama+' '+item.kelas+' </a><span style="display:none;">'+item.tahun_ajaran+'</span></li>');
+      });
+      if(Object.keys(siswa).length == 0){
+         $('#list').append('<li class="nav-item text-center">Data siswa tidak ditemukan.</li>');
+      };
+     });
+  });
 	 $("#cari").on("keyup", function() {
 	    var value = $(this).val().toLowerCase();
 	    $("#list li").filter(function() {

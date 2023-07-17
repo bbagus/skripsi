@@ -37,10 +37,10 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="/admin/" class="nav-link {{ Request::path() == 'admin' ? 'active' : '' }}">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
+            <a href="/admin/profil" class="nav-link {{ Request::path() == 'admin/profil' ? 'active' : '' }}">
+              <i class="nav-icon fas fa-user-alt"></i>
               <p>
-              Dashboard
+              Profil
               </p>
             </a>
           </li>

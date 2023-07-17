@@ -22,26 +22,6 @@
           </div>
         </div>
           <!-- col -->
-          <div class="col-md-9">
-            <div class="card card-primary">
-              <div class="card-header" style="background-color: #094688;">
-                <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                <i class="fas fa-minus"></i>
-                </button>
-              </div>
-                 <h3 class="card-title text-white">
-                Kalender
-                </h3>
-              </div>
-              <div class="card-body p-0">
-                <!-- THE CALENDAR -->
-                <div id="calendar"></div>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-          </div>
           <div class="col-md-3">
             <div class="card card-info">
               <div class="card-header">
@@ -66,6 +46,26 @@
             </div>
           </div>
           <!-- /.col -->
+           <div class="col-md-9">
+            <div class="card card-primary">
+              <div class="card-header" style="background-color: #094688;">
+                <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+                </button>
+              </div>
+                 <h3 class="card-title text-white">
+                Kalender
+                </h3>
+              </div>
+              <div class="card-body p-0">
+                <!-- THE CALENDAR -->
+                <div id="calendar"></div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
         </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->

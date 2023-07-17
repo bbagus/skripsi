@@ -7,6 +7,9 @@
 <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 <!-- icheck bootstrap -->
 <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+<!-- Select2 -->
+  <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 <style>
 thead input {
         width: 100%;
@@ -61,29 +64,18 @@ thead input {
                     </th>
                     <th><input class="nis form-control" type="text" placeholder="NIS" /></th>
                     <th><input class="nama form-control" type="text" placeholder="Nama lengkap" /></th>
-                    <th><select class="kelas form-control">
-                      <option selected="" value="">Kelas</option>
-                      <option value="XI MM 1">XI MM 1</option>
-                      <option value="XI MM 2">XI MM 2</option>
-                      <option value="XI MM 3">XI MM 3</option>
-                      <option value="XI AKL 1">XI AKL 1</option>
-                      <option value="XI AKL 2">XI AKL 2</option>
-                      <option value="XI OTKP 1">XI OTKP 1</option>
-                      <option value="XI OTKP 2">XI OTKP 2</option>
-                      <option value="XI BDP 1">XI BDP 1</option>
-                      <option value="XI BDP 2">XI BDP 2</option>
-                      <option value="XI TB">XI TB</option>
-                      <option value="XI PH">XI PH</option>
+                    <th><select class="kelas form-control select2bs4">
+                      <option selected="" value="">Semua</option>
+                      @foreach($kelas as $kls)
+                      <option value="{{$kls->nama}}">{{$kls->nama}}</option>
+                      @endforeach
                     </select></th>
                     <th>
-                      <select class="jurusan form-control">
-                      <option selected="" value="">Program Keahlian</option>
-                      <option value="Akuntansi Keuangan dan Lembaga">Akuntansi Keuangan dan Lembaga</option>
-                      <option value="Bisnis Daring dan Pemasaran">Bisnis Daring dan Pemasaran</option>
-                      <option value="Otomatisasi dan Tata Kelola Perkantoran">Otomatisasi dan Tata Kelola Perkantoran</option>
-                      <option value="Perhotelan">Perhotelan</option>
-                      <option value="Multimedia">Multimedia</option>
-                      <option value="Tata Busana">Tata Busana</option>
+                      <select class="jurusan form-control select2bs4">
+                      <option selected="" value="">Semua</option>
+                      @foreach ($kelas->unique('jurusan') as $jur)
+                      <option value="{{$jur->jurusan}}">{{$jur->jurusan}}</option>
+                      @endforeach
                     </select>
                     </th>
                     <th><input class="telp form-control" type="text" placeholder="No. Telp" /></th>
@@ -182,8 +174,18 @@ thead input {
 </script>
 <script src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/buttons.colVis.min.js">
 </script>
+<!-- Select2 -->
+<script src="{{url('/')}}/AdminLTE-master/plugins/select2/js/select2.full.min.js"></script>
+<script src="{{url('/')}}/AdminLTE-master/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
 <script defer>
   $(function () {
+       bsCustomFileInput.init();
+     //Initialize Select2 Elements
+     $('.select2').select2()
+     //Initialize Select2 Elements
+     $('.select2bs4').select2({
+      theme: 'bootstrap4'
+    })
     //Enable check and uncheck all functionality
     $('.checkbox-toggle').click(function () {
       var clicks = $(this).data('clicks')

@@ -65,7 +65,7 @@ SI-PKL : Admin - Detail pengajuan
               <tr>
                 <td>Tahun Ajaran</td>
                 <td>:</td>
-                <td>{{$tahunajaran}}</td>
+                <td>{{$pengajuan->tahun_ajaran}}</td>
               </tr>
             </tbody>
           </table>

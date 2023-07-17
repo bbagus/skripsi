@@ -18,8 +18,8 @@
             </div>
           </div>
         </div>
-        <div class="col-md-12">
-          <div class="card card-info card-outline">
+          <div class="col-md-5">
+          <div class="card card-info card-outline " style="height:95%">
             <div class="card-header">
              <div class="card-tools">
               <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -37,7 +37,7 @@
                   <th>Nama</th>
                   <th>NIP</th>
                   <th>No. Telp</th>
-                  <th>Foto</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -46,7 +46,7 @@
                   <td>{{$penempatan->nama}}</td>
                   <td>{{$penempatan->nip}}</td>
                   <td>{{$penempatan->telp}}</td>
-                  <td style="max-width: 80px;">
+                  <td style="max-width: 90px;">
                     @if($penempatan->foto!='default.jpg')
                     <img class="img-fluid" src="{{url('/')}}/data_file/{{$penempatan->foto}}" alt="foto guru">
                     @else
@@ -65,9 +65,13 @@
                   </tbody>
                 </table>
               </div>
+              <div class="card-footer" style="padding: .75rem 3rem;">
+              </div>
             </div>
+          </div>
            <!-- general form elements -->
-          <div class="card card-primary" >
+           <div class="col-md-7">
+          <div class="card card-primary" style="height:95%;">
             <div class="card-header">
               <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -94,32 +98,32 @@
                 <input id="kd_detail" type="hidden" name="kd_detail" value="{{$detail!=null?$detail->kd_detail:''}}"/>
                 <input type="hidden" name="kd_pengajuan" value="{{$industri->kd_pengajuan}}"/>
                 <div class="form-group row">
-                  <label for="nama" class="col-sm-2 col-form-label">Nama Instansi<strong class="text-danger">*</strong></label>
-                  <div class="col-sm-10">
+                  <label for="nama" class="col-sm-4 col-form-label">Nama Instansi<strong class="text-danger">*</strong></label>
+                  <div class="col-sm-8">
                     <a class="form-control" href="{{url('/')}}/industri/{{$industri->kd_industri}}">{{$industri->nama}}</a>
                   </div>
                 </div>
                   <div class="form-group row">
-                  <label for="alamat" class="col-sm-2 col-form-label">Alamat</label>
-                  <div class="col-sm-10">
+                  <label for="alamat" class="col-sm-4 col-form-label">Alamat</label>
+                  <div class="col-sm-8">
                     <input disabled   type="text" class="form-control" name="alamat" placeholder="Tulis nama industri.." value="{{$industri->alamat}}">
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="bagian" class="col-sm-2 col-form-label">Bagian/Divisi</label>
-                  <div class="col-sm-10">
+                  <label for="bagian" class="col-sm-4 col-form-label">Bagian/Divisi</label>
+                  <div class="col-sm-8">
                     <input type="text" class="form-control"  name="bagian" placeholder="Tulis bagian/divisi.." maxlength="50" value="{{ $detail == null ? '': $detail->bagian }}">
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="pimpinan" class="col-sm-2 col-form-label">Nama Pimpinan Instansi</label>
-                  <div class="col-sm-10">
+                  <label for="pimpinan" class="col-sm-4 col-form-label">Nama Pimpinan Instansi</label>
+                  <div class="col-sm-8">
                     <input type="text" class="form-control"  name="pimpinan" placeholder="Tulis nama pimpinan instansi.." maxlength="50" value="{{ $detail == null ? '': $detail->pimpinan }}">
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="pembimbing" class="col-sm-2 col-form-label">Nama Pembimbing Instansi</label>
-                  <div class="col-sm-10">
+                  <label for="pembimbing" class="col-sm-4 col-form-label">Nama Pembimbing Instansi</label>
+                  <div class="col-sm-8">
                     <input type="text" class="form-control"  name="pembimbing" placeholder="Tulis nama pembimbing instansi.." maxlength="50" value="{{ $detail == null ? '': $detail->pembimbing }}">
                   </div>
                 </div>
@@ -134,6 +138,8 @@
               <!-- /.card-footer -->
               @endif
         </div>
+      </div>
+      <div class="col-md-12">
         <div class="card card-info">
             <div class="card-header">
               <div class="card-tools">
@@ -216,8 +222,8 @@
               @endif
             </div>
         </div>
+      </div>
       <!-- /.col -->
-    </div>
     <!-- /.row -->
   </div><!-- /.container-fluid -->
 </section>

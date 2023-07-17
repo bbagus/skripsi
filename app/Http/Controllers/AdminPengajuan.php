@@ -14,7 +14,10 @@ class AdminPengajuan extends Controller
     }
     public function index(){
          $user = $this->repository->getData(); 
-		return view('admin.pengajuan')->with('user', $user);
+         $kelas = DB::table('kelas')->get();
+		return view('admin.pengajuan')
+        ->with('kelas', $kelas)
+        ->with('user', $user);
 	}
     public function loadMenunggu(){
         $pengajuan = DB::table('pengajuan')
@@ -96,8 +99,7 @@ class AdminPengajuan extends Controller
           ->with('user', $user)
           ->with('pengajuan', $pengajuan)
           ->with('siswa', $siswa)
-          ->with('industri', $industri)
-          ->with('tahunajaran',$this->repository->getTahunAjaran());
+          ->with('industri', $industri);
     }
     public function generatePengajuan(){
         $nis = Siswa::leftjoin('pengajuan', 'siswa.nis','=','pengajuan.nis')

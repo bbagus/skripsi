@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{DB,Validator,File};
-use App\Models\{Siswa,User};
+use App\Models\{Siswa,User,Kelas};
 use App\Repositories\UserRepository;
 
 class AdminSiswa extends Controller
@@ -14,7 +14,9 @@ class AdminSiswa extends Controller
         $this->repository = $repository;
     }
 	public function index(){
-		return view('admin.siswa', ['user' => $this->repository->getData()]);
+		$kelas = DB::table('kelas')
+		->select('nama', 'jurusan')->distinct()->get();
+		return view('admin.siswa', ['user' => $this->repository->getData(), 'kelas' => $kelas]);
 	}
 	public function loadSiswa(){
 		$siswa = DB::table('siswa')
@@ -25,13 +27,23 @@ class AdminSiswa extends Controller
 	}
 	public function tambahSiswa(){
 		$user = $this->repository->getData();
-		return view('admin.tambahSiswa')->with('user', $user);
+		$kelas = DB::table('kelas')->get();
+		return view('admin.tambahSiswa')
+		->with('kelas', $kelas)
+		->with('user', $user);
 	}
 	public function editSiswa($nis){
 		$siswa = DB::table('siswa')
 		->join('users', 'siswa.nis', '=', 'users.username')
+		->join('kelas', 'siswa.kd_kelas','=','kelas.kd_kelas')
+		->select('siswa.nis', 'siswa.nama', 'siswa.tgl_lahir', 'siswa.kd_kelas', 'kelas.nama as kelas','kelas.jurusan', 'siswa.telp','siswa.alamat','siswa.orang_tua', 'siswa.foto', 'username', 'email')
 		->where('nis',$nis)->first();
-		if ($siswa != null)	return view('admin.editSiswa', ['siswa' => $siswa,'user' => $this->repository->getData()]);
+		$kelas = DB::table('kelas')->get();
+		if ($siswa != null)	return view('admin.editSiswa', [
+			'siswa' => $siswa,
+			'user' => $this->repository->getData(),
+			'kelas' => $kelas
+		]);
 		return redirect()->action([AdminSiswa::class, 'index']);
 	}
 	public function proses_upload(Request $request){

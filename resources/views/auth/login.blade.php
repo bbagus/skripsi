@@ -25,7 +25,7 @@
             <input type="password" placeholder="Password" id="password" class="form-control" name="password" required autocomplete="current-password">
             <div class="input-group-append">
                 <div class="input-group-text">
-                    <i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+                    <a><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
                 </div>
             </div>
             @if ($errors->has('password'))
@@ -41,13 +41,7 @@
             </label>
             </div>
           </div>
-          <div class="col-6">
-            <div class="icheck-primary" style="text-align:right;">
-            <a href="forgot-password.html">Lupa password ?</a>
-            </div>
-         </div>
         </div>
-
         <div class="d-grid mx-auto mb-2">
             <button type="submit" class="btn btn-primary btn-block">Masuk</button>
         </div>
@@ -55,7 +49,7 @@
     </div>
     <div class="card-body login-card-body" style="padding-top: 0px;">
         <p class="login-box-msg" style="padding-bottom: 0px;">
-        <b>SI-PKL 2021.</b>
+        <b>SI-PKL 2023.</b>
         </p>
     </div>
 </div>

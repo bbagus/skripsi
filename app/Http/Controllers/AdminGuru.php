@@ -14,21 +14,35 @@ class AdminGuru extends Controller
         $this->repository = $repository;
     }
 	public function index(){
-		return view('admin.guru', ['user' => $this->repository->getData()]);
+		$jurusan = DB::table('kelas')
+		->select('jurusan')
+		->distinct()->get();
+		return view('admin.guru', ['user' => $this->repository->getData(), 'jurusan' => $jurusan]);
 	}
 	public function loadGuru(){
 		$guru = DB::table('guru_pembimbing')->get();
 		return response()->json($guru);
 	}
 	public function tambahGuru(){
-		return view('admin.tambahGuru')->with('user', $this->repository->getData());
+		$jurusan = DB::table('kelas')
+		->select('jurusan')
+		->distinct()->get();
+		return view('admin.tambahGuru')
+		->with('jurusan', $jurusan)
+		->with('user', $this->repository->getData());
 	}
 	public function editGuru($kd_pembimbing){
 		$user = $this->repository->getData();
 		$guru = DB::table('guru_pembimbing')
 		->join('users', 'guru_pembimbing.username', '=', 'users.username')
 		->where('kd_pembimbing',$kd_pembimbing)->first();
-		if ($guru != null) return view('admin.editGuru', ['guru' => $guru, 'user' => $user]);
+		$jurusan = DB::table('kelas')
+		->select('jurusan')->distinct()->get();
+		if ($guru != null) return view('admin.editGuru', [
+			'guru' => $guru, 
+			'user' => $user,
+			'jurusan' => $jurusan
+		]);
 		return redirect()->action([AdminGuru::class, 'index']);
 	}
 	public function proses_upload(Request $request){

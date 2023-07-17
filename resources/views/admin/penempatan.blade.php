@@ -5,6 +5,9 @@
 <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
 <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 <style>
 thead input {
         width: 100%;
@@ -50,6 +53,7 @@ thead input {
                       <option value="2020/2021">2020/2021</option>
                       <option value="2021/2022">2021/2022</option>
                       <option value="2022/2023" >2022/2023</option>
+                      <option value="2023/2024" >2023/2024</option>
                     </select>
                   </div>
                 </div>
@@ -70,19 +74,11 @@ thead input {
                   <th></th>
                     <th><input class="nis form-control" type="text" placeholder="NIS" /></th>
                     <th><input class="nama form-control" type="text" placeholder="Nama Siswa" /></th>
-                    <th><select class="kelas form-control">
-                          <option selected="" value="">Kelas</option>
-                          <option value="XI MM 1">XI MM 1</option>
-                          <option value="XI MM 2">XI MM 2</option>
-                          <option value="XI MM 3">XI MM 3</option>
-                          <option value="XI AKL 1">XI AKL 1</option>
-                          <option value="XI AKL 2">XI AKL 2</option>
-                          <option value="XI OTKP 1">XI OTKP 1</option>
-                          <option value="XI OTKP 2">XI OTKP 2</option>
-                          <option value="XI BDP 1">XI BDP 1</option>
-                          <option value="XI BDP 2">XI BDP 2</option>
-                          <option value="XI TB">XI TB</option>
-                          <option value="XI PH">XI PH</option>
+                    <th><select class="kelas form-control select2bs4">
+                        <option selected="" value="">Semua</option>
+                          @foreach($kelas as $kls)
+                        <option value="{{$kls->nama}}">{{$kls->nama}}</option>
+                          @endforeach
                         </select>
                     </th>
                     <th><input class="guru form-control" type="text" placeholder="Guru Pembimbing" /></th>
@@ -103,6 +99,7 @@ thead input {
                       <option value="2020/2021">2020/2021</option>
                       <option value="2021/2022">2021/2022</option>
                       <option value="2022/2023" >2022/2023</option>
+                      <option value="2023/2024" >2023/2024</option>
                     </select>
                   </div>
               </div>
@@ -122,19 +119,11 @@ thead input {
                   <tr id="filter2">
                     <th><input class="nis form-control" type="text" placeholder="NIS" /></th>
                     <th><input class="nama form-control" type="text" placeholder="Nama Siswa" /></th>
-                    <th><select class="kelas form-control">
-                          <option selected="" value="">Kelas</option>
-                          <option value="XI MM 1">XI MM 1</option>
-                          <option value="XI MM 2">XI MM 2</option>
-                          <option value="XI MM 3">XI MM 3</option>
-                          <option value="XI AKL 1">XI AKL 1</option>
-                          <option value="XI AKL 2">XI AKL 2</option>
-                          <option value="XI OTKP 1">XI OTKP 1</option>
-                          <option value="XI OTKP 2">XI OTKP 2</option>
-                          <option value="XI BDP 1">XI BDP 1</option>
-                          <option value="XI BDP 2">XI BDP 2</option>
-                          <option value="XI TB">XI TB</option>
-                          <option value="XI PH">XI PH</option>
+                    <th><select class="kelas form-control select2bs4">
+                         <option selected="" value="">Semua</option>
+                          @foreach($kelas as $kel)
+                        <option value="{{$kel->nama}}">{{$kel->nama}}</option>
+                          @endforeach
                         </select>
                     </th>
                     <th><input class="guru form-control" type="text" placeholder="Guru Pembimbing" /></th>
@@ -156,6 +145,7 @@ thead input {
                       <option value="2020/2021">2020/2021</option>
                       <option value="2021/2022">2021/2022</option>
                       <option value="2022/2023" >2022/2023</option>
+                      <option value="2023/2024" >2023/2024</option>
                     </select>
                   </div>
               </div>
@@ -175,19 +165,12 @@ thead input {
                   <tr id="filter3">
                     <th><input class="nis form-control" type="text" placeholder="NIS" /></th>
                     <th><input class="nama form-control" type="text" placeholder="Nama Siswa" /></th>
-                    <th><select class="kelas form-control">
-                          <option selected="" value="">Kelas</option>
-                          <option value="XI MM 1">XI MM 1</option>
-                          <option value="XI MM 2">XI MM 2</option>
-                          <option value="XI MM 3">XI MM 3</option>
-                          <option value="XI AKL 1">XI AKL 1</option>
-                          <option value="XI AKL 2">XI AKL 2</option>
-                          <option value="XI OTKP 1">XI OTKP 1</option>
-                          <option value="XI OTKP 2">XI OTKP 2</option>
-                          <option value="XI BDP 1">XI BDP 1</option>
-                          <option value="XI BDP 2">XI BDP 2</option>
-                          <option value="XI TB">XI TB</option>
-                          <option value="XI PH">XI PH</option>
+                    <th><select class="kelas form-control select2bs4">
+                          <option selected="" value="">Semua</option>
+                          @foreach($kelas as $kelas)
+                        <option value="{{$kelas->nama}}">{{$kelas->nama}}</option>
+                          @endforeach
+                        </select>
                         </select>
                     </th>
                     <th><input class="guru form-control" type="text" placeholder="Guru Pembimbing" /></th>
@@ -235,8 +218,17 @@ thead input {
 </script>
 <script defer src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/buttons.colVis.min.js" >
 </script>
+<!-- Select2 -->
+<script src="{{url('/')}}/AdminLTE-master/plugins/select2/js/select2.full.min.js"></script>
+<script src="{{url('/')}}/AdminLTE-master/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
 <script defer >
 $(document).ready(function () {
+   //Initialize Select2 Elements
+     $('.select2').select2()
+     //Initialize Select2 Elements
+     $('.select2bs4').select2({
+      theme: 'bootstrap4'
+    })
    var table = $("#example1").DataTable({
     "processing": true,
     "orderCellsTop": true,

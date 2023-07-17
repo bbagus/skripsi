@@ -29,14 +29,14 @@ class UserRepository
         return $koordinator;
     }
     public function getTahunAjaran(){
-        $tahunajar = '2021/2022';
+        $tahunajar = '2023/2024';
         return $tahunajar;
     }
 
     public function getTanggalPKL(){
         $tanggal = (object)array(); 
-        $tanggal->mulai = '2021-04-01';
-        $tanggal->selesai = '2022-04-01';
+        $tanggal->mulai = '2022-01-01';
+        $tanggal->selesai = '2023-12-31';
         return $tanggal;
     }
 }

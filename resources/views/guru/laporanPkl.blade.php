@@ -22,29 +22,6 @@
                 </div>
              </div>
            </div>
-          <div class="col-md-9">
-            <div class="card">
-              <div class="card-header" style="background-color: #094688;">
-                <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                <i class="fas fa-minus"></i>
-                </button>
-              </div>
-               <h3 class="card-title text-white">
-                Riwayat Bimbingan
-              </h3>
-            </div>
-            <div class="card-body">
-              <form id="bimbingan" action="{{url('/')}}/guru/laporan-pkl/tambah" method="POST" enctype="multipart/form-data">
-                @csrf
-                <!-- The time line -->
-                 <div id="klik">Klik nama siswa</div>
-                <div id="timeline" class="timeline">
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
         <div class="col-md-3">
             <div class="card card-info">
               <div class="card-header">
@@ -68,6 +45,29 @@
             </div>
             </div>
           </div>
+          <div class="col-md-9">
+            <div class="card">
+              <div class="card-header" style="background-color: #094688;">
+                <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+                </button>
+              </div>
+               <h3 class="card-title text-white">
+                Riwayat Bimbingan
+              </h3>
+            </div>
+            <div class="card-body">
+              <form id="bimbingan" action="{{url('/')}}/guru/laporan-pkl/tambah" method="POST" enctype="multipart/form-data">
+                @csrf
+                <!-- The time line -->
+                 <div id="klik">Klik nama siswa</div>
+                <div id="timeline" class="timeline">
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
       <!-- /.timeline -->
     </section>

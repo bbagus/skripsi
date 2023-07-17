@@ -21,7 +21,11 @@ class AdminIndustri extends Controller
 		return response()->json($industri);
 	}
 	public function tambahIndustri(){
-		return view('admin.tambahIndustri')->with('user', $this->repository->getData());
+		$jurusan = DB::table('kelas')
+		->select('jurusan')->distinct()->get();
+		return view('admin.tambahIndustri')
+		->with('jurusan', $jurusan)
+		->with('user', $this->repository->getData());
 	}
 	public function editIndustri($kd_industri){
 		$industri = DB::table('industri')->where('kd_industri',$kd_industri)->first();

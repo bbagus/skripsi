@@ -7,6 +7,9 @@
   <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
      <!-- icheck bootstrap -->
   <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="{{url('/')}}/AdminLTE-master/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 @endsection
 @section('sidebar')
 @include('layout.sidebaradmin')
@@ -52,14 +55,11 @@
                     <th><input class="nama form-control" type="text" placeholder="Nama" /></th>
                     <th><input class="nip form-control" type="text" placeholder="NIP" /></th>
                     <th><input class="telp form-control" type="text" placeholder="No. Telepon" /></th>
-                    <th><select class="jurusan form-control">
-                      <option selected="" value="">Program Keahlian</option>
-                      <option value="Akuntansi Keuangan dan Lembaga">Akuntansi Keuangan dan Lembaga</option>
-                      <option value="Bisnis Daring dan Pemasaran">Bisnis Daring dan Pemasaran</option>
-                      <option value="Otomatisasi dan Tata Kelola Perkantoran">Otomatisasi dan Tata Kelola Perkantoran</option>
-                      <option value="Perhotelan">Perhotelan</option>
-                      <option value="Multimedia">Multimedia</option>
-                      <option value="Tata Busana">Tata Busana</option>
+                    <th><select class="jurusan form-control select2bs4">
+                      <option selected="" value="">Semua</option>
+                    @foreach($jurusan as $jur)
+                      <option value="{{$jur->jurusan}}">{{$jur->jurusan}}</option>
+                     @endforeach
                     </select></th>
                     <th><input class="wilayah form-control" type="text" placeholder="Wilayah" /></th>
                     <th></th>
@@ -156,8 +156,18 @@
 </script>
 <script src="{{url('/')}}/AdminLTE-master/plugins/datatables-buttons/js/buttons.colVis.min.js">
 </script>
+<!-- Select2 -->
+<script src="{{url('/')}}/AdminLTE-master/plugins/select2/js/select2.full.min.js"></script>
+<script src="{{url('/')}}/AdminLTE-master/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
 <script defer>
  $(function () {
+   bsCustomFileInput.init();
+     //Initialize Select2 Elements
+     $('.select2').select2()
+     //Initialize Select2 Elements
+     $('.select2bs4').select2({
+      theme: 'bootstrap4'
+    })
    //Enable check and uncheck all functionality
     $('.checkbox-toggle').click(function () {
       var clicks = $(this).data('clicks')

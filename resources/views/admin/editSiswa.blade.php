@@ -59,17 +59,10 @@ SI-PKL : Ubah Data Siswa - {{$siswa->nama}}
               <label for="kd_kelas" class="col-sm-2 col-form-label" class="col-sm-2 col-form-label">Kelas<strong class="text-danger">*</strong></label>
               <div class="col-sm-10">
                 <select class="form-control select2bs4" name="kd_kelas" style="width: 100%;">
-                  <option <?php echo $siswa->kd_kelas == '1' ? 'selected': '' ?> value="1">XI MM 1</option>
-                  <option <?php echo $siswa->kd_kelas == '2' ? 'selected': '' ?> value="2">XI MM 2</option>
-                  <option <?php echo $siswa->kd_kelas == '3' ? 'selected': '' ?> value="1">XI MM 3</option>
-                  <option <?php echo $siswa->kd_kelas == '4' ? 'selected': '' ?> value="2">XI AKL 1</option>
-                  <option <?php echo $siswa->kd_kelas == '5' ? 'selected': '' ?> value="1">XI AKL 2</option>
-                  <option <?php echo $siswa->kd_kelas == '6' ? 'selected': '' ?> value="2">XI OTKP 1</option>
-                  <option <?php echo $siswa->kd_kelas == '7' ? 'selected': '' ?> value="1">XI OTKP 2</option>
-                  <option <?php echo $siswa->kd_kelas == '8' ? 'selected': '' ?> value="2">XI BDP 1</option>
-                  <option <?php echo $siswa->kd_kelas == '9' ? 'selected': '' ?> value="1">XI BDP 2</option>
-                  <option <?php echo $siswa->kd_kelas == '10' ? 'selected': '' ?> value="2">XI TB</option>
-                  <option <?php echo $siswa->kd_kelas == '11' ? 'selected': '' ?> value="1">XI PH</option>
+                  <option selected="" value="{{$siswa->kd_kelas}}">{{$siswa->kelas}}</option>
+                  @foreach ($kelas as $kelas)
+                  <option value="{{$kelas->kd_kelas}}">{{$kelas->nama}}</option>
+                  @endforeach
                 </select>
               </div>
             </div>

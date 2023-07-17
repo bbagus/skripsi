@@ -27,7 +27,7 @@ Route::get('/industri/{kd_industri}', [Industri::class, 'detailIndustri']);
 
 //admin
 Route::middleware(['auth','is_admin'])->group(function () {
-    Route::get('admin', [AdminDashboard::class, 'dashboard']);
+    Route::get('admin',[AdminProfil::class, 'index']);
 //profil admin
     Route::get('admin/profil', [AdminProfil::class, 'index']);
     Route::get('admin/profil/edit', [AdminProfil::class, 'editData']);
@@ -120,12 +120,12 @@ Route::middleware(['auth','is_admin'])->group(function () {
     Route::get('admin/kelola-laporan-pkl', [AdminMonitoring::class, 'laporanPKL']);
      Route::get('admin/kelola-laporan-pkl/{kd_penempatan}', [AdminMonitoring::class, 'loadlaporanPKL']);
     Route::get('admin/kelola-nilai', [AdminMonitoring::class, 'nilai']);
-    Route::get('admin/kelola-nilai/{kd_penempatan}', [AdminMonitoring::class, 'loadNilai']);
+    Route::get('admin/get-nilai', [AdminMonitoring::class, 'loadNilai']);
 });
 
 Route::middleware(['auth','is_siswa'])->group(function () {
 //siswa
-    Route::get('siswa', [SiswaDashboard::class, 'dashboard']);
+    Route::get('siswa', [SiswaProfil::class, 'index']);
     Route::get('siswa/profil', [SiswaProfil::class, 'index']);
     Route::get('siswa/profil/edit', [SiswaProfil::class, 'editData']);
 //pengajuan
@@ -154,7 +154,7 @@ Route::middleware(['auth','is_siswa'])->group(function () {
 
 Route::middleware(['auth','is_guru'])->group(function () {
 //guru
-    Route::get('guru', [GuruDashboard::class, 'dashboard']);
+    Route::get('guru', [GuruProfil::class, 'index']);
 //guruprofil
     Route::get('guru/profil', [GuruProfil::class, 'index']);
     Route::get('guru/profil/edit', [GuruProfil::class, 'editData']);
@@ -200,6 +200,8 @@ Route::middleware(['auth','is_admin'])->group(function () {
     Route::get('admin/kelola-penempatan-carisiswa2', [AdminPenempatan::class, 'searchSiswa2']);
     Route::get('admin/kelola-penempatan-carisiswa3', [AdminPenempatan::class, 'searchSiswa3']);
     Route::get('admin/kelola-penempatan-carisiswa4', [AdminPenempatan::class, 'searchSiswa4']);
+    Route::get('admin/kelola-laporan-kegiatan/loadsiswa/{kd_kelas}', [AdminMonitoring::class, 'loadSiswa']);
+    Route::get('admin/kelola-laporan-kegiatan/loadsiswa2/{kd_kelas}', [AdminMonitoring::class, 'loadSiswa2']);
     });
 
 

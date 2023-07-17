@@ -34,9 +34,8 @@ class SiswaPengajuan extends Controller
     }
     public function search(Request $request){
         $industri = [];
-        if($request->has('q')){
-            $industri = DB::table('industri')->select('kd_industri','nama')->where('nama', 'LIKE', '%'. $request->q .'%')->get();
-        }
+        $industri = DB::table('industri')->select('kd_industri','nama')->where('nama', 'LIKE', '%'. $request->q .'%')->get();
+        
         return response()->json($industri);
     }
     public function tambahPengajuan(Request $request){

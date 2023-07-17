@@ -26,13 +26,13 @@ class Login extends Controller
             $role = auth()->user()->role;
            if ($role == 'admin') {
                  $request->session()->regenerate();//tambahan
-                 return redirect('admin');
+                 return redirect('admin/profil');
              }else if ($role == 'siswa'){
                 $request->session()->regenerate();//tambahan
-                return redirect('siswa');
+                return redirect('siswa/profil');
              }else if ($role == 'guru'){
                 $request->session()->regenerate();//tambahan
-                return redirect('guru');
+                return redirect('guru/profil');
              }
          } return redirect("login")->withSuccess('Username atau Password salah!');
     }

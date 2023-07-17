@@ -126,8 +126,8 @@
       } catch (e) {}
       return false;
     }, 'Waktu selesai harus lebih besar');
-      var fromDate = new Date("2021-01-01");
-      var toDate = new Date("2022-12-31");
+      var fromDate = new Date("2022-01-01");
+      var toDate = new Date("2023-12-31");
       var time = '07:00';
       $('#mulai').change(function(){
         time = $(this).val();

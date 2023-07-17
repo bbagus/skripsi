@@ -37,7 +37,7 @@
                 alt="User profile picture" style="min-height:150px;">
               </div>
               <ul id="hapus" class="list-group list-group-unbordered mb-3" style="text-align: center;">
-                <li class="list-group-item"> 
+                <li class="list-group-item"> S
                   <a href="javascript:void(0)" onclick="hapusFoto('/guru/profil/hapus-foto')" class="btn btn-dark"><i class="fa fa-trash-alt"></i> Hapus Foto</a>
                 </li>
               </ul>
@@ -104,12 +104,9 @@
                     <div class="col-sm-10">
                       <select class="form-control select2bs4" name="jurusan" style="width: 100%;">
                         <option selected="" value="{{$user->jurusan}}">{{$user->jurusan}}</option>
-                        <option value="Akuntansi Keuangan dan Lembaga">Akuntansi Keuangan dan Lembaga</option>
-                        <option value="Bisnis Daring dan Pemasaran">Bisnis Daring dan Pemasaran</option>
-                        <option value="Otomatisasi dan Tata Kelola Perkantoran">Otomatisasi dan Tata Kelola Perkantoran</option>
-                        <option value="Perhotelan">Perhotelan</option>
-                        <option value="Multimedia">Multimedia</option>
-                        <option value="Tata Busana">Tata Busana</option>
+                         @foreach($jurusan as $jurusan)
+                        <option value="{{$jurusan->jurusan}}">{{$jurusan->jurusan}}</option>
+                        @endforeach
                       </select>
                     </div>
                   </div>

@@ -57,17 +57,9 @@
               <div class="col-sm-10">
                 <select class="form-control select2bs4" name="kd_kelas" id="kd_kelas" style="width: 100%;">
                   <option disabled="" selected="" hidden="">Pilih kelas</option>
-                  <option value="1">XI MM 1</option>
-                  <option value="2">XI MM 2</option>
-                  <option value="3">XI MM 3</option>
-                  <option value="4">XI AKL 1</option>
-                  <option value="5">XI AKL 2</option>
-                  <option value="6">XI OTKP 1</option>
-                  <option value="7">XI OTKP 2</option>
-                  <option value="8">XI BDP 1</option>
-                  <option value="9">XI BDP 2</option>
-                  <option value="10">XI TB</option>
-                  <option value="11">XI PH</option>
+                  @foreach ($kelas as $kelas)
+                  <option value="{{$kelas->kd_kelas}}">{{$kelas->nama}}</option>
+                  @endforeach
                 </select>
               </div>
             </div>

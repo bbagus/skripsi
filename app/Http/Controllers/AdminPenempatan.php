@@ -13,7 +13,10 @@ class AdminPenempatan extends Controller
         $this->repository = $repository;
     }
     public function index(){  
-		return view('admin.penempatan')->with('user', $this->repository->getData());
+        $kelas = DB::table('kelas')->get();
+		return view('admin.penempatan')
+        ->with('kelas', $kelas)
+        ->with('user', $this->repository->getData());
 	}
     public function loadSiswa(){
         $penempatan = DB::table('penempatan')
@@ -94,14 +97,20 @@ class AdminPenempatan extends Controller
     }
     public function detailGuru($nama){
         $str = explode('-',$nama);
+        //kondisi jeneng 1 kata
+        if (count($str) < 2) { 
+            $guru = DB::table('guru_pembimbing')->where('nama', '=', $str)->first();
+        } else {
+        //kondisi jeneng 2 kata
         $guru = DB::table('guru_pembimbing')->where('nama','like',$str[0].'%')->where('nama','like','%'.$str[1].'%')->first();
+        }
         //string gelar
          $gelar = end($str);
          if(strlen($gelar) == 2) $gelar = $gelar[0].'.'.$gelar[1].'.';
          elseif(strlen($gelar) == 3)  {
             $gelar = $gelar[0].'.'.$gelar[1].$gelar[2].'.';
          } else  $gelar = $gelar[0].'.'.$gelar[1].$gelar[2].'.'.$gelar[3].'.';
-        //kondisi jeneng 1 kata
+        //kondisi jeneng 1 kata tapi + gelar
         if($guru == null) $guru = DB::table('guru_pembimbing')->where('nama',$str[0].', '.$gelar)->first();
         //kondisi jeneng podo
         $str2 = explode(' ',$guru->nama);
@@ -115,7 +124,9 @@ class AdminPenempatan extends Controller
              $namabaru .= ', '.$gelar;
              $guru = DB::table('guru_pembimbing')->where('nama',$namabaru)->first();
         }
+        $kelas = DB::table('kelas')->get();
         return view('admin.editpenempatan-guru')
+            ->with('kelas', $kelas)
             ->with('guru', $guru)
             ->with('user', $this->repository->getData());
     }
@@ -166,12 +177,18 @@ class AdminPenempatan extends Controller
     }
     public function detailIndustri($nama){
         $str = explode('-',$nama);
+         if (count($str) < 2) { 
+            $industri = DB::table('industri')->where('nama', $str)->first();
+        } else {
         $industri = DB::table('industri')->where('nama','like', $str[0].'%')->where('nama','like', '%'.$str[1].'%')->first();
+        }
         $str2 = explode(' ',$industri->nama);
         if(count($str) != count($str2)){
             $industri = DB::table('industri')->where('nama','like', $str[0].'%')->where('nama','like', '%'.$str[1].'%')->where('nama','like', '%'.$str[2].'%')->first();
         }
+        $kelas = DB::table('kelas')->get();
         return view('admin.editpenempatan-industri')->with('industri', $industri)
+            ->with('kelas', $kelas)
             ->with('user', $this->repository->getData());
     }
     public function LoadDetailIndustri($kd_industri){
@@ -221,35 +238,30 @@ class AdminPenempatan extends Controller
     }
     public function searchIndustri(Request $request){
         $industri = [];
-        if($request->has('q')){
             $industri = DB::table('industri')->select('kd_industri','nama')->where('nama', 'LIKE', '%'. $request->q .'%')->get();
-        }  return response()->json($industri);
+          return response()->json($industri);
     }
     public function searchGuru(Request $request){
         $guru = [];
-        if($request->has('q')){
             $guru = DB::table('guru_pembimbing')->select('kd_pembimbing','nama')->where('nama', 'LIKE', '%'. $request->q .'%')->get();
-        }
-        else {
-        $guru = DB::table('guru_pembimbing')->select('kd_pembimbing','nama')->get();
-        } return response()->json($guru);
+         return response()->json($guru);
     }
     public function searchSiswa(Request $request){
         $siswa = [];
-        if($request->has('q')){
+            if($request->has('q') and ($request->q) != null){
               $siswa = DB::table('siswa')
               ->join('pengajuan','siswa.nis','=', 'pengajuan.nis')
               ->join('kelas','siswa.kd_kelas', '=', 'kelas.kd_kelas')
               ->join('penempatan','pengajuan.kd_pengajuan', '=', 'penempatan.kd_pengajuan')
               ->select('siswa.nis','siswa.nama','kelas.nama as kelas')
               ->where('penempatan.kd_pembimbing', null)
-              ->where('siswa.nama', 'LIKE', '%'. $request->q .'%')
+              ->Where('siswa.nama', 'LIKE', '%'. $request->q .'%')
               ->orWhere('siswa.nis', 'LIKE', '%'. $request->q .'%')->get();
-      } return response()->json($siswa);
+          }
+       return response()->json($siswa);
     }
     public function searchSiswa2(Request $request){
         $siswa = [];
-        if($request->has('q2')){
               $siswa = DB::table('siswa')
               ->join('pengajuan','siswa.nis','=', 'pengajuan.nis')
               ->join('kelas','siswa.kd_kelas', '=', 'kelas.kd_kelas')
@@ -258,11 +270,11 @@ class AdminPenempatan extends Controller
               ->where('penempatan.kd_pembimbing', null)
               ->where('siswa.nama', 'LIKE', '%'. $request->q1 .'%')
               ->where('kelas.kd_kelas', '=', $request->q2)->get();
-      } return response()->json($siswa);
+       return response()->json($siswa);
     }
     public function searchSiswa3(Request $request){
         $siswa = [];
-        if($request->has('q')){
+        if($request->has('q') and ($request->q) != null){
               $siswa = DB::table('siswa')
               ->join('pengajuan','siswa.nis','=', 'pengajuan.nis')
               ->join('kelas','siswa.kd_kelas', '=', 'kelas.kd_kelas')
@@ -271,11 +283,11 @@ class AdminPenempatan extends Controller
               ->where('pengajuan.kd_industri', null)
               ->where('siswa.nama', 'LIKE', '%'. $request->q .'%')
               ->orWhere('siswa.nis', 'LIKE', '%'. $request->q .'%')->get();
-      } return response()->json($siswa);
+          }
+       return response()->json($siswa);
     }
     public function searchSiswa4(Request $request){
         $siswa = [];
-        if($request->has('q2')){
               $siswa = DB::table('siswa')
               ->join('pengajuan','siswa.nis','=', 'pengajuan.nis')
               ->join('kelas','siswa.kd_kelas', '=', 'kelas.kd_kelas')
@@ -284,7 +296,8 @@ class AdminPenempatan extends Controller
               ->where('pengajuan.kd_industri', null)
               ->where('siswa.nama', 'LIKE', '%'. $request->q1 .'%')
               ->where('kelas.kd_kelas', '=', $request->q2)->get();
-      } return response()->json($siswa);
+          
+       return response()->json($siswa);
     }
 }
 

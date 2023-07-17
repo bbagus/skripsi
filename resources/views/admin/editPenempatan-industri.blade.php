@@ -126,19 +126,10 @@
                 <div class="form-group row">
                   <label for="listkelas" class="col-sm-3 col-form-label">Cari berdasarkan kelas</label>
                   <div class="col-sm-9">
-                    <select class="form-control" name="listkelas" id="listkelas" style="width: 100%;">
-                      <option disabled="" selected="" >Pilih kelas</option>
-                      <option value="1">XI MM 1</option>
-                      <option value="2">XI MM 2</option>
-                      <option value="3">XI MM 3</option>
-                      <option value="4">XI AKL 1</option>
-                      <option value="5">XI AKL 2</option>
-                      <option value="6">XI OTKP 1</option>
-                      <option value="7">XI OTKP 2</option>
-                      <option value="8">XI BDP 1</option>
-                      <option value="9">XI BDP 2</option>
-                      <option value="10">XI TB</option>
-                      <option value="11">XI PH</option>
+                    <select class="form-control select2bs4" name="listkelas" id="listkelas" style="width: 100%;">
+                       @foreach ($kelas as $kls)
+                        <option value="{{$kls->kd_kelas}}">{{$kls->nama}}</option>
+                      @endforeach
                     </select>
                   </div>
                 </div>

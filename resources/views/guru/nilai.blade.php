@@ -17,6 +17,29 @@
             </div>
           </div>
         </div>
+          <div class="col-md-3">
+            <div class="card card-info">
+              <div class="card-header">
+                <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+                </button>
+              </div>
+                <h3 class="card-title">
+                Daftar Siswa
+                </h3>
+              </div>
+              <div class="card-body p-2" id="siswa">
+               <ul class="nav nav-pills flex-column">
+                @foreach($siswa as $s)
+                <li class="nav-item">
+                  <a href="javascript:void(0)" class="nav-link {{$s->kd_penempatan}}" > {{$s->nama}}</a>
+                </li>
+                @endforeach
+              </ul>
+            </div>
+            </div>
+          </div>
           <div class="col-md-9">
             <div class="card">
               <div class="card-header" style="background-color: #094688;">
@@ -41,29 +64,6 @@
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
-          </div>
-          <div class="col-md-3">
-            <div class="card card-info">
-              <div class="card-header">
-                <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                <i class="fas fa-minus"></i>
-                </button>
-              </div>
-                <h3 class="card-title">
-                Daftar Siswa
-                </h3>
-              </div>
-              <div class="card-body p-2" id="siswa">
-               <ul class="nav nav-pills flex-column">
-                @foreach($siswa as $s)
-                <li class="nav-item">
-                  <a href="javascript:void(0)" class="nav-link {{$s->kd_penempatan}}" > {{$s->nama}}</a>
-                </li>
-                @endforeach
-              </ul>
-            </div>
-            </div>
           </div>
           <!-- col -->
         </div>
